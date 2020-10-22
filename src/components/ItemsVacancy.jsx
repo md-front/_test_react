@@ -14,38 +14,36 @@ const btns = [
     },
 ];
 
-export default class  ItemsVacancy extends React.Component {
-    constructor(props) {
-        super(props);
+export default function  ItemsVacancy(props) {
 
-        /*this.state = {
-            isFav: this.props.vacancy.is_fav || false,
-            isDel: false,
-        }*/
-    }
+    const vacancy = props.vacancy;
 
-    handleClick(e, btnType) {
+    function handleClick(e, btnType) {
         e.preventDefault();
         e.stopPropagation();
 
-        /* todo ? Вынести наверх, не менять изнутри. Создавать стейт вакансий?*/
-        this.props.vacancy[btnType.type] = !this.props.vacancy[btnType.type];
+        const params = {
+            id: vacancy.id,
+            groupId: vacancy.employer.id
+        };
 
-        this.props.handleClickAction(btnType.name, this.props.vacancy);
+        props.handleClickAction(btnType.name, params);
     }
 
-    render() {
-        return (
-            <a href={this.props.vacancy.alternate_url} target="_blank" className="link">
-                <span className={`link__text${this.props.vacancy.is_del ? ' link__text--blacklist' : ''}${this.props.vacancy.is_fav ? ' link__text--favorite' : ''}`}>{ this.props.vacancy.name }</span>
+    let textClassName = 'link__text';
+    textClassName += vacancy.is_del ? ' link__text--blacklist' : '';
+    textClassName += vacancy.is_fav ? ' link__text--favorite' : '';
 
-                { btns.map((btnType, index) =>
-                    <button type="button"
-                            key={index}
-                            className={`link__btn link__btn--${btnType.name}`}
-                            onClick={e => this.handleClick(e, btnType)}/>
-                ) }
-            </a>
-        );
-    }
+    return (
+        <a href={vacancy.alternate_url} target="_blank" className="link">
+            <span className={ textClassName }>{ vacancy.name }</span>
+
+            { btns.map((btnType, index) =>
+                <button type="button"
+                        key={ index }
+                        className={`link__btn link__btn--${ btnType.name }`}
+                        onClick={e => handleClick(e, btnType)}/>
+            ) }
+        </a>
+    );
 }

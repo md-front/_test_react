@@ -17,6 +17,12 @@
   margin-left: 10px;
 }
 
+h1 {
+}
+h1 sup {
+  color: grey;
+}
+
 .items {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

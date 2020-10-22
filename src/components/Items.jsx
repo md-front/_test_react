@@ -2,18 +2,6 @@ import React from 'react';
 import ItemsSection from './ItemsSection';
 import ItemsList from "./ItemsList";
 
-const PARAMS = [
-    {
-        'id': 'ekb',
-        'name': 'Екатеринбург',
-        'location': 'area=3',
-    },
-    /*{
-        'id': 'remote',
-        'name': 'Удалённо',
-        'location': 'schedule=remote'
-    },*/
-]
 
 export default class extends React.Component {
 
@@ -21,7 +9,7 @@ export default class extends React.Component {
         super(props);
 
         this.state = {
-            sections: PARAMS,
+            sections: window.PARAMS,
         }
     }
 
@@ -32,7 +20,8 @@ export default class extends React.Component {
                     <ItemsSection section={section}
                                   key={index}
                                   handleClickAction={this.props.handleClickAction}
-                                  store={this.props.store} />
+                                  favorites={this.props.favorites}
+                                  blacklist={this.props.blacklist} />
                 )}
             </main>
         );

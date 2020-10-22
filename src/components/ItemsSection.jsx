@@ -2,6 +2,14 @@ import React from 'react';
 import ItemsTitle from './ItemsTitle';
 import ItemsList from './ItemsList';
 
+/* todo ? вынести эти параметры из всех компонентов глобально? */
+const actionTypes = {
+    favorites: 'is_fav',
+    blacklist: 'is_del',
+}
+
+// let changedVacation = {};
+
 export default class ItemsSection extends React.Component {
 
     constructor(props) {
@@ -9,12 +17,11 @@ export default class ItemsSection extends React.Component {
 
         this.state = {
             items: [],
-            vacancies: [],
-            vacanciesLength: 0
+            // vacancies: [],
+            visibleVacancies: 0,
         }
     }
 
-    /** DATA */
     componentDidMount() {
         (async () => {
             const vacancies = await this.getVacancies();
@@ -23,6 +30,51 @@ export default class ItemsSection extends React.Component {
             this.setState({items})
         })()
     }
+    componentDidUpdate(prevAllProps) {
+
+        /* todo ? как вынести за componentDidUpdate? */
+        ['favorites','blacklist'].forEach(type => {
+            /* объекты { вакансия: группа } */
+            const prevProps = prevAllProps[type];
+            const actualProps = this.props[type];
+
+            /* id вакансий */
+            const prevVacanciesIds = Object.keys(prevProps);
+            const actualVacanciesIds = Object.keys(actualProps);
+
+            const items = [...this.state.items];
+
+            if(prevVacanciesIds.length === actualVacanciesIds.length) return
+
+            /* todo ? как отрефакторить? */
+            if(prevVacanciesIds.length > actualVacanciesIds.length) {
+                const changedVacanciesId = prevVacanciesIds.filter(id => !actualVacanciesIds.includes(id));
+
+                changedVacanciesId.forEach(vacancyId => changeStatus(vacancyId, prevProps))
+            } else {
+                const vacancyId = actualVacanciesIds.find(vacancyId => !prevVacanciesIds.includes(vacancyId));
+
+                changeStatus(vacancyId, actualProps);
+            }
+
+            /* todo ? вынести во внешний метод? */
+            function changeStatus(vacancyId, typeProps) {
+                const group = items.find(group => group.id === typeProps[vacancyId]);
+
+                if(!group) return;
+
+                const vacancy = group.items.find(vacancy => vacancy.id === vacancyId);
+
+                vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
+
+                group.haveVisibleItem = group.items.some(vacancy => !vacancy.is_del)
+            }
+
+            this.setState({ items });
+        })
+    }
+
+    /** DATA */
     async getVacancies() {
         let zeroStep = await this.getVacanciesStep(0,'noExperience');
         let result = zeroStep.items.map(item => {
@@ -40,12 +92,12 @@ export default class ItemsSection extends React.Component {
                 result.push(...step.items);
             }
 
-        this.setState({ vacancies: result })
+        // this.setState({ vacancies: result })
 
         return result;
     }
     async getVacanciesStep(pageNum = 0, exp = 'between1And3') {
-        let response = await fetch(`https://api.hh.ru/vacancies?text=frontend&${this.props.section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 10}&page=${pageNum}&experience=${exp}`);
+        let response = await fetch(`https://api.hh.ru/vacancies?text=frontend&${this.props.section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 3}&page=${pageNum}&experience=${exp}`);
 
         if (response.ok) {
             const json = await response.json();
@@ -60,7 +112,7 @@ export default class ItemsSection extends React.Component {
     }
     groupVacancies(vacancies) {
         let result = {};
-        let vacanciesLength = 0;
+        let visibleVacancies = 0;
         let prevVacancyName = '';
 
         vacancies.forEach(vacancy => {
@@ -68,14 +120,30 @@ export default class ItemsSection extends React.Component {
             /* Проверка дублей вакансии */
             if(vacancy.name === prevVacancyName) return;
 
-            /* Проверка на начиние в блеклисте */
-            if(this.props.store.blacklist.includes(vacancy.id)) return;
-
             /* Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return;
 
             prevVacancyName = vacancy.name;
-            vacanciesLength++;
+
+            const EMPLOYER = vacancy.employer;
+            const EMPLOYER_ID = EMPLOYER.id;
+
+            if(!result.hasOwnProperty(EMPLOYER_ID)) {
+                result[EMPLOYER_ID] = {
+                    id: EMPLOYER_ID,
+                    name: EMPLOYER.name,
+                    items: [],
+                    haveVisibleItem: false,
+                }
+            }
+
+            /* Проверка на начиние в блеклисте */
+            if(this.props.blacklist.hasOwnProperty(vacancy.id)) {
+                vacancy.is_del = true;
+            } else {
+                result[EMPLOYER_ID].haveVisibleItem = true
+                visibleVacancies++;
+            }
 
             /* Недавняя вакансия в пределах диапозона NEW_IN_DAYS */
             if(new Date(vacancy.created_at) > window.VALID_NEW_DATE)
@@ -86,35 +154,24 @@ export default class ItemsSection extends React.Component {
                 vacancy.no_exp = true;
 
             /* Вакансия в избранном */
-            if(this.props.store.favorites.includes(vacancy.id))
+            if(this.props.favorites.hasOwnProperty(vacancy.id))
                 vacancy.is_fav = true;
-
-            const EMPLOYER = vacancy.employer;
-            const EMPLOYER_ID = EMPLOYER.id;
-
-            if(!result.hasOwnProperty(EMPLOYER_ID)) {
-                result[EMPLOYER_ID] = {
-                    items: [],
-                    name: EMPLOYER.name
-                }
-            }
 
             result[EMPLOYER_ID].items.push(vacancy)
         })
 
-        this.setState({ vacanciesLength })
+        this.setState({ visibleVacancies })
 
         return Object.values(result);
     }
-
-
 
     render() {
         return (
             <section>
                 <ItemsTitle title={this.props.section.name}
-                            quantity={this.state.vacanciesLength} />
+                            quantity={this.state.visibleVacancies - Object.keys(this.props.blacklist).length} />
                 <ItemsList items={this.state.items}
+                           haveVisibleItem={this.state.haveVisibleItem}
                            handleClickAction={this.props.handleClickAction} />
             </section>
         );

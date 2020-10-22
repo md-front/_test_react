@@ -17,9 +17,12 @@ export default function ItemsItem(props) {
             </h2>
 
             { props.item.items.map((vacancy, index) =>
-                <ItemsVacancy vacancy={vacancy}
+                !vacancy.is_del ?
+                    <ItemsVacancy vacancy={vacancy}
                               key={index}
                               handleClickAction={props.handleClickAction} />
+                              :
+                    ''
             )}
 
         </div>
