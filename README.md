@@ -1,68 +1,68 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+###WIP
 
-## Available Scripts
+* React
 
-In the project directory, you can run:
+####Ещё перенести:
+
+* 
+* Глобальные переменные
+
+
+###TODO:
+
+* Превью первые 100 символов + зп
+* Удалённые красить в красный
+* Последнюю кликнутую ссылку выделять
+
+* Конфликт избранной вакансии / на удаление
+
+* Навести порядок в закладках
+* на className перебить где возможно
+
+* Сайдбар избранных вакансий, джунских
+* Уведомления о новых вакансиях (как всплываха куки? или в сайдбар)
+* Уведомление о новом работодателе / Избранном
+* Кешировать все вакансии и уведомлять при новых в сайдбаре
+
+* Дизайн + мобилка
+* Первая форма ввода модалкой (с сейвом результатов)
+
+* Джунов сортитовать от остальных
+* Возможность задавать приоритет группам (организациям) / Избранное со своей сортировкой
+
+* Подгружать аналогичные вакансии при добавлении в избранное
+* "Нет опыта работы" привязать к чекбосу, градация по цветам
+* Дополнительные сорировки в PARAMS для удалёнки / екб
+* Пушить постранично
+* Тесты + Обработка ошибок
+* Поле ввода + настраивоемый фильтр + чекбокс удалёнки + выбор города + диапозон опыта
+* COMPANY_BLACKLIST автоматизировать
+* Модалка действий с вакансией (Превью + зп + избранное / удалить)
+* Улучшить поиск дублей
+
+* Хранить все параметры поиска и сохранений на бэке?
+* Выводить на карту?
+* Авторизация + Отправка отклика со страницы?
+
+
+* База из работодателей с архивными вакансиями по фронту. С апи
+
+###READ:
+
+* const TEST / const test ?
+* Сеттеры, геттеры - разобраться, допилить Action
+* Подумать как лучше переиграть bind в Action
+
+###DONE:
+
+* Найти иконку
+* Вынести скрипты в отдельыне файлы и стили
+* Подсвечивать новые вакансии
+* Добавить удалёнку
+* Компани / ваканси блэклист куки * Удаление из списков!
+* Эффекты удаление после нажатия
+* Поставить гит, слить в репо
 
 ### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Open [http://localhost:3000](http://localhost:3000)

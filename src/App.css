@@ -1,38 +1,108 @@
-.App {
-  text-align: center;
+.clear { /* &[button] */
+  display: inline-flex;
+  margin-right: 15px;
+  align-items: center;
+  padding: 5px;
+  font-weight: 700;
+  transition: opacity .2s;
+  cursor: pointer;
 }
-
-.App-logo {
-  height: 40vmin;
+.clear.disabled {
+  opacity: .4;
   pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.clear img {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.items {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+}
+
+
+.item {
+  padding: 15px;
+  border: 2px solid darkgray;
+  border-radius: 13px;
+}
+.item.new {
+  border-color: purple;
+}
+.item.no-exp h2 {
+  color: limegreen;
+}
+h2 {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  font-size: 18px;
+  margin: 0 0 15px;
 }
-
-.App-link {
-  color: #61dafb;
+h2 span {
+  color: lightcoral;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h2 img {
+  max-width: 100px;
+  max-height: 30px;
+  margin-left: 10px;
+}
+.link {
+  display: block;
+  padding-right: 70px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: lightskyblue;
+  text-decoration: none;
+  position: relative;
+  transition: color .2s;
+}
+.link:visited {
+  color: lightgray;
+}
+.link__text--favorite {
+  color: orange;
+}
+.link__text--blacklist {
+  color: red;
+  opacity: .7;
+}
+.link:last-child {
+  margin-bottom: 0;
+}
+.link:hover {
+  color: cornflowerblue;
+}
+.link:hover .link__btn  {
+  opacity: 1;
+}
+.link__btn {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 35px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('./assets/star.svg');
+  background-color: transparent;
+  transform: translateY(-50%);
+  transition: transform .2s, opacity .2s;
+  opacity: 0;
+}
+.link__btn--favorite {
+  right: 35px;
+  background-image: url('./assets/star.svg');
+}
+.link__btn--blacklist {
+  right: 0;
+  background-image: url('./assets/del.svg');
+}
+.link__btn:hover {
+  transform: scale(1.5) translateY(-50%);
 }
