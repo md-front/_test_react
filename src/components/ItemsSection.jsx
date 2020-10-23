@@ -17,8 +17,7 @@ export default class ItemsSection extends React.Component {
 
         this.state = {
             items: [],
-            // vacancies: [],
-            visibleVacancies: 0,
+            vacancies: []
         }
     }
 
@@ -33,52 +32,51 @@ export default class ItemsSection extends React.Component {
     componentDidUpdate(prevAllProps) {
 
         /* todo ? как вынести за componentDidUpdate? */
-        ['favorites','blacklist'].forEach(type => {
-            /* объекты { вакансия: группа } */
-            const prevProps = prevAllProps[type];
-            const actualProps = this.props[type];
+        ['favorites','blacklist'].forEach(type => this.activityCheck(prevAllProps, type));
+    }
 
-            /* id вакансий */
-            const prevVacanciesIds = Object.keys(prevProps);
-            const actualVacanciesIds = Object.keys(actualProps);
+    activityCheck(prevAllProps, type){
+        /* объекты { вакансия: группа } */
+        const prevProps = prevAllProps[type][this.props.section.id];
+        const actualProps = this.props[type][this.props.section.id];
 
-            const items = [...this.state.items];
+        /* id вакансий */
+        const prevVacanciesIds = Object.keys(prevProps);
+        const actualVacanciesIds = Object.keys(actualProps);
 
-            if(prevVacanciesIds.length === actualVacanciesIds.length) return
+        const items = [...this.state.items];
 
-            /* todo ? как отрефакторить? */
-            if(prevVacanciesIds.length > actualVacanciesIds.length) {
-                const changedVacanciesId = prevVacanciesIds.filter(id => !actualVacanciesIds.includes(id));
+        if(prevVacanciesIds.length === actualVacanciesIds.length) return
 
-                changedVacanciesId.forEach(vacancyId => changeStatus(vacancyId, prevProps))
-            } else {
-                const vacancyId = actualVacanciesIds.find(vacancyId => !prevVacanciesIds.includes(vacancyId));
+        /* todo ? как отрефакторить? */
+        if(prevVacanciesIds.length > actualVacanciesIds.length) {
+            const changedVacanciesId = prevVacanciesIds.filter(id => !actualVacanciesIds.includes(id));
 
-                changeStatus(vacancyId, actualProps);
-            }
+            changedVacanciesId.forEach(vacancyId => changeStatus(vacancyId, prevProps))
+        } else {
+            const vacancyId = actualVacanciesIds.find(vacancyId => !prevVacanciesIds.includes(vacancyId));
 
-            /* todo ? вынести во внешний метод? */
-            function changeStatus(vacancyId, typeProps) {
-                const group = items.find(group => group.id === typeProps[vacancyId]);
+            changeStatus(vacancyId, actualProps);
+        }
 
-                if(!group) return;
+        /* todo ? вынести во внешний метод? */
+        function changeStatus(vacancyId, typeProps) {
+            const group = items.find(group => group.id === typeProps[vacancyId]);
+            const vacancy = group.items.find(vacancy => vacancy.id === vacancyId);
 
-                const vacancy = group.items.find(vacancy => vacancy.id === vacancyId);
+            vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
 
-                vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
+            group.haveVisibleItem = group.items.some(vacancy => !vacancy.is_del)
+        }
 
-                group.haveVisibleItem = group.items.some(vacancy => !vacancy.is_del)
-            }
-
-            this.setState({ items });
-        })
+        this.setState({ items });
     }
 
     /** DATA */
     async getVacancies() {
-        let zeroStep = await this.getVacanciesStep(0,'noExperience');
+        let zeroStep = await this.getVacanciesStep(0,'noExperience'); /* todo ? как лучше реализовать отдельный запрос */
         let result = zeroStep.items.map(item => {
-            item.no_exp = true;
+            item.is_jun = true;
             return item;
         });
 
@@ -92,7 +90,7 @@ export default class ItemsSection extends React.Component {
                 result.push(...step.items);
             }
 
-        // this.setState({ vacancies: result })
+        this.setState({ vacancies: result })
 
         return result;
     }
@@ -112,18 +110,11 @@ export default class ItemsSection extends React.Component {
     }
     groupVacancies(vacancies) {
         let result = {};
-        let visibleVacancies = 0;
-        let prevVacancyName = '';
+        let validVacancies = [];
 
         vacancies.forEach(vacancy => {
-
-            /* Проверка дублей вакансии */
-            if(vacancy.name === prevVacancyName) return;
-
             /* Проверка на кейворды в имени  */
-            if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return;
-
-            prevVacancyName = vacancy.name;
+            if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
 
             const EMPLOYER = vacancy.employer;
             const EMPLOYER_ID = EMPLOYER.id;
@@ -137,42 +128,52 @@ export default class ItemsSection extends React.Component {
                 }
             }
 
+
+            /* Проверка дублирования вакансий в группе */
+            if(result[EMPLOYER_ID].items.some(item => item.name === vacancy.name)) return;
+
             /* Проверка на начиние в блеклисте */
-            if(this.props.blacklist.hasOwnProperty(vacancy.id)) {
+            if(this.props.blacklist[this.props.section.id].hasOwnProperty(vacancy.id))
                 vacancy.is_del = true;
-            } else {
-                result[EMPLOYER_ID].haveVisibleItem = true
-                visibleVacancies++;
-            }
+            else
+                result[EMPLOYER_ID].haveVisibleItem = true;
 
             /* Недавняя вакансия в пределах диапозона NEW_IN_DAYS */
             if(new Date(vacancy.created_at) > window.VALID_NEW_DATE)
-                vacancy.is_new = true;
+                result[EMPLOYER_ID].is_new = true;
 
             /* Вакансия без опыта, todo повторная проверка */
-            if(!vacancy.no_exp && vacancy.name.match(window.JUNIOR))
-                vacancy.no_exp = true;
+            if(!vacancy.is_jun && vacancy.name.match(window.JUNIOR))
+                result[EMPLOYER_ID].is_jun = true;
 
             /* Вакансия в избранном */
-            if(this.props.favorites.hasOwnProperty(vacancy.id))
+            if(this.props.favorites[this.props.section.id].hasOwnProperty(vacancy.id))
                 vacancy.is_fav = true;
 
-            result[EMPLOYER_ID].items.push(vacancy)
+            result[EMPLOYER_ID].items.push(vacancy);
+            validVacancies.push(vacancy);
         })
 
-        this.setState({ visibleVacancies })
+        this.setState({ vacancies: validVacancies })
 
         return Object.values(result);
     }
 
     render() {
+        const visibleVacancies = this.state.vacancies.length - Object.keys(this.props.blacklist[this.props.section.id]).length;
+
         return (
             <section>
                 <ItemsTitle title={this.props.section.name}
-                            quantity={this.state.visibleVacancies - Object.keys(this.props.blacklist).length} />
-                <ItemsList items={this.state.items}
-                           haveVisibleItem={this.state.haveVisibleItem}
-                           handleClickAction={this.props.handleClickAction} />
+                            quantity={visibleVacancies} />
+
+                { visibleVacancies ?
+                    <ItemsList items={this.state.items}
+                               handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
+                    :
+                    <h3>Подходящих вакансий не найндено :(</h3>
+                }
+
             </section>
         );
     }

@@ -14,36 +14,73 @@ const btns = [
     },
 ];
 
-export default function  ItemsVacancy(props) {
+export default class ItemsVacancy extends React.Component {
 
-    const vacancy = props.vacancy;
+    constructor(props) {
+        super(props);
 
-    function handleClick(e, btnType) {
+        this.state = {
+            isHover: false
+        }
+
+        this.handleMouseHover = this.handleMouseHover.bind(this);
+    }
+
+    handleMouseHover() {
+        const isHover = !this.state.isHover;
+
+        this.setState({ isHover })
+    }
+
+    handleClick(e, btnType) {
         e.preventDefault();
         e.stopPropagation();
 
         const params = {
-            id: vacancy.id,
-            groupId: vacancy.employer.id
+            id: this.props.vacancy.id,
+            groupId: this.props.vacancy.employer.id
         };
 
-        props.handleClickAction(btnType.name, params);
+        this.props.handleClickAction(btnType.name, params);
     }
 
-    let textClassName = 'link__text';
-    textClassName += vacancy.is_del ? ' link__text--blacklist' : '';
-    textClassName += vacancy.is_fav ? ' link__text--favorite' : '';
+    render() {
+        const vacancy = this.props.vacancy;
+        const salary = vacancy.salary;
 
-    return (
-        <a href={vacancy.alternate_url} target="_blank" className="link">
-            <span className={ textClassName }>{ vacancy.name }</span>
+        let textClassName = 'link__text';
+        textClassName += vacancy.is_fav ? ' link__text--favorite' : '';
 
-            { btns.map((btnType, index) =>
-                <button type="button"
-                        key={ index }
-                        className={`link__btn link__btn--${ btnType.name }`}
-                        onClick={e => handleClick(e, btnType)}/>
-            ) }
-        </a>
-    );
+        return (
+            <a href={ vacancy.alternate_url }
+               className="link"
+               onMouseEnter={this.handleMouseHover}
+               onMouseLeave={this.handleMouseHover}
+               target="_blank" >
+
+                <span className={ textClassName }>
+                    <span>{ salary && '$' }</span> { vacancy.name }
+                </span>
+
+                { this.state.isHover &&
+                    <span className="link__popup">
+                        { salary &&
+                            <span className="link__salary">{ salary.from }{ salary.from && salary.to ? ' - ' : '' }{ salary.to }</span>
+                        }
+                        { vacancy.snippet && vacancy.snippet.requirement &&
+                            <span className="link__description">{ vacancy.snippet.requirement }</span>
+                        }
+                    </span>
+                }
+
+                { btns.map((btnType, index) =>
+                    <button type="button"
+                            key={ index }
+                            className={`link__btn link__btn--${ btnType.name }`}
+                            onClick={e => this.handleClick(e, btnType)}/>
+                ) }
+
+            </a>
+        );
+    }
 }

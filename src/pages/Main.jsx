@@ -8,43 +8,70 @@ export default class Main extends React.Component {
         super(props);
 
         this.state = {
-            favorites: window.getLS('favorites'),
-            blacklist: window.getLS('blacklist')
+            favorites: this.getDataFromStorage('favorites'),
+            blacklist: this.getDataFromStorage('blacklist'),
         }
 
         this.clearItems = this.clearItems.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
     }
 
-    /** Actions */
-    handleClickAction(type, params) {
-        const items = {...this.state[type]};
+    isBtnActive(type) {
+
+        for(let location in this.state[type]) {
+            if(Object.keys(this.state[type][location]).length) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** Store actions */
+    getDataFromStorage(type) {
+        return window.getLS(type) || this.createEmptyStore(type);
+    }
+    createEmptyStore() {
+        const result = {};
+
+        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})
+
+        return result;
+    }
+
+
+    /** Btn actions */
+    handleClickAction(type, sectionId, params) {
+        const items = {...this.state[type][sectionId]};
 
         if(items.hasOwnProperty(params.id))
             delete items[params.id];
         else
             items[params.id] = params.groupId;
 
-        this.setItems(type, items);
+        const result = {...this.state[type]};
+
+        result[sectionId] = items;
+
+        this.setItems(type, result);
     }
     clearItems(type) {
-        this.setItems(type,{}, {});
+        const result = this.createEmptyStore(type);
 
-        // window.location.reload();
+        this.setItems(type, result);
     }
-    setItems(type, payload = this.state[type]) {
+    setItems(type, payload) {
         this.setState({ [type]: payload });
 
         window.setLS(type, payload);
     }
 
-
     render() {
         return (
             <div className="main">
                 <Header clearItems={this.clearItems}
-                        isFavActive={!!Object.entries(this.state.favorites).length}
-                        isDelActive={!!Object.entries(this.state.blacklist).length}/>
+                        isFavActive={this.isBtnActive('favorites')}
+                        isDelActive={this.isBtnActive('blacklist')}/>
                 <Items handleClickAction={this.handleClickAction}
                        favorites={this.state.favorites}
                        blacklist={this.state.blacklist} />

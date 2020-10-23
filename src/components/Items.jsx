@@ -9,7 +9,7 @@ export default class extends React.Component {
         super(props);
 
         this.state = {
-            sections: window.PARAMS,
+            sections: window.LOCATION_PARAMS,
         }
     }
 
