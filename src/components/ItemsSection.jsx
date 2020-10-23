@@ -1,6 +1,7 @@
 import React from 'react';
+import { lastValidDate } from '../helpers/helpers';
 import ItemsTitle from './ItemsTitle';
-import ItemsList from './ItemsList';
+import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
 const actionTypes = {
@@ -16,7 +17,8 @@ export default class ItemsSection extends React.Component {
         super(props);
 
         this.state = {
-            items: [],
+            groups: [],
+            isLoaded: false,
             vacancies: []
         }
     }
@@ -24,9 +26,9 @@ export default class ItemsSection extends React.Component {
     componentDidMount() {
         (async () => {
             const vacancies = await this.getVacancies();
-            const items = this.groupVacancies(vacancies);
+            const groups = this.groupVacancies(vacancies);
 
-            this.setState({items})
+            this.setState({ groups, isLoaded: true })
         })()
     }
     componentDidUpdate(prevAllProps) {
@@ -44,9 +46,9 @@ export default class ItemsSection extends React.Component {
         const prevVacanciesIds = Object.keys(prevProps);
         const actualVacanciesIds = Object.keys(actualProps);
 
-        const items = [...this.state.items];
+        let groups = [...this.state.groups];
 
-        if(prevVacanciesIds.length === actualVacanciesIds.length) return
+        if(prevVacanciesIds.length === actualVacanciesIds.length) return;
 
         /* todo ? как отрефакторить? */
         if(prevVacanciesIds.length > actualVacanciesIds.length) {
@@ -61,27 +63,29 @@ export default class ItemsSection extends React.Component {
 
         /* todo ? вынести во внешний метод? */
         function changeStatus(vacancyId, typeProps) {
-            const group = items.find(group => group.id === typeProps[vacancyId]);
-            const vacancy = group.items.find(vacancy => vacancy.id === vacancyId);
+            const group = groups.find(group => group.id === typeProps[vacancyId]);
+            const vacancy = group.groups.find(vacancy => vacancy.id === vacancyId);
 
             vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
 
-            group.haveVisibleItem = group.items.some(vacancy => !vacancy.is_del)
+            group.haveVisibleItem = group.groups.some(vacancy => !vacancy.is_del)
         }
 
-        this.setState({ items });
+        groups = groups.sort(this.sortGroups);
+
+        this.setState({ groups });
     }
 
     /** DATA */
     async getVacancies() {
         let zeroStep = await this.getVacanciesStep(0,'noExperience'); /* todo ? как лучше реализовать отдельный запрос */
-        let result = zeroStep.items.map(item => {
+        let result = zeroStep.vacancies.map(item => {
             item.is_jun = true;
             return item;
         });
 
         let firstStep = await this.getVacanciesStep();
-        result = [...result, ...firstStep.items];
+        result = [...result, ...firstStep.vacancies];
         let pagesLeft = firstStep.pagesLeft;
 
         if(window.LOAD_ALL_DATA)
@@ -101,7 +105,7 @@ export default class ItemsSection extends React.Component {
             const json = await response.json();
 
             return {
-                items: json.items,
+                vacancies: json.items,
                 pagesLeft: json.pages
             };
         } else {
@@ -111,52 +115,112 @@ export default class ItemsSection extends React.Component {
     groupVacancies(vacancies) {
         let result = {};
         let validVacancies = [];
+        const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
 
         vacancies.forEach(vacancy => {
             /* Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
 
-            const EMPLOYER = vacancy.employer;
-            const EMPLOYER_ID = EMPLOYER.id;
+            const EMPLOYER_ID = vacancy.employer.id;
 
             if(!result.hasOwnProperty(EMPLOYER_ID)) {
                 result[EMPLOYER_ID] = {
                     id: EMPLOYER_ID,
-                    name: EMPLOYER.name,
+                    name: vacancy.employer.name,
+                    sort: {
+                        value: 0,
+                        name: 'default',
+                    },
                     items: [],
                     haveVisibleItem: false,
                 }
             }
 
+            let group = result[EMPLOYER_ID];
 
             /* Проверка дублирования вакансий в группе */
-            if(result[EMPLOYER_ID].items.some(item => item.name === vacancy.name)) return;
+            if(group.items.some(item => item.name === vacancy.name)) return;
 
-            /* Проверка на начиние в блеклисте */
+            /* Проверка на наличие в блеклисте */
             if(this.props.blacklist[this.props.section.id].hasOwnProperty(vacancy.id))
                 vacancy.is_del = true;
             else
-                result[EMPLOYER_ID].haveVisibleItem = true;
+                group.haveVisibleItem = true;
 
-            /* Недавняя вакансия в пределах диапозона NEW_IN_DAYS */
-            if(new Date(vacancy.created_at) > window.VALID_NEW_DATE)
-                result[EMPLOYER_ID].is_new = true;
-
-            /* Вакансия без опыта, todo повторная проверка */
-            if(!vacancy.is_jun && vacancy.name.match(window.JUNIOR))
-                result[EMPLOYER_ID].is_jun = true;
+            const isFav = this.props.favorites[this.props.section.id].hasOwnProperty(vacancy.id);
+            const isJun = !vacancy.is_jun && vacancy.name.match(window.JUNIOR);
+            const isNew = new Date(vacancy.created_at) > lastValidDate;
 
             /* Вакансия в избранном */
-            if(this.props.favorites[this.props.section.id].hasOwnProperty(vacancy.id))
-                vacancy.is_fav = true;
+            if(isFav)
+                setGroupParams(4, 'is_fav')
 
-            result[EMPLOYER_ID].items.push(vacancy);
+            /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
+            if(isNew && !isFav)
+                setGroupParams(3, 'is_new')
+
+            /* Вакансия без опыта, todo повторная проверка */
+            if(isJun)
+                setGroupParams(2, 'is_jun')
+
+            /* В вакансии указана зп */
+            if(vacancy.salary)
+                setGroupParams(1, 'salary')
+
+            group.items.push(vacancy);
             validVacancies.push(vacancy);
+
+            function setGroupParams(sortValue, paramName) {
+
+                if(group.sort.value < sortValue) {
+                    group.sort = {
+                        value: sortValue,
+                        name: paramName
+                    }
+                }
+
+                group[paramName] = true;
+            }
         })
 
         this.setState({ vacancies: validVacancies })
 
-        return Object.values(result);
+        return this.groupBySort(Object.values(result));
+    }
+
+    groupBySort(groups) {
+        const result = {};
+
+        groups.forEach(group => {
+            const sortType = group.sort.name;
+
+            if(!result[sortType])
+                result[sortType] = {
+                    name: sortType,
+                    sortValue: group.sort.value,
+                    items: [],
+                }
+
+            result[sortType].items.push(group);
+        })
+
+        return Object.values(result).sort((groupsA, groupsB) => groupsB.sortValue - groupsA.sortValue);
+    }
+
+    renderItemsOnLoad(visibleVacancies) {
+
+        if(visibleVacancies)
+            return (
+                this.state.groups.map((item, index) =>
+                    <ItemsInner itemsList={ item }
+                                key={index}
+                                handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
+                )
+            )
+        else
+            return (
+                <h3>Подходящих вакансий не найдено :(</h3>
+            )
     }
 
     render() {
@@ -164,14 +228,14 @@ export default class ItemsSection extends React.Component {
 
         return (
             <section>
-                <ItemsTitle title={this.props.section.name}
-                            quantity={visibleVacancies} />
+                <ItemsTitle title={ this.props.section.name }
+                            isLoaded={ this.state.isLoaded }
+                            quantity={ visibleVacancies } />
 
-                { visibleVacancies ?
-                    <ItemsList items={this.state.items}
-                               handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
+                { this.state.isLoaded ?
+                    this.renderItemsOnLoad(visibleVacancies)
                     :
-                    <h3>Подходящих вакансий не найндено :(</h3>
+                    <h3>Загрузка</h3>
                 }
 
             </section>

@@ -23,6 +23,7 @@ export default class extends React.Component {
                                   favorites={this.props.favorites}
                                   blacklist={this.props.blacklist} />
                 )}
+
             </main>
         );
     }

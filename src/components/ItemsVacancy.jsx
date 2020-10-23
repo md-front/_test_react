@@ -59,7 +59,7 @@ export default class ItemsVacancy extends React.Component {
                target="_blank" >
 
                 <span className={ textClassName }>
-                    <span>{ salary && '$' }</span> { vacancy.name }
+                    <span>{ salary && '$' }&nbsp;</span>{ vacancy.name }
                 </span>
 
                 { this.state.isHover &&

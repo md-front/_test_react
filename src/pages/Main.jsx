@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { setLS, getLS } from '../helpers/helpers';
 import Header from '../components/Header';
 import Items from '../components/Items';
 
@@ -29,7 +30,7 @@ export default class Main extends React.Component {
 
     /** Store actions */
     getDataFromStorage(type) {
-        return window.getLS(type) || this.createEmptyStore(type);
+        return getLS(type) || this.createEmptyStore(type);
     }
     createEmptyStore() {
         const result = {};
@@ -63,7 +64,7 @@ export default class Main extends React.Component {
     setItems(type, payload) {
         this.setState({ [type]: payload });
 
-        window.setLS(type, payload);
+        setLS(type, payload);
     }
 
     render() {

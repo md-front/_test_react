@@ -8,8 +8,10 @@ export default function ItemsItem(props) {
     let itemClassName = 'item';
 
     itemClassName += props.item.items.length > 2 ? ' item--big' : '';
-    itemClassName += props.item.is_new ? ' item--new' : '';
+    itemClassName += props.item.salary ? ' item--salary' : '';
+    // itemClassName += props.item.is_new ? ' item--new' : '';
     itemClassName += props.item.is_jun ? ' item--jun' : '';
+    itemClassName += props.item.is_first ? ' item--first' : '';
 
     return (
         <div className={itemClassName}>  {/*TODO классы*/}

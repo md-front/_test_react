@@ -17,36 +17,45 @@
   margin-left: 10px;
 }
 
-h1 {
-}
-h1 sup {
-  color: grey;
+h1 {}
+
+.items-group__salary .link__text > span {
+  display: none;
 }
 
 .items {
-  display: flex;
-  margin-left: -20px;
+  display: grid;
+  grid-template-columns: repeat(5, calc(20% - 20px));
+  grid-gap: 20px;
+  /*display: flex;*/
+  /*margin-left: -20px;*/
   flex-wrap: wrap;
 }
 
 
 .item {
-  width: calc(100% / 5 - 20px);
+  display: flex;
+  /*width: calc(100% / 5 - 20px);*/
   min-height: 117px;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  /*margin-left: 20px;*/
+  /*margin-bottom: 20px;*/
   padding: 15px;
+  flex-direction: column;
+  justify-content: space-between;
   border: 2px solid darkgray;
   border-radius: 13px;
 }
 .item--big {
-  width: calc(100% / 2.5 - 20px);
+  /*width: calc(100% / 2.5 - 20px);*/
 }
 .item--big .item__inner {
   /*column-count: 2;*/
 }
 .item--new {
   border-color: purple;
+}
+.item--first {
+  grid-column: 1;
 }
 .item--jun h2 {
   color: limegreen;
@@ -81,7 +90,12 @@ h2 img {
 .link:visited {
   color: lightgray;
 }
-.link__text {}
+.link__text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* '$' */
 .link__text > span {
