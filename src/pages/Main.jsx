@@ -35,7 +35,7 @@ export default class Main extends React.Component {
     createEmptyStore() {
         const result = {};
 
-        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})
+        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})    
 
         return result;
     }
@@ -43,16 +43,13 @@ export default class Main extends React.Component {
 
     /** Btn actions */
     handleClickAction(type, sectionId, params) {
-        const items = {...this.state[type][sectionId]};
+        const result = {...this.state[type]};
+        const items = result[sectionId];
 
         if(items.hasOwnProperty(params.id))
             delete items[params.id];
         else
             items[params.id] = params.groupId;
-
-        const result = {...this.state[type]};
-
-        result[sectionId] = items;
 
         this.setItems(type, result);
     }

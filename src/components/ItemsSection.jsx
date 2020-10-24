@@ -1,5 +1,4 @@
 import React from 'react';
-import { lastValidDate } from '../helpers/helpers';
 import ItemsTitle from './ItemsTitle';
 import ItemsInner from './ItemsInner';
 
@@ -47,10 +46,10 @@ export default class ItemsSection extends React.Component {
         const actualVacanciesIds = Object.keys(actualProps);
 
         let groups = [...this.state.groups];
+        let vacancies = [...this.state.vacancies];
 
         if(prevVacanciesIds.length === actualVacanciesIds.length) return;
 
-        /* todo ? как отрефакторить? */
         if(prevVacanciesIds.length > actualVacanciesIds.length) {
             const changedVacanciesId = prevVacanciesIds.filter(id => !actualVacanciesIds.includes(id));
 
@@ -63,17 +62,18 @@ export default class ItemsSection extends React.Component {
 
         /* todo ? вынести во внешний метод? */
         function changeStatus(vacancyId, typeProps) {
-            const group = groups.find(group => group.id === typeProps[vacancyId]);
-            const vacancy = group.groups.find(vacancy => vacancy.id === vacancyId);
+            console.log('changeStatus groups',groups);
+            // const group = groups.find(group => group.id === typeProps[vacancyId]);
+            const vacancy = vacancies.find(vacancy => vacancy.id === vacancyId);
 
             vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
 
-            group.haveVisibleItem = group.groups.some(vacancy => !vacancy.is_del)
+            // group.haveVisibleItem = group.groups.some(vacancy => !vacancy.is_del)
         }
 
-        groups = groups.sort(this.sortGroups);
+        // groups = groups.sort(this.sortGroups);
 
-        this.setState({ groups });
+        this.setState({ vacancies });
     }
 
     /** DATA */
@@ -153,19 +153,21 @@ export default class ItemsSection extends React.Component {
 
             /* Вакансия в избранном */
             if(isFav)
-                setGroupParams(4, 'is_fav')
+                setGroupParams(4, 'is_fav');
+            else
+                vacancy.is_fav = false;
 
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(isNew && !isFav)
-                setGroupParams(3, 'is_new')
+                setGroupParams(3, 'is_new');
 
             /* Вакансия без опыта, todo повторная проверка */
             if(isJun)
-                setGroupParams(2, 'is_jun')
+                setGroupParams(2, 'is_jun');
 
             /* В вакансии указана зп */
             if(vacancy.salary)
-                setGroupParams(1, 'salary')
+                setGroupParams(1, 'salary');
 
             group.items.push(vacancy);
             validVacancies.push(vacancy);
@@ -173,6 +175,7 @@ export default class ItemsSection extends React.Component {
             function setGroupParams(sortValue, paramName) {
 
                 if(group.sort.value < sortValue) {
+                    vacancy.sortValue = sortValue;
                     group.sort = {
                         value: sortValue,
                         name: paramName
@@ -213,7 +216,8 @@ export default class ItemsSection extends React.Component {
             return (
                 this.state.groups.map((item, index) =>
                     <ItemsInner itemsList={ item }
-                                key={index}
+                                section={ this.props.section }
+                                key={ index }
                                 handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
                 )
             )
