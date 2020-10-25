@@ -19,8 +19,37 @@
 
 h1 {}
 
-.items-group__salary .link__text > span {
+.items-group {
+  margin-bottom: 20px;
+  padding: 0 25px 25px;
+  /* border: 2px solid darkgray; */
+  border-radius: 13px;
+}
+.items-group--is_fav {
+  background-color: rgb(255 165 0 / .4);
+}
+.items-group--is_new {
+  background-color: rgb(128 0 128 / .4);
+}
+.items-group--is_jun {
+  background-color: rgb(0 128 0 / .4);
+}
+.items-group--is_jun h2 {
+  color: black !important;
+}
+.items-group--salary {
+  background-color: rgb(255 127 80 / .4);
+}
+.items-group--salary .link__text > span {
   display: none;
+}
+.items-group__name { /* &[h3] */  
+  display: inline-block;
+  margin: 0 -10px 10px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: #fff;
+  transform: translateY(-50%);
 }
 
 .items {
@@ -30,6 +59,12 @@ h1 {}
   /*display: flex;*/
   /*margin-left: -20px;*/
   flex-wrap: wrap;
+}
+
+@media (max-width: 1400px) {
+  .items {
+    grid-template-columns: repeat(4, calc(25% - 20px));
+  }
 }
 
 
@@ -44,6 +79,7 @@ h1 {}
   justify-content: space-between;
   border: 2px solid darkgray;
   border-radius: 13px;
+  background-color: #fff;
 }
 .item--big {
   /*width: calc(100% / 2.5 - 20px);*/
@@ -102,6 +138,7 @@ h2 img {
   font-weight: 700;
   color: lightcoral;
 }
+
 .link__text--favorite {
   color: orange;
 }
@@ -159,6 +196,4 @@ h2 img {
   margin-bottom: 5px;
   font-weight: 700;
 }
-.link__description {
-
-}
+.link__description {}

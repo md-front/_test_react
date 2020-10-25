@@ -37,9 +37,13 @@ export default class ItemsSection extends React.Component {
     }
 
     activityCheck(prevAllProps, type){
+
         /* объекты { вакансия: группа } */
         const prevProps = prevAllProps[type][this.props.section.id];
         const actualProps = this.props[type][this.props.section.id];
+
+        console.log('prevProps',prevProps);
+        console.log('actualProps',actualProps);
 
         /* id вакансий */
         const prevVacanciesIds = Object.keys(prevProps);
@@ -62,18 +66,26 @@ export default class ItemsSection extends React.Component {
 
         /* todo ? вынести во внешний метод? */
         function changeStatus(vacancyId, typeProps) {
-            console.log('changeStatus groups',groups);
-            // const group = groups.find(group => group.id === typeProps[vacancyId]);
             const vacancy = vacancies.find(vacancy => vacancy.id === vacancyId);
+
+            /* Группа работодателей по типу сортировки */
+            const group = groups.find(group => group.sortValue === vacancy.sort);
+
+            /* Работодатель */
+            const item = group.find(item => item.id === typeProps[vacancyId]);
 
             vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
 
-            // group.haveVisibleItem = group.groups.some(vacancy => !vacancy.is_del)
+            item.haveVisibleItem = item.items.some(vacancy => !vacancy.is_del);
+
+            group.haveVisibleItem = group.items.some(item => !item.haveVisibleItem);
+
+            console.log('groups',groups);
         }
 
         // groups = groups.sort(this.sortGroups);
 
-        this.setState({ vacancies });
+        this.setState({ vacancies, groups });
     }
 
     /** DATA */
@@ -91,6 +103,9 @@ export default class ItemsSection extends React.Component {
         if(window.LOAD_ALL_DATA)
             while(--pagesLeft > 0) {
                 const step = await this.getVacanciesStep(pagesLeft);
+                
+                if(!step.items) break;
+
                 result.push(...step.items);
             }
 

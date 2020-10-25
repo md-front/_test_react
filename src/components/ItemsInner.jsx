@@ -12,9 +12,7 @@ const GROUP_NAMES = {
 export default function ItemsInner(props) {
 
     let groupClassName = 'items-group';
-
-    if(props.itemsList.name === 'salary')
-        groupClassName += ' items-group__salary';
+    groupClassName += ` items-group--${ props.itemsList.name }`;
 
     return (
         <div className={ groupClassName }>

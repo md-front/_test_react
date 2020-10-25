@@ -30,7 +30,13 @@ export default class Main extends React.Component {
 
     /** Store actions */
     getDataFromStorage(type) {
-        return getLS(type) || this.createEmptyStore(type);
+        const storage = getLS(type);
+        const empty = this.createEmptyStore(type);
+
+        if(!storage || Object.keys(storage) < Object.keys(empty))
+            return empty;
+        else
+            return storage;
     }
     createEmptyStore() {
         const result = {};
