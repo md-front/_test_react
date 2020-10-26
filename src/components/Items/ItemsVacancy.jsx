@@ -2,18 +2,6 @@ import React from 'react';
 // import fav from '../assets/star.svg';
 // import del from '../assets/del.svg';
 
-/* TODO ? как лучше переделать? */
-const btns = [
-    {
-        name: 'favorites',
-        type: 'is_fav'
-    },
-    {
-        name: 'blacklist',
-        type: 'is_del'
-    },
-];
-
 export default class ItemsVacancy extends React.Component {
 
     constructor(props) {
@@ -23,6 +11,7 @@ export default class ItemsVacancy extends React.Component {
             isHover: false
         }
 
+        this.handleClick = this.handleClick.bind(this);
         this.handleMouseHover = this.handleMouseHover.bind(this);
     }
 
@@ -32,16 +21,11 @@ export default class ItemsVacancy extends React.Component {
         this.setState({ isHover })
     }
 
-    handleClick(e, btnType) {
+    handleClick(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const params = {
-            id: this.props.vacancy.id,
-            groupId: this.props.vacancy.employer.id
-        };
-
-        this.props.handleClickAction(btnType.name, params);
+        this.props.handleClickAction('blacklist', this.props.vacancy.id);
     }
 
     render() {
@@ -73,12 +57,9 @@ export default class ItemsVacancy extends React.Component {
                     </span>
                 }
 
-                { btns.map((btnType, index) =>
-                    <button type="button"
-                            key={ index }
-                            className={`link__btn link__btn--${ btnType.name }`}
-                            onClick={e => this.handleClick(e, btnType)}/>
-                ) }
+                <button type="button"
+                        className="link__del"
+                        onClick={ this.handleClick }/>
 
             </a>
         );

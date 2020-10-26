@@ -34,14 +34,14 @@ h1 {}
 
 
 .item {
-  display: flex;
+  /*display: flex;*/
   /*width: calc(100% / 5 - 20px);*/
   min-height: 117px;
   /*margin-left: 20px;*/
   /*margin-bottom: 20px;*/
   padding: 15px;
-  flex-direction: column;
-  justify-content: space-between;
+  /*flex-direction: column;*/
+  /*justify-content: space-between;*/
   border: 2px solid darkgray;
   border-radius: 13px;
 }
@@ -57,25 +57,37 @@ h1 {}
 .item--first {
   grid-column: 1;
 }
-.item--jun h2 {
+.item--jun .item__title h2 {
   color: limegreen;
 }
-.item__inner {
-
-}
-h2 {
+.item__title {
   display: flex;
   justify-content: space-between;
-  font-size: 18px;
+  align-items: center;
   margin: 0 0 15px;
+  cursor: pointer;
 }
-h2 span {
-  color: lightcoral;
+.item__title:hover h2 {
+  color: orange;
 }
-h2 img {
+.item__title h2 {
+  margin: 0;
+  font-size: 18px;
+  transition: color .2s;
+}
+.item__title img {
   max-width: 100px;
   max-height: 30px;
   margin-left: 10px;
+}
+
+.item__favorite {
+
+}
+.item__inner {}
+
+h2 span {
+  color: lightcoral;
 }
 .link {
   display: block;
@@ -111,37 +123,33 @@ h2 img {
 .link:hover {
   color: cornflowerblue;
 }
-.link:hover .link__btn  {
+.link:hover .link__del  {
   opacity: 1;
 }
-.link__btn {
+.link__del {
   display: block;
   position: absolute;
   top: 50%;
-  right: 35px;
+  right: 0;
   width: 20px;
   height: 20px;
   border: none;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('./assets/star.svg');
+  background-image: url('./assets/del.svg');
   background-color: transparent;
   transform: translateY(-50%);
   transition: transform .2s, opacity .2s;
   opacity: 0;
 }
-.link__btn--favorite {
-  right: 35px;
-  background-image: url('./assets/star.svg');
-}
-.link__btn--blacklist {
-  right: 0;
-  background-image: url('./assets/del.svg');
-}
-.link__btn:hover {
+.link__del:hover {
   transform: scale(1.5) translateY(-50%);
 }
+/*.link__btn--favorite {
+  right: 35px;
+  background-image: url('./assets/star.svg');
+}*/
 .link__popup {
   color: black;
   background: #fff;

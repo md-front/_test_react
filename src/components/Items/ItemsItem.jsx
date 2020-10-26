@@ -7,22 +7,20 @@ export default function ItemsItem(props) {
 
     let itemClassName = 'item';
 
-    itemClassName += props.item.items.length > 2 ? ' item--big' : '';
+    // itemClassName += props.item.items.length > 2 ? ' item--big' : '';
     itemClassName += props.item.salary ? ' item--salary' : '';
     // itemClassName += props.item.is_new ? ' item--new' : '';
     itemClassName += props.item.is_jun ? ' item--jun' : '';
-    itemClassName += props.item.is_first ? ' item--first' : '';
 
     return (
-        <div className={itemClassName}>  {/*TODO классы*/}
-            <h2>
-                { props.item.name }
-                { logoUrl ?
-                    <img src={logoUrl['90']}/>
-                    :
-                    ''
-                }
-            </h2>
+        <div className={itemClassName}>
+            <div className="item__title"
+                 onClick={ () => props.handleClickAction('favorites', props.item.id) }
+                 title="В избранное">
+                <h2>{ props.item.name }</h2>
+
+                { logoUrl && <img src={logoUrl['90']}/> }
+            </div>
 
             <div className="item__inner">
                 { props.item.items.map((vacancy, index) =>

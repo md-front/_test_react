@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { setLS, getLS } from '../helpers/helpers';
 import Header from '../components/Header';
-import Items from '../components/Items';
+import Items from '../components/Items/Items';
 
 export default class Main extends React.Component {
 
     constructor(props) {
         super(props);
 
+        /**
+         *
+         * @type {{favorites: Object, blacklist: Object}}
+         * favorites: { 'ekb': [Работодатели] }
+         * blacklist: { 'ekb': [Вакансии] }
+         */
         this.state = {
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
@@ -43,16 +49,15 @@ export default class Main extends React.Component {
 
     /** Btn actions */
     handleClickAction(type, sectionId, params) {
-        const items = {...this.state[type][sectionId]};
+        console.log('handleClickAction', type, sectionId, params);
+
+        const result = {...this.state[type]};
+        const items = result[sectionId];
 
         if(items.hasOwnProperty(params.id))
             delete items[params.id];
         else
             items[params.id] = params.groupId;
-
-        const result = {...this.state[type]};
-
-        result[sectionId] = items;
 
         this.setItems(type, result);
     }

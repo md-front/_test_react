@@ -1,5 +1,5 @@
 import React from 'react';
-import { lastValidDate } from '../helpers/helpers';
+import { lastValidDate } from '../../helpers/helpers';
 import ItemsTitle from './ItemsTitle';
 import ItemsInner from './ItemsInner';
 
@@ -34,10 +34,11 @@ export default class ItemsSection extends React.Component {
     componentDidUpdate(prevAllProps) {
 
         /* todo ? как вынести за componentDidUpdate? */
-        ['favorites','blacklist'].forEach(type => this.activityCheck(prevAllProps, type));
+        // ['favorites','blacklist'].forEach(type => this.activityCheck(prevAllProps, type));
     }
 
     activityCheck(prevAllProps, type){
+
         /* объекты { вакансия: группа } */
         const prevProps = prevAllProps[type][this.props.section.id];
         const actualProps = this.props[type][this.props.section.id];
