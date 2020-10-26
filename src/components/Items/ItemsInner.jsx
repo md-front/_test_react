@@ -2,7 +2,7 @@ import React from 'react';
 import ItemsList from './ItemsList';
 
 const GROUP_NAMES = {
-    is_fav: 'Избранные вакансии',
+    is_fav: 'Избранное',
     is_new: 'Новые вакансии',
     is_jun: 'Вакансии для начинающих',
     salary: 'Вакансии с указанным окладом',

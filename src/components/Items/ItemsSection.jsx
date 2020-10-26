@@ -97,6 +97,7 @@ export default class ItemsSection extends React.Component {
                 return item.id === id;
             })
 
+            /* todo refactoring */
             newGroup = groups.find(group => group.sortValue === FAVORITE_SORT_VALUE);
 
             if(!newGroup) {
@@ -113,6 +114,7 @@ export default class ItemsSection extends React.Component {
                 return item.id === id;
             });
 
+            /* todo refactoring */
             newGroup = groups.find(group => group.sortValue === item.sort.value);
 
             if(!newGroup) {
@@ -120,6 +122,8 @@ export default class ItemsSection extends React.Component {
                 groups.push(newGroup);
             }
         }
+
+        item.is_fav = isAdding;
 
         newGroup.items.push(item);
 
@@ -158,23 +162,17 @@ export default class ItemsSection extends React.Component {
                 break;
         }
 
-        /* TODO ТУЦ_ТУЦ */
-        console.clear();
-        console.log('id, parentId',id, parentId);
-        console.log('item',item);
-        console.log('были в группе:',item.sort.value);
-
         let topVacancySort = DEFAULT_SORT;
         item.items.forEach(vacancy => {
             if(!vacancy.is_del && vacancy.sort.value > topVacancySort.value)
                 topVacancySort = vacancy.sort;
         })
 
-        if(item.sort.value !== topVacancySort.value) {
+        if(!item.is_fav && item.sort.value !== topVacancySort.value) {
             item.sort = topVacancySort;
 
-            console.log('переносим в новую:',item.sort.value);
 
+            /* todo refactoring */
             let newGroup = groups.find(group => group.sortValue === item.sort.value);
 
             if(!newGroup) {
@@ -190,8 +188,6 @@ export default class ItemsSection extends React.Component {
 
             groups = sortByReduction(groups, 'sortValue');
         }
-
-
 
         item.haveVisibleItem = checkItems(item.items, 'is_del', false);
         prevGroup.haveVisibleItem = checkItems(prevGroup.items, 'haveVisibleItem');
