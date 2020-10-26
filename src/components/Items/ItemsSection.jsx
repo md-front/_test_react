@@ -1,12 +1,15 @@
 import React from 'react';
+import { sortByReduction } from '../../helpers/helpers';
 import ItemsTitle from './ItemsTitle';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
-const actionTypes = {
+const ACTION_TYPES = {
     favorites: 'is_fav',
     blacklist: 'is_del',
 }
+
+const FAVORITE_SORT_VALUE = 4;
 
 // let changedVacation = {};
 
@@ -20,6 +23,9 @@ export default class ItemsSection extends React.Component {
             isLoaded: false,
             vacancies: []
         }
+
+        this.favoritesAction = this.favoritesAction.bind(this);
+        this.blacklistAction = this.blacklistAction.bind(this);
     }
 
     componentDidMount() {
@@ -32,58 +38,113 @@ export default class ItemsSection extends React.Component {
     }
     componentDidUpdate(prevAllProps) {
 
+        const ACTIONS = [
+            {
+                name: 'favorites',
+                action: this.favoritesAction
+            },
+            {
+                name: 'blacklist',
+                action: this.blacklistAction
+            },
+        ]
+
         /* todo ? как вынести за componentDidUpdate? */
-        // ['favorites','blacklist'].forEach(type => this.activityCheck(prevAllProps, type));
+        ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
     }
 
-    activityCheck(prevAllProps, type){
+    activityCheck(action, prevAllProps){
+        const prevProps = prevAllProps[action.name][this.props.section.id];
+        const actualProps = this.props[action.name][this.props.section.id];
 
-        /* объекты { вакансия: группа } */
-        const prevProps = prevAllProps[type][this.props.section.id];
-        const actualProps = this.props[type][this.props.section.id];
+        if(prevProps.length === actualProps.length) return;
 
-        console.log('prevProps',prevProps);
-        console.log('actualProps',actualProps);
+        if(prevProps.length > actualProps.length) {
+            const changedIds = prevProps.filter(id => !actualProps.includes(id));
 
-        /* id вакансий */
-        const prevVacanciesIds = Object.keys(prevProps);
-        const actualVacanciesIds = Object.keys(actualProps);
+            changedIds.forEach(changedId => action.action(action.name, changedId, false))
+        } else {
+            const changedId = actualProps.find(vacancyId => !prevProps.includes(vacancyId));
 
+            action.action(action.name, changedId, true);
+        }
+    }
+    favoritesAction(type, id, isAdding) {
+        let groups = [...this.state.groups];
+        let prevGroup;
+        let newGroup;
+        let item;
+        let itemIndex;
+
+        if(isAdding) {
+            /* todo не проходить через все item */
+            for(let group of groups) {
+                item = group.items.find((item, index) => {
+                    itemIndex = index;
+                    return item.id === id;
+                })
+
+                if(item) break;
+            }
+
+            prevGroup = groups.find(group => group.sortValue === item.sort.value);
+
+            newGroup = groups.find(group => group.sortValue === FAVORITE_SORT_VALUE);
+
+            if(!newGroup) {
+                newGroup = this.createGroup("is_fav", FAVORITE_SORT_VALUE);
+                groups.push(newGroup);
+            }
+        } else {
+            /* Группа работодателей по типу */
+            prevGroup = groups.find(group => group.sortValue === FAVORITE_SORT_VALUE);
+
+            /* Работодатель */
+            item = prevGroup.items.find((item, index) => {
+                itemIndex = index;
+                return item.id === id;
+            });
+
+            newGroup = groups.find(group => group.sortValue === item.sort.value);
+
+            if(!newGroup) {
+                newGroup = this.createGroup(item.sort.name, item.sort.value);
+                groups.push(newGroup);
+            }
+        }
+
+        newGroup.items.push(item);
+
+        prevGroup.items.splice(itemIndex, 1);
+
+        newGroup.haveVisibleItem = newGroup.items.length > 0;
+
+        prevGroup.haveVisibleItem = prevGroup.items.length > 0;
+
+        groups = sortByReduction(groups, 'sortValue');
+
+        this.setState({ groups });
+    }
+
+    blacklistAction(type, id) {
         let groups = [...this.state.groups];
         let vacancies = [...this.state.vacancies];
 
-        if(prevVacanciesIds.length === actualVacanciesIds.length) return;
+        const vacancy = vacancies.find(vacancy => vacancy.id === id);
 
-        if(prevVacanciesIds.length > actualVacanciesIds.length) {
-            const changedVacanciesId = prevVacanciesIds.filter(id => !actualVacanciesIds.includes(id));
+        /* Группа работодателей по типу */
+        const group = groups.find(group => group.sortValue === vacancy.sortValue);
 
-            changedVacanciesId.forEach(vacancyId => changeStatus(vacancyId, prevProps))
-        } else {
-            const vacancyId = actualVacanciesIds.find(vacancyId => !prevVacanciesIds.includes(vacancyId));
+        /* Работодатель */
+        const item = group.items.find(item => item.id === vacancy.employer.id);
 
-            changeStatus(vacancyId, actualProps);
-        }
+        vacancy[ACTION_TYPES[type]] = !vacancy[ACTION_TYPES[type]];
 
-        /* todo ? вынести во внешний метод? */
-        function changeStatus(vacancyId, typeProps) {
-            const vacancy = vacancies.find(vacancy => vacancy.id === vacancyId);
+        item.haveVisibleItem = item.items.some(vacancy => !vacancy.is_del);
 
-            /* Группа работодателей по типу сортировки */
-            const group = groups.find(group => group.sortValue === vacancy.sort);
+        group.haveVisibleItem = group.items.some(item => item.haveVisibleItem);
 
-            /* Работодатель */
-            const item = group.find(item => item.id === typeProps[vacancyId]);
-
-            vacancy[actionTypes[type]] = !vacancy[actionTypes[type]];
-
-            item.haveVisibleItem = item.items.some(vacancy => !vacancy.is_del);
-
-            group.haveVisibleItem = group.items.some(item => !item.haveVisibleItem);
-
-            console.log('groups',groups);
-        }
-
-        // groups = groups.sort(this.sortGroups);
+        groups = sortByReduction(groups, 'sortValue');
 
         this.setState({ vacancies, groups });
     }
@@ -128,7 +189,7 @@ export default class ItemsSection extends React.Component {
         }
     }
     groupVacancies(vacancies) {
-        let result = {};
+        let items = {};
         let validVacancies = [];
         const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
 
@@ -136,11 +197,11 @@ export default class ItemsSection extends React.Component {
             /* Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
 
-            const EMPLOYER_ID = vacancy.employer.id;
+            const employerId = vacancy.employer.id;
 
-            if(!result.hasOwnProperty(EMPLOYER_ID)) {
-                result[EMPLOYER_ID] = {
-                    id: EMPLOYER_ID,
+            if(!items.hasOwnProperty(employerId))
+                items[employerId] = {
+                    id: employerId,
                     name: vacancy.employer.name,
                     sort: {
                         value: 0,
@@ -149,31 +210,23 @@ export default class ItemsSection extends React.Component {
                     items: [],
                     haveVisibleItem: false,
                 }
-            }
 
-            let group = result[EMPLOYER_ID];
+            let item = items[employerId];
 
             /* Проверка дублирования вакансий в группе */
-            if(group.items.some(item => item.name === vacancy.name)) return;
+            if(item.items.some(item => item.name === vacancy.name)) return;
 
             /* Проверка на наличие в блеклисте */
-            if(this.props.blacklist[this.props.section.id].hasOwnProperty(vacancy.id))
+            if(this.props.blacklist[this.props.section.id].includes(vacancy.id))
                 vacancy.is_del = true;
             else
-                group.haveVisibleItem = true;
+                item.haveVisibleItem = true;
 
-            const isFav = this.props.favorites[this.props.section.id].hasOwnProperty(vacancy.id);
             const isJun = !vacancy.is_jun && vacancy.name.match(window.JUNIOR);
             const isNew = new Date(vacancy.created_at) > lastValidDate;
 
-            /* Вакансия в избранном */
-            if(isFav)
-                setGroupParams(4, 'is_fav');
-            else
-                vacancy.is_fav = false;
-
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
-            if(isNew && !isFav)
+            if(isNew)
                 setGroupParams(3, 'is_new');
 
             /* Вакансия без опыта, todo повторная проверка */
@@ -184,45 +237,61 @@ export default class ItemsSection extends React.Component {
             if(vacancy.salary)
                 setGroupParams(1, 'salary');
 
-            group.items.push(vacancy);
-            validVacancies.push(vacancy);
-
             function setGroupParams(sortValue, paramName) {
 
-                if(group.sort.value < sortValue) {
+                if(item.sort.value < sortValue) {
                     vacancy.sortValue = sortValue;
-                    group.sort = {
+                    item.sort = {
+                        name: paramName,
                         value: sortValue,
-                        name: paramName
                     }
                 }
 
-                group[paramName] = true;
+                item[paramName] = true;
             }
+
+            item.items.push(vacancy);
+            validVacancies.push(vacancy);
         })
 
         this.setState({ vacancies: validVacancies })
 
-        return this.groupBySort(Object.values(result));
+        return this.groupItems(Object.values(items));
     }
 
-    groupBySort(groups) {
-        const result = {};
+    groupItems(items) {
+        const groups = {};
 
-        groups.forEach(group => {
-            const sortType = group.sort.name;
+        items.forEach(item => {
+            const isFav = this.props.favorites[this.props.section.id].includes(item.id);
 
-            if(!result[sortType])
-                result[sortType] = {
-                    name: sortType,
-                    sortValue: group.sort.value,
-                    items: [],
-                }
+            let groupType;
+            let sortValue;
 
-            result[sortType].items.push(group);
+            if(isFav) {
+                groupType = 'is_fav';
+                sortValue = FAVORITE_SORT_VALUE;
+            } else {
+                groupType = item.sort.name;
+                sortValue = item.sort.value;
+            }
+
+            if(!groups[groupType])
+                groups[groupType] = this.createGroup(groupType, sortValue)
+
+            groups[groupType].items.push(item);
         })
 
-        return Object.values(result).sort((groupsA, groupsB) => groupsB.sortValue - groupsA.sortValue);
+        return sortByReduction(Object.values(groups), 'sortValue');
+    }
+
+    createGroup(name, sortValue, items = []) {
+        return {
+            name,
+            sortValue,
+            haveVisibleItem: true,
+            items
+        }
     }
 
     renderItemsOnLoad(visibleVacancies) {
@@ -230,6 +299,7 @@ export default class ItemsSection extends React.Component {
         if(visibleVacancies)
             return (
                 this.state.groups.map((item, index) =>
+                    item.haveVisibleItem &&
                     <ItemsInner itemsList={ item }
                                 section={ this.props.section }
                                 key={ index }

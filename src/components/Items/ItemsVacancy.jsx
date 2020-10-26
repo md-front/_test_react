@@ -32,9 +32,6 @@ export default class ItemsVacancy extends React.Component {
         const vacancy = this.props.vacancy;
         const salary = vacancy.salary;
 
-        let textClassName = 'link__text';
-        textClassName += vacancy.is_fav ? ' link__text--favorite' : '';
-
         return (
             <a href={ vacancy.alternate_url }
                className="link"
@@ -42,7 +39,7 @@ export default class ItemsVacancy extends React.Component {
                onMouseLeave={this.handleMouseHover}
                target="_blank" >
 
-                <span className={ textClassName }>
+                <span className="link__text" >
                     <span>{ salary && '$' }&nbsp;</span>{ vacancy.name }
                 </span>
 

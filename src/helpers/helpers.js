@@ -8,4 +8,12 @@ module.exports = {
     getLS(key) {
         return JSON.parse(localStorage.getItem(key))
     },
+
+    /**  Sort */
+    sortByReduction(arr, param) {
+        return arr.sort((a,b) => b[param] - a[param]);
+    },
+    sortByIncreasing(arr, param) {
+        return arr.sort((a,b) => a[param] - b[param]);
+    }
 }
