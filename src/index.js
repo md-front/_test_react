@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 
 // debug
-window.LOAD_ALL_DATA = false;
+window.LOAD_ALL_DATA = true;
 
 window.LOCATION_PARAMS = [
     {

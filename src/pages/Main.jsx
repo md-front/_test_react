@@ -47,22 +47,23 @@ export default class Main extends React.Component {
     createEmptyStore() {
         const result = {};
 
-        window.LOCATION_PARAMS.forEach(location => result[location.id] = [])
+        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})
 
         return result;
     }
 
 
     /** Btn actions */
-    handleClickAction(type, sectionId, id) {
-        let items = [...this.state[type][sectionId]];
+    handleClickAction(type, sectionId, params) {
+        const items = {...this.state[type][sectionId]};
 
-        if(items.includes(id))
-            items = items.filter(item => item !== id);
+        if(items.hasOwnProperty(params.id))
+            delete items[params.id];
         else
-            items.push(id);
+            items[params.id] = params.parentId;
 
-        const result = {...this.state[type]}; /* todo отрефакторить, что-то я тут упускаю */
+        const result = {...this.state[type]};
+
         result[sectionId] = items;
 
         this.setItems(type, result);

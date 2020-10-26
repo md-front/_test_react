@@ -15,5 +15,10 @@ module.exports = {
     },
     sortByIncreasing(arr, param) {
         return arr.sort((a,b) => a[param] - b[param]);
+    },
+
+    /** Check */
+    checkItems(arr, param, state = true) {
+        return arr && arr.some(element => state ? element[param] : !element[param])
     }
 }

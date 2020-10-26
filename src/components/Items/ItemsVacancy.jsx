@@ -11,7 +11,7 @@ export default class ItemsVacancy extends React.Component {
             isHover: false
         }
 
-        this.handleClick = this.handleClick.bind(this);
+        this.toggleBlacklist = this.toggleBlacklist.bind(this);
         this.handleMouseHover = this.handleMouseHover.bind(this);
     }
 
@@ -21,11 +21,16 @@ export default class ItemsVacancy extends React.Component {
         this.setState({ isHover })
     }
 
-    handleClick(e) {
+    toggleBlacklist(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.handleClickAction('blacklist', this.props.vacancy.id);
+        const params = {
+            id: this.props.vacancy.id,
+            parentId: this.props.vacancy.employer.id
+        };
+
+        this.props.handleClickAction('blacklist', params);
     }
 
     render() {
@@ -56,7 +61,7 @@ export default class ItemsVacancy extends React.Component {
 
                 <button type="button"
                         className="link__del"
-                        onClick={ this.handleClick }/>
+                        onClick={ this.toggleBlacklist }/>
 
             </a>
         );

@@ -12,10 +12,19 @@ export default function ItemsItem(props) {
     // itemClassName += props.item.is_new ? ' item--new' : '';
     itemClassName += props.item.is_jun ? ' item--jun' : '';
 
+    function toggleFavorite() {
+        const params = {
+            id: props.item.id,
+            parentId: props.item.sort.value
+        };
+
+        props.handleClickAction('favorites', params)
+    }
+
     return (
         <div className={itemClassName}>
             <div className="item__title"
-                 onClick={ () => props.handleClickAction('favorites', props.item.id) }
+                 onClick={ toggleFavorite }
                  title="В избранное">
                 <h2>{ props.item.name }</h2>
 
