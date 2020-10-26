@@ -36,12 +36,18 @@ export default class Main extends React.Component {
 
     /** Store actions */
     getDataFromStorage(type) {
-        return getLS(type) || this.createEmptyStore(type);
+        const storage = getLS(type);
+        const empty = this.createEmptyStore(type);
+
+        if(!storage || Object.keys(storage) < Object.keys(empty))
+            return empty;
+        else
+            return storage;
     }
     createEmptyStore() {
         const result = {};
 
-        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})
+        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})    
 
         return result;
     }
@@ -50,7 +56,6 @@ export default class Main extends React.Component {
     /** Btn actions */
     handleClickAction(type, sectionId, params) {
         console.log('handleClickAction', type, sectionId, params);
-
         const result = {...this.state[type]};
         const items = result[sectionId];
 
