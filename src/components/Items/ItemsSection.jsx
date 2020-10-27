@@ -1,6 +1,5 @@
 import React from 'react';
 import { sortByReduction, checkItems } from '../../helpers/helpers';
-import ItemsTitle from './ItemsTitle';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
@@ -36,6 +35,10 @@ export default class ItemsSection extends React.Component {
             const vacancies = await this.getVacancies();
             const groups = this.groupVacancies(vacancies);
 
+            const quantity = this.visibleVacancies();
+
+            this.props.handleLoaded(quantity);
+
             this.setState({ groups, isLoaded: true })
         })()
     }
@@ -52,12 +55,16 @@ export default class ItemsSection extends React.Component {
             },
         ]
 
-        /* todo ? как вынести за componentDidUpdate? */
+        /* todo ? как-то вынести за componentDidUpdate? */
         ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
     }
 
+    visibleVacancies() {
+        return this.state.vacancies.length - Object.keys(this.props.blacklist[this.props.section.id]).length;
+    }
+
     activityCheck(action, prevAllProps){
-        /* объекты { вакансия: группа } */
+        /* объекты { вакансия: item } / { item: группа } */
         const prevProps = prevAllProps[action.name][this.props.section.id];
         const actualProps = this.props[action.name][this.props.section.id];
 
@@ -67,6 +74,7 @@ export default class ItemsSection extends React.Component {
 
         if(prevIds.length === actualIds.length) return;
 
+        /* todo ? убрать if и всё проходить фильтром, стоит ли? */
         if(prevIds.length > actualIds.length) {
             const changedIds = prevIds.filter(id => !actualIds.includes(id));
 
@@ -89,38 +97,42 @@ export default class ItemsSection extends React.Component {
         let item;
         let itemIndex;
 
-        if(isAdding) {
-            prevGroup = groups.find(group => group.sortValue === parentId);
-
-            item = prevGroup.items.find((item, index) => {
-                itemIndex = index;
-                return item.id === id;
-            })
-
-            /* todo refactoring */
-            newGroup = groups.find(group => group.sortValue === FAVORITE_SORT_VALUE);
-
-            if(!newGroup) {
-                newGroup = this.createGroup("is_fav", FAVORITE_SORT_VALUE);
-                groups.push(newGroup);
+        /* todo ? избавился от лишних if'ов, но выглядит довольно убого */
+        const PARAMS = {
+            adding: {
+                parentId: parentId,
+                newGroupId() {
+                    return FAVORITE_SORT_VALUE
+                },
+                createNewGroup() {
+                    return this.createGroup("is_fav", FAVORITE_SORT_VALUE);
+                }
+            },
+            removing: {
+                parentId: FAVORITE_SORT_VALUE,
+                newGroupId(item) {
+                    return item.sort.value
+                },
+                createNewGroup() {
+                    return this.createGroup(item.sort.name, item.sort.value);
+                }
             }
-        } else {
-            /* Группа работодателей по типу */
-            prevGroup = groups.find(group => group.sortValue === FAVORITE_SORT_VALUE);
+        }
 
-            /* Работодатель */
-            item = prevGroup.items.find((item, index) => {
-                itemIndex = index;
-                return item.id === id;
-            });
+        const currentParams = isAdding ? PARAMS['adding'] : PARAMS['removing'];
 
-            /* todo refactoring */
-            newGroup = groups.find(group => group.sortValue === item.sort.value);
+        prevGroup = groups.find(group => group.sortValue === currentParams.parentId);
 
-            if(!newGroup) {
-                newGroup = this.createGroup(item.sort.name, item.sort.value);
-                groups.push(newGroup);
-            }
+        item = prevGroup.items.find((item, index) => {
+            itemIndex = index;
+            return item.id === id;
+        })
+
+        newGroup = groups.find(group => group.sortValue === currentParams.newGroupId(item));
+
+        if(!newGroup) {
+            newGroup = currentParams.createNewGroup.call(this);
+            groups.push(newGroup);
         }
 
         item.is_fav = isAdding;
@@ -129,8 +141,8 @@ export default class ItemsSection extends React.Component {
 
         prevGroup.items.splice(itemIndex, 1);
 
-        newGroup.haveVisibleItem = newGroup.items && newGroup.items.some(item => item.haveVisibleItem);
-        prevGroup.haveVisibleItem = prevGroup.items && prevGroup.items.some(item => item.haveVisibleItem);
+        newGroup.haveVisibleItem = checkItems(newGroup.items, 'haveVisibleItem');
+        prevGroup.haveVisibleItem = checkItems(prevGroup.items, 'haveVisibleItem');
 
         groups = sortByReduction(groups, 'sortValue');
 
@@ -162,6 +174,8 @@ export default class ItemsSection extends React.Component {
                 break;
         }
 
+        item.haveVisibleItem = checkItems(item.items, 'is_del', false);
+
         let topVacancySort = DEFAULT_SORT;
         item.items.forEach(vacancy => {
             if(!vacancy.is_del && vacancy.sort.value > topVacancySort.value)
@@ -171,8 +185,6 @@ export default class ItemsSection extends React.Component {
         if(!item.is_fav && item.sort.value !== topVacancySort.value) {
             item.sort = topVacancySort;
 
-
-            /* todo refactoring */
             let newGroup = groups.find(group => group.sortValue === item.sort.value);
 
             if(!newGroup) {
@@ -184,12 +196,11 @@ export default class ItemsSection extends React.Component {
 
             prevGroup.items.splice(itemIndex, 1);
 
-            newGroup.haveVisibleItem = newGroup.items && newGroup.items.some(item => item.haveVisibleItem);
+            newGroup.haveVisibleItem = checkItems(newGroup.items, 'haveVisibleItem');
 
             groups = sortByReduction(groups, 'sortValue');
         }
 
-        item.haveVisibleItem = checkItems(item.items, 'is_del', false);
         prevGroup.haveVisibleItem = checkItems(prevGroup.items, 'haveVisibleItem');
 
         groups = sortByReduction(groups, 'sortValue');
@@ -269,7 +280,7 @@ export default class ItemsSection extends React.Component {
             else
                 item.haveVisibleItem = true;
 
-            const isJun = !vacancy.is_jun && vacancy.name.match(window.JUNIOR);
+            const isJun = vacancy.is_jun || vacancy.name.match(window.JUNIOR);
             const isNew = new Date(vacancy.created_at) > lastValidDate;
 
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
@@ -285,18 +296,19 @@ export default class ItemsSection extends React.Component {
                 setGroupParams(1, 'salary');
 
             function setGroupParams(sortValue, paramName) {
-
-                if(item.sort.value < sortValue) {
-                    const sort = {
-                        name: paramName,
-                        value: sortValue,
-                    }
-
-                    vacancy.sort = sort;
-                    item.sort = sort;
+                const sort = {
+                    name: paramName,
+                    value: sortValue,
                 }
 
+                if(item.sort.value < sortValue)
+                    item.sort = sort;
+
+                if(vacancy.sort.value < sortValue)
+                    vacancy.sort = sort;
+
                 item[paramName] = true;
+                vacancy[paramName] = true;
             }
 
             item.items.push(vacancy);
@@ -333,7 +345,7 @@ export default class ItemsSection extends React.Component {
 
         for(let i in groups) {
             const group = groups[i];
-            group.haveVisibleItem = group.items && group.items.some(item => item.haveVisibleItem);
+            group.haveVisibleItem = checkItems(group.items, 'haveVisibleItem');
         }
 
         return sortByReduction(Object.values(groups), 'sortValue');
@@ -348,38 +360,37 @@ export default class ItemsSection extends React.Component {
         }
     }
 
-    renderItemsOnLoad(visibleVacancies) {
-
-        if(visibleVacancies)
-            return (
-                this.state.groups.map((item, index) =>
-                    item.haveVisibleItem &&
-                    <ItemsInner itemsList={ item }
-                                section={ this.props.section }
-                                key={ index }
-                                handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
-                )
+    /** Render */
+    renderItemsOnLoad() {
+        return this.visibleVacancies ? this.renderItems() : this.renderItemsIsEmpty();
+    }
+    renderItems() {
+        return (
+            this.state.groups.map((item, index) =>
+                item.haveVisibleItem &&
+                <ItemsInner itemsList={ item }
+                            section={ this.props.section }
+                            key={ index }
+                            handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
             )
-        else
-            return (
-                <h3>Подходящих вакансий не найдено :(</h3>
-            )
+        )
+    }
+    renderItemsIsEmpty() {
+        return <h3>Подходящих вакансий не найдено :(</h3>;
     }
 
     render() {
-        const visibleVacancies = this.state.vacancies.length - Object.keys(this.props.blacklist[this.props.section.id]).length;
 
         return (
             <section>
-                <ItemsTitle title={ this.props.section.name }
-                            isLoaded={ this.state.isLoaded }
-                            quantity={ visibleVacancies } />
 
-                { this.state.isLoaded ?
-                    this.renderItemsOnLoad(visibleVacancies)
-                    :
-                    <h3>Загрузка</h3>
-                }
+                <div className="section__inner">
+                    { this.state.isLoaded ?
+                        this.renderItemsOnLoad()
+                        :
+                        <h3>Загрузка...</h3>
+                    }
+                </div>
 
             </section>
         );

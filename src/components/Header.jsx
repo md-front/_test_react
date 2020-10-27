@@ -21,15 +21,17 @@ export default function(props) {
 
     return (
         <header>
-            { btns.map((btn, index) =>
-                <button type="button"
-                        key={index}
-                        className={`clear${ !props[btn.disableName] ? ' disabled' : ''}`}
-                        onClick={() => props.clearItems(btn.actionType)}>
-                    { btn.text }
-                    <img src={ btn.img }/>
-                </button>
-            )}
+            <div className="btns">
+                { btns.map((btn, index) =>
+                    <button type="button"
+                            key={index}
+                            className={`clear${ !props[btn.disableName] ? ' disabled' : ''}`}
+                            onClick={() => props.clearItems(btn.actionType)}>
+                        { btn.text }
+                        <img src={ btn.img }/>
+                    </button>
+                )}
+            </div>
         </header>
     );
 }

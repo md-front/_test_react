@@ -6,17 +6,17 @@ import App from './App';
 // debug
 window.LOAD_ALL_DATA = true;
 
-window.LOCATION_PARAMS = [
+const LOCATION_PARAMS = [
     {
         'id': 'ekb',
         'name': 'Екатеринбург',
         'location': 'area=3',
     },
-    /*{
+    {
         'id': 'remote',
         'name': 'Удалённо',
         'location': 'schedule=remote'
-    },*/
+    },
 ]
 
 // Регулярки имени вакансии
@@ -28,7 +28,7 @@ window.COMPANY_BLACKLIST = ['4932875','46587']; /* TODO забивается р�
 
 ReactDOM.render(
   <React.StrictMode>
-    <App/>
+    <App locations={ LOCATION_PARAMS } />
   </React.StrictMode>,
   document.getElementById('root')
 );

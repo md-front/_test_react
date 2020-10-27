@@ -6,7 +6,7 @@ export default function App(props) {
 
   return (
     <div>
-        <Main/>
+        <Main locations={ props.locations }/>
     </div>
   );
 }

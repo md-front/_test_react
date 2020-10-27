@@ -47,7 +47,7 @@ export default class Main extends React.Component {
     createEmptyStore() {
         const result = {};
 
-        window.LOCATION_PARAMS.forEach(location => result[location.id] = {})
+        this.props.locations.forEach(location => result[location.id] = {})
 
         return result;
     }
@@ -82,12 +82,14 @@ export default class Main extends React.Component {
     render() {
         return (
             <div className="main">
-                <Header clearItems={this.clearItems}
-                        isFavActive={this.isBtnActive('favorites')}
-                        isDelActive={this.isBtnActive('blacklist')}/>
-                <Items handleClickAction={this.handleClickAction}
-                       favorites={this.state.favorites}
-                       blacklist={this.state.blacklist} />
+                <Header clearItems={ this.clearItems }
+                        isFavActive={ this.isBtnActive('favorites') }
+                        isDelActive={ this.isBtnActive('blacklist') }/>
+
+                <Items handleClickAction={ this.handleClickAction }
+                       locations={ this.props.locations }
+                       favorites={ this.state.favorites }
+                       blacklist={ this.state.blacklist } />
             </div>
         );
     }

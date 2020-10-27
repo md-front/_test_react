@@ -7,9 +7,7 @@ export default function ItemsItem(props) {
 
     let itemClassName = 'item';
 
-    // itemClassName += props.item.items.length > 2 ? ' item--big' : '';
     itemClassName += props.item.salary ? ' item--salary' : '';
-    // itemClassName += props.item.is_new ? ' item--new' : '';
     itemClassName += props.item.is_jun ? ' item--jun' : '';
 
     function toggleFavorite() {
@@ -33,12 +31,10 @@ export default function ItemsItem(props) {
 
             <div className="item__inner">
                 { props.item.items.map((vacancy, index) =>
-                    !vacancy.is_del ?
-                        <ItemsVacancy vacancy={vacancy}
-                                      key={index}
-                                      handleClickAction={props.handleClickAction} />
-                        :
-                        ''
+                    !vacancy.is_del &&
+                    <ItemsVacancy vacancy={vacancy}
+                                  key={index}
+                                  handleClickAction={props.handleClickAction} />
                 )}
             </div>
 

@@ -8,7 +8,7 @@ export default class ItemsVacancy extends React.Component {
         super(props);
 
         this.state = {
-            isHover: false
+            isHover: false,
         }
 
         this.toggleBlacklist = this.toggleBlacklist.bind(this);
@@ -43,7 +43,6 @@ export default class ItemsVacancy extends React.Component {
                onMouseEnter={this.handleMouseHover}
                onMouseLeave={this.handleMouseHover}
                target="_blank" >
-
                 <span className="link__text" >
                     <span>{ salary && '$' }&nbsp;</span>{ vacancy.name }
                 </span>
@@ -54,7 +53,7 @@ export default class ItemsVacancy extends React.Component {
                             <span className="link__salary">{ salary.from }{ salary.from && salary.to ? ' - ' : '' }{ salary.to }</span>
                         }
                         { vacancy.snippet && vacancy.snippet.requirement &&
-                            <span className="link__description">{ vacancy.snippet.requirement }</span>
+                            <span className="link__description"  dangerouslySetInnerHTML={{  __html: this.props.vacancy.snippet.requirement  }} />
                         }
                     </span>
                 }

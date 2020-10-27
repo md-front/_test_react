@@ -3,12 +3,11 @@
   box-sizing: border-box;
 }
 
-header {
-  display: flex;
-  justify-content: flex-end;
+body {
+  margin: 0;
 }
 
-body {
+h1 {
   margin: 0;
 }
 
