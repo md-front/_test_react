@@ -22,20 +22,27 @@ const btns = [
     },
 ]
 
-export default function(props) {
+export default function Header(props) {
 
     return (
         <header>
-            <div className={ styles.btns }>
-                { btns.map((btn, index) =>
-                    <button type="button"
-                            key={ index }
-                            className={ props[btn.disableName] ? styles[btn.className] : styles[btn.disableClassName] }
-                            onClick={ () => props.clearItems(btn.actionType) }>
-                        { btn.text }
-                        <img src={ btn.img }/>
-                    </button>
-                )}
+            <div className={ styles.actions }>
+                <button type="button"
+                        onClick={ props.showAlert }
+                        className={ styles['show-alert'] }
+                        title="Показать описание">!</button>
+
+                <div className={ styles.btns }>
+                    { btns.map((btn, index) =>
+                        <button type="button"
+                                key={ index }
+                                className={ props[btn.disableName] ? styles[btn.className] : styles[btn.disableClassName] }
+                                onClick={ () => props.clearItems(btn.actionType) }>
+                            { btn.text }
+                            <img src={ btn.img }/>
+                        </button>
+                    )}
+                </div>
             </div>
         </header>
     );

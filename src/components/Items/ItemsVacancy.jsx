@@ -47,14 +47,14 @@ export default class ItemsVacancy extends React.Component {
                 </span>
 
                 { this.state.isHover &&
-                    <span className={ styles.popup }>
+                    <div className={ styles.popup }>
                         { salary &&
                             <span className={ styles.salary }>{ salary.from }{ salary.from && salary.to ? ' - ' : '' }{ salary.to }</span>
                         }
                         { vacancy.snippet && vacancy.snippet.requirement &&
                             <span className={ styles.description } dangerouslySetInnerHTML={{  __html: this.props.vacancy.snippet.requirement  }} />
                         }
-                    </span>
+                    </div>
                 }
 
                 <button type="button"

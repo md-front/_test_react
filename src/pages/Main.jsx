@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { setLS, getLS } from '../helpers';
 import Header from '../components/Header';
 import Items from '../components/Items/Items';
+import Alert from "../components/Alert";
 
 export default class Main extends React.Component {
 
@@ -15,6 +16,7 @@ export default class Main extends React.Component {
          * blacklist: { 'ekb': [Вакансии] }
          */
         this.state = {
+            alertShowed: false,
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
         }
@@ -79,18 +81,23 @@ export default class Main extends React.Component {
         setLS(type, payload);
     }
 
+
     render() {
         return (
-            <div className="main">
-                <Header clearItems={ this.clearItems }
-                        isFavActive={ this.isBtnActive('favorites') }
-                        isDelActive={ this.isBtnActive('blacklist') }/>
+            !this.state.alertShowed ?
+                <Alert closeAlert={ () => this.setState({ alertShowed: true }) } />
+                :
+                <div className="main">
+                    <Header clearItems={ this.clearItems }
+                            isFavActive={ this.isBtnActive('favorites') }
+                            isDelActive={ this.isBtnActive('blacklist') }
+                            showAlert={ () => this.setState({ alertShowed: false }) }/>
 
-                <Items handleClickAction={ this.handleClickAction }
-                       locations={ this.props.locations }
-                       favorites={ this.state.favorites }
-                       blacklist={ this.state.blacklist } />
-            </div>
+                    <Items handleClickAction={ this.handleClickAction }
+                           locations={ this.props.locations }
+                           favorites={ this.state.favorites }
+                           blacklist={ this.state.blacklist } />
+                </div>
         );
     }
 }
