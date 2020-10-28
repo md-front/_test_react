@@ -1,0 +1,58 @@
+@import '../variables.scss';
+
+.btns {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn { /* &[button] */
+  display: inline-flex;
+  margin-left: 15px;
+  align-items: center;
+  padding: 5px 10px;
+  font-weight: 700;
+  border: 2px solid;
+  border-radius: 13px;
+  background-color: transparent;
+  transition: .2s;
+  cursor: pointer;
+
+  img {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+  }
+}
+
+.disabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+.fav {
+  composes: btn;
+  border-color: favColor;
+
+  &:hover {
+    background-color: favColor;
+  }
+
+  &-disabled {
+    composes: fav;
+    composes: disabled;
+  }
+}
+
+.del {
+  composes: btn;
+  border-color: defaultColor;
+
+  &:hover {
+    background-color: defaultColor;
+  }
+
+  &-disabled {
+    composes: del;
+    composes: disabled;
+  }
+}

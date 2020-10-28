@@ -1,22 +1,20 @@
 import React from 'react';
+import styles from '../../styles/components/Items/ItemsInner.module.scss';
 import ItemsList from './ItemsList';
 
 const GROUP_NAMES = {
     is_fav: 'Избранное',
     is_new: 'Новые вакансии',
     is_jun: 'Вакансии для начинающих',
-    salary: 'Вакансии с указанным окладом',
+    is_salary: 'Вакансии с указанным окладом',
     default: 'Без дополнительных параметров',
 }
 
 export default function ItemsInner(props) {
 
-    let groupClassName = 'items-group';
-    groupClassName += ` items-group--${ props.itemsList.name }`;
-
     return (
-        <div className={ groupClassName }>
-            <h3 className="items-group__name">{ GROUP_NAMES[props.itemsList.name] }:</h3>
+        <div className={ styles[props.itemsList.name] }>
+            <h3 className={ styles.title }>{ GROUP_NAMES[props.itemsList.name] }:</h3>
             <ItemsList items={ props.itemsList.items }
                        handleClickAction={ props.handleClickAction } />
         </div>

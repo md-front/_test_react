@@ -1,14 +1,10 @@
 import React from 'react';
+import styles from '../../styles/components/Items/ItemsItem.module.scss';
 import ItemsVacancy from './ItemsVacancy';
 
 export default function ItemsItem(props) {
 
     const logoUrl = props.item.items[0].employer.logo_urls;
-
-    let itemClassName = 'item';
-
-    itemClassName += props.item.salary ? ' item--salary' : '';
-    itemClassName += props.item.is_jun ? ' item--jun' : '';
 
     function toggleFavorite() {
         const params = {
@@ -20,8 +16,8 @@ export default function ItemsItem(props) {
     }
 
     return (
-        <div className={itemClassName}>
-            <div className="item__title"
+        <div className={ props.item.is_jun ? styles.jun : styles.item }>
+            <div className={ styles.title }
                  onClick={ toggleFavorite }
                  title="В избранное">
                 <h2>{ props.item.name }</h2>
@@ -29,14 +25,12 @@ export default function ItemsItem(props) {
                 { logoUrl && <img src={logoUrl['90']}/> }
             </div>
 
-            <div className="item__inner">
-                { props.item.items.map((vacancy, index) =>
-                    !vacancy.is_del &&
-                    <ItemsVacancy vacancy={vacancy}
-                                  key={index}
-                                  handleClickAction={props.handleClickAction} />
-                )}
-            </div>
+            { props.item.items.map((vacancy, index) =>
+                !vacancy.is_del &&
+                <ItemsVacancy vacancy={vacancy}
+                              key={index}
+                              handleClickAction={props.handleClickAction} />
+            )}
 
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { setLS, getLS } from '../helpers/helpers';
+import { setLS, getLS } from '../helpers';
 import Header from '../components/Header';
 import Items from '../components/Items/Items';
 

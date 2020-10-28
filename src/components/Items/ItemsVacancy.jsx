@@ -1,6 +1,5 @@
 import React from 'react';
-// import fav from '../assets/star.svg';
-// import del from '../assets/del.svg';
+import styles from '../../styles/components/Items/ItemsVacancy.module.scss';
 
 export default class ItemsVacancy extends React.Component {
 
@@ -39,27 +38,27 @@ export default class ItemsVacancy extends React.Component {
 
         return (
             <a href={ vacancy.alternate_url }
-               className="link"
+               className={ styles.link }
                onMouseEnter={this.handleMouseHover}
                onMouseLeave={this.handleMouseHover}
                target="_blank" >
-                <span className="link__text" >
+                <span className={ styles.text } >
                     <span>{ salary && '$' }&nbsp;</span>{ vacancy.name }
                 </span>
 
                 { this.state.isHover &&
-                    <span className="link__popup">
+                    <span className={ styles.popup }>
                         { salary &&
-                            <span className="link__salary">{ salary.from }{ salary.from && salary.to ? ' - ' : '' }{ salary.to }</span>
+                            <span className={ styles.salary }>{ salary.from }{ salary.from && salary.to ? ' - ' : '' }{ salary.to }</span>
                         }
                         { vacancy.snippet && vacancy.snippet.requirement &&
-                            <span className="link__description"  dangerouslySetInnerHTML={{  __html: this.props.vacancy.snippet.requirement  }} />
+                            <span className={ styles.description } dangerouslySetInnerHTML={{  __html: this.props.vacancy.snippet.requirement  }} />
                         }
                     </span>
                 }
 
                 <button type="button"
-                        className="link__del"
+                        className={ styles.del }
                         onClick={ this.toggleBlacklist }/>
 
             </a>

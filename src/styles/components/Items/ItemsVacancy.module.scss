@@ -1,0 +1,87 @@
+.link {
+  display: block;
+  padding-right: 70px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: lightskyblue;
+  text-decoration: none;
+  position: relative;
+  transition: color .2s;
+
+  &:visited {
+    color: lightgray;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    color: cornflowerblue;
+
+    .del  {
+      opacity: 1;
+    }
+  }
+}
+
+.text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* '$' */
+  & > span {
+    font-weight: 700;
+    color: lightcoral;
+  }
+}
+
+.del {
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('../../../assets/del.svg');
+  background-color: transparent;
+  transform: translateY(-50%);
+  transition: transform .2s, opacity .2s;
+  opacity: 0;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.5) translateY(-50%);
+  }
+}
+
+.popup {
+  color: black;
+  background: #fff;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-radius: 8px;
+  font-size: 15px;
+  z-index: 1;
+}
+
+.salary {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.description highlighttext {
+  margin: -2px 0;
+  padding: 2px;
+  background-color: #ffff90;
+}

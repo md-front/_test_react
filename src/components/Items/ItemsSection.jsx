@@ -1,5 +1,6 @@
 import React from 'react';
-import { sortByReduction, checkItems } from '../../helpers/helpers';
+// import styles from './ItemsSection.module.scss';
+import { sortByReduction, checkItems } from '../../helpers';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
@@ -21,9 +22,9 @@ export default class ItemsSection extends React.Component {
         super(props);
 
         this.state = {
-            groups: [],
-            isLoaded: false,
-            vacancies: []
+            groups: props.section.groups || [],
+            isLoaded: !!props.section.groups,
+            vacancies: props.section.vacancies || []
         }
 
         this.favoritesAction = this.favoritesAction.bind(this);
@@ -31,16 +32,22 @@ export default class ItemsSection extends React.Component {
     }
 
     componentDidMount() {
-        (async () => {
-            const vacancies = await this.getVacancies();
-            const groups = this.groupVacancies(vacancies);
 
-            const quantity = this.visibleVacancies();
+        if(!this.props.section.visibleVacancies)
+            (async () => {
+                const vacancies = await this.getVacancies();
+                const groups = this.groupVacancies(vacancies);
 
-            this.props.handleLoaded(quantity);
+                const loadedData = {
+                    visibleVacancies: this.visibleVacancies(),
+                    groups,
+                    vacancies: this.state.vacancies
+                }
 
-            this.setState({ groups, isLoaded: true })
-        })()
+                this.props.handleLoaded(this.props.section.id, loadedData);
+
+                this.setState({ groups, isLoaded: true })
+            })()
     }
     componentDidUpdate(prevAllProps) {
 
@@ -146,6 +153,8 @@ export default class ItemsSection extends React.Component {
 
         groups = sortByReduction(groups, 'sortValue');
 
+        this.props.handleLoaded(this.props.section.id, { groups })
+
         this.setState({ groups });
     }
 
@@ -204,6 +213,14 @@ export default class ItemsSection extends React.Component {
         prevGroup.haveVisibleItem = checkItems(prevGroup.items, 'haveVisibleItem');
 
         groups = sortByReduction(groups, 'sortValue');
+
+        const updatedData = {
+            vacancies,
+            groups,
+            visibleVacancies: this.visibleVacancies()
+        }
+
+        this.props.handleLoaded(this.props.section.id, updatedData)
 
         this.setState({ vacancies, groups });
     }
@@ -293,7 +310,7 @@ export default class ItemsSection extends React.Component {
 
             /* В вакансии указана зп */
             if(vacancy.salary)
-                setGroupParams(1, 'salary');
+                setGroupParams(1, 'is_salary');
 
             function setGroupParams(sortValue, paramName) {
                 const sort = {
@@ -383,15 +400,11 @@ export default class ItemsSection extends React.Component {
 
         return (
             <section>
-
-                <div className="section__inner">
-                    { this.state.isLoaded ?
-                        this.renderItemsOnLoad()
-                        :
-                        <h3>Загрузка...</h3>
-                    }
-                </div>
-
+                { this.state.isLoaded ?
+                    this.renderItemsOnLoad()
+                    :
+                    <h3>Загрузка...</h3>
+                }
             </section>
         );
     }

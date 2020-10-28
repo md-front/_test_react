@@ -1,0 +1,72 @@
+@import '../../variables';
+
+.group {
+  margin-bottom: 30px;
+  border: 2px solid transparent;
+  padding: 0 25px 25px;
+  border-radius: 13px;
+}
+
+.title { /* &[h3] */
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 4px 15px;
+  border: 2px solid defaultColor;
+  border-radius: 13px;
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+.is_fav {
+  composes: group;
+  background-color: favColor;
+
+  .title {
+    border-color: favColor;
+  }
+}
+
+.is_new {
+  composes: group;
+  background-color: newColor;
+
+  .title {
+    border-color: newColor;
+  }
+}
+
+.is_jun {
+  composes: group;
+  background-color: junColor;
+
+  .title {
+    border-color: junColor;
+  }
+
+  h2 { /* item.title */
+    color: black !important;
+  }
+}
+
+.is_salary {
+  composes: group;
+  background-color: salaryColor;
+
+  .title {
+    border-color: salaryColor;
+  }
+
+  /* '$' */
+  a > span > span {
+    display: none;
+  }
+}
+
+.default {
+  composes: group;
+  background-color: defaultColor;
+
+  .title {
+    border-color: defaultColor;
+  }
+}

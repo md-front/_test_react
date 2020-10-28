@@ -1,0 +1,39 @@
+.item {
+  min-height: 117px;
+  padding: 15px;
+  border: 2px solid transparent;
+  border-radius: 13px;
+  background-color: #fff;
+}
+
+.jun {
+  composes: item;
+
+  .title h2 {
+    color: limegreen;
+  }
+}
+
+.title {
+  display: flex;
+  min-height: 40px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 15px;
+  cursor: pointer;
+
+  &:hover h2 {
+    color: orange;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    transition: color .2s;
+  }
+  img {
+    max-width: 100px;
+    max-height: 40px;
+    margin-left: 10px;
+  }
+}
