@@ -16,12 +16,13 @@ export default class Main extends React.Component {
          * blacklist: { 'ekb': [Вакансии] }
          */
         this.state = {
-            alertShowed: false,
+            alertShowed: getLS('alert'),
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
         }
 
         this.clearItems = this.clearItems.bind(this);
+        this.toggleAlert = this.toggleAlert.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
     }
 
@@ -34,6 +35,14 @@ export default class Main extends React.Component {
         }
 
         return false;
+    }
+
+    toggleAlert() {
+        const status = this.state.alertShowed;
+
+        setLS('alert',!status);
+
+        this.setState({ alertShowed: !status })
     }
 
     /** Store actions */
@@ -85,13 +94,13 @@ export default class Main extends React.Component {
     render() {
         return (
             !this.state.alertShowed ?
-                <Alert closeAlert={ () => this.setState({ alertShowed: true }) } />
+                <Alert closeAlert={ this.toggleAlert } />
                 :
                 <div className="main">
                     <Header clearItems={ this.clearItems }
                             isFavActive={ this.isBtnActive('favorites') }
                             isDelActive={ this.isBtnActive('blacklist') }
-                            showAlert={ () => this.setState({ alertShowed: false }) }/>
+                            showAlert={ this.toggleAlert }/>
 
                     <Items handleClickAction={ this.handleClickAction }
                            locations={ this.props.locations }
