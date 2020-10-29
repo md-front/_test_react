@@ -17,6 +17,12 @@ module.exports = {
         return arr.sort((a,b) => a[param] - b[param]);
     },
 
+    /**  Date */
+    parseDateString(dateString) {
+        const arr = dateString.split(/\D/);
+        return new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+    },
+
     /** Check */
     checkItems(arr, param, state = true) {
         return arr && arr.some(element => state ? element[param] : !element[param])

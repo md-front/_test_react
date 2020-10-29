@@ -1,6 +1,6 @@
 import React from 'react';
 // import styles from './ItemsSection.module.scss';
-import { sortByReduction, checkItems } from '../../helpers';
+import { sortByReduction, checkItems, parseDateString } from '../../helpers';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
@@ -300,10 +300,7 @@ export default class ItemsSection extends React.Component {
                 item.haveVisibleItem = true;
 
             const isJun = vacancy.is_jun || vacancy.name.match(window.JUNIOR);
-            const isNew = new Date(Date.parse(vacancy.created_at)) > lastValidDate;
-
-
-            alert(Date.parse(vacancy.created_at), new Date(vacancy.created_at) > lastValidDate)
+            const isNew = parseDateString(vacancy.created_at) > lastValidDate;
 
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(isNew)
