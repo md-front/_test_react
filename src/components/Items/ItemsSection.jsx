@@ -269,7 +269,7 @@ export default class ItemsSection extends React.Component {
         let validVacancies = [];
         const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
 
-        alert(lastValidDate)
+        // alert(lastValidDate)
 
         vacancies.forEach(vacancy => {
             /* Проверка на кейворды в имени  */
@@ -301,6 +301,9 @@ export default class ItemsSection extends React.Component {
 
             const isJun = vacancy.is_jun || vacancy.name.match(window.JUNIOR);
             const isNew = new Date(vacancy.created_at) > lastValidDate;
+
+
+            alert(new Date(vacancy.created_at), new Date(vacancy.created_at) > lastValidDate)
 
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(isNew)
