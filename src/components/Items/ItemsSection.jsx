@@ -303,7 +303,7 @@ export default class ItemsSection extends React.Component {
             const isNew = new Date(vacancy.created_at) > lastValidDate;
 
 
-            alert(new Date(vacancy.created_at), new Date(vacancy.created_at) > lastValidDate)
+            alert(new Date(Date.parse(vacancy.created_at)), new Date(vacancy.created_at) > lastValidDate)
 
             /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(isNew)
