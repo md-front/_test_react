@@ -41,7 +41,8 @@ export default class ItemsVacancy extends React.Component {
                className={ styles.link }
                onMouseEnter={this.handleMouseHover}
                onMouseLeave={this.handleMouseHover}
-               target="_blank" >
+               target="_blank"
+               rel="noopener noreferrer">
                 <span className={ styles.text } >
                     <span>{ salary && '$' }&nbsp;</span>{ vacancy.name }
                 </span>

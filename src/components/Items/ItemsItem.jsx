@@ -22,7 +22,7 @@ export default function ItemsItem(props) {
                  title="В избранное">
                 <h2>{ props.item.name }</h2>
 
-                { logoUrl && <img src={logoUrl['90']}/> }
+                { logoUrl && <img src={logoUrl['90']} alt="logo"/> }
             </div>
 
             { props.item.items.map((vacancy, index) =>

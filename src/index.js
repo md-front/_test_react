@@ -6,7 +6,7 @@ import App from './App';
 // debug
 window.LOAD_ALL_DATA = true;
 
-const LOCATION_PARAMS = [
+const REGIONS_PARAMS = [
     {
         'id': 'ekb',
         'name': 'Екатеринбург',
@@ -24,11 +24,11 @@ window.NEW_IN_DAYS = 1;
 window.NECESSARY = new RegExp(/front|фронт|js|javascript/i);
 window.UNNECESSARY = new RegExp(/backend|fullstack|SQL|lead|ведущий|angular/i);
 window.JUNIOR = new RegExp(/junior|стажер|младший/i);
-window.COMPANY_BLACKLIST = ['4932875','46587']; /* TODO забивается руками */
+/* window.COMPANY_BLACKLIST = ['4932875','46587']; */
 
 ReactDOM.render(
   <React.StrictMode>
-    <App locations={ LOCATION_PARAMS } />
+    <App regions={ REGIONS_PARAMS } />
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,4 +1,3 @@
-/* todo избавиться от файла, раскидать по компонентам? */
 module.exports = {
 
     /** Storage Actions */

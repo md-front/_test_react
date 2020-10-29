@@ -9,11 +9,11 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
 
-        this.props.locations[0].is_active = true;
+        this.props.regions[0].is_active = true;
 
         this.state = {
-            sections: this.props.locations,
-            activeSectionId: this.props.locations[0].id,
+            sections: this.props.regions,
+            activeSectionId: this.props.regions[0].id,
         }
 
         this.handleLoaded = this.handleLoaded.bind(this);

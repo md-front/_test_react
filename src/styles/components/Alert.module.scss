@@ -57,7 +57,7 @@
   composes: list-item;
   background-color: junColor;
 
-  /* "зеленым заголовком" */
+  // "зеленым заголовком"
   ~ span {
     font-weight: 700;
     color: rgba(0, 128, 0, .8);
@@ -67,7 +67,7 @@
   composes: list-item;
   background-color: salaryColor;
 
-  /* '$' */
+  // '$'
   ~ span {
     color: lightcoral;
   }

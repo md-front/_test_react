@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { setLS, getLS } from '../helpers';
 import Header from '../components/Header';
 import Items from '../components/Items/Items';
@@ -21,28 +21,59 @@ export default class Main extends React.Component {
             blacklist: this.getDataFromStorage('blacklist'),
         }
 
+        this.alertRef = React.createRef();
+
         this.clearItems = this.clearItems.bind(this);
+        this.closeByEsc = this.closeByEsc.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
+        this.alertClickOutside = this.alertClickOutside.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
+    }
+
+    componentDidMount() {
+
+        if(!this.state.alertShowed)
+            this.createAlertHandlers();
     }
 
     isBtnActive(type) {
 
         for(let location in this.state[type]) {
-            if(Object.keys(this.state[type][location]).length) {
+            if(Object.keys(this.state[type][location]).length)
                 return true;
-            }
         }
 
         return false;
     }
 
-    toggleAlert() {
+    /** Alert actions */
+    toggleAlert(e) {
+        e.stopPropagation()
         const status = this.state.alertShowed;
+
+        status ? this.createAlertHandlers() : this.removeAlertHandlers();
 
         setLS('alert',!status);
 
         this.setState({ alertShowed: !status })
+    }
+    createAlertHandlers() {
+        document.addEventListener('click', this.alertClickOutside)
+        document.addEventListener('keydown', this.closeByEsc)
+    }
+    removeAlertHandlers() {
+        document.removeEventListener('click', this.alertClickOutside);
+        document.removeEventListener('keydown', this.closeByEsc)
+    }
+    alertClickOutside(e) {
+        const alert = this.alertRef.current;
+
+        if (alert && !alert.contains(e.target))
+            this.toggleAlert(e);
+    }
+    closeByEsc(e) {
+        if(e.key === 'Escape')
+            this.toggleAlert(e);
     }
 
     /** Store actions */
@@ -58,7 +89,7 @@ export default class Main extends React.Component {
     createEmptyStore() {
         const result = {};
 
-        this.props.locations.forEach(location => result[location.id] = {})
+        this.props.regions.forEach(region => result[region.id] = {})
 
         return result;
     }
@@ -94,7 +125,7 @@ export default class Main extends React.Component {
     render() {
         return (
             !this.state.alertShowed ?
-                <Alert closeAlert={ this.toggleAlert } />
+                <Alert closeAlert={ this.toggleAlert } alertRef={ this.alertRef }/>
                 :
                 <div className="main">
                     <Header clearItems={ this.clearItems }
@@ -103,7 +134,7 @@ export default class Main extends React.Component {
                             showAlert={ this.toggleAlert }/>
 
                     <Items handleClickAction={ this.handleClickAction }
-                           locations={ this.props.locations }
+                           regions={ this.props.regions }
                            favorites={ this.state.favorites }
                            blacklist={ this.state.blacklist } />
                 </div>

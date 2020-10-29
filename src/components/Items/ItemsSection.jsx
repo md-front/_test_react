@@ -71,11 +71,11 @@ export default class ItemsSection extends React.Component {
     }
 
     activityCheck(action, prevAllProps){
-        /* объекты { вакансия: item } / { item: группа } */
+        /** объекты { вакансия: item } / { item: группа } */
         const prevProps = prevAllProps[action.name][this.props.section.id];
         const actualProps = this.props[action.name][this.props.section.id];
 
-        /* id вакансий */
+        /** id вакансий */
         const prevIds = Object.keys(prevProps);
         const actualIds = Object.keys(actualProps);
 
@@ -166,21 +166,24 @@ export default class ItemsSection extends React.Component {
 
         vacancy[ACTION_TYPES[type]] = !vacancy[ACTION_TYPES[type]];
 
-        /* Группа работодателей по типу */
+        /** Группа работодателей по типу */
         let prevGroup;
         let item;
         let itemIndex;
 
         /* todo переделать на parentId - section.id, избежать обхода всех items */
-        for(let i in groups) {
-            prevGroup = groups[i];
-            item = prevGroup.items.find((item, index) => {
-                itemIndex = index;
+        for(let group of groups) {
+            let tempIndex;
+            item = group.items.find((item, index) => {
+                tempIndex = index;
                 return item.id === parentId;
             });
 
-            if(item)
+            if(item) {
+                itemIndex = tempIndex;
+                prevGroup = group;
                 break;
+            }
         }
 
         item.haveVisibleItem = checkItems(item.items, 'is_del', false);
@@ -227,7 +230,8 @@ export default class ItemsSection extends React.Component {
 
     /** DATA */
     async getVacancies() {
-        let zeroStep = await this.getVacanciesStep(0,'noExperience'); /* todo ? как лучше реализовать отдельный запрос */
+        /* todo ? как лучше реализовать отдельный запрос */
+        let zeroStep = await this.getVacanciesStep(0,'noExperience');
         let result = zeroStep.vacancies.map(item => {
             item.is_jun = true;
             return item;
@@ -272,7 +276,7 @@ export default class ItemsSection extends React.Component {
         // alert(lastValidDate)
 
         vacancies.forEach(vacancy => {
-            /* Проверка на кейворды в имени  */
+            /** Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
 
             const employerId = vacancy.employer.id;
@@ -288,12 +292,12 @@ export default class ItemsSection extends React.Component {
 
             let item = items[employerId];
 
-            /* Проверка дублирования вакансий в группе */
+            /** Проверка дублирования вакансий в группе */
             if(item.items.some(item => item.name === vacancy.name)) return;
 
             vacancy.sort = DEFAULT_SORT;
 
-            /* Проверка на наличие в блеклисте */
+            /** Проверка на наличие в блеклисте */
             if(this.props.blacklist[this.props.section.id].hasOwnProperty(vacancy.id))
                 vacancy.is_del = true;
             else
@@ -302,15 +306,15 @@ export default class ItemsSection extends React.Component {
             const isJun = vacancy.is_jun || vacancy.name.match(window.JUNIOR);
             const isNew = parseDateString(vacancy.created_at) > lastValidDate;
 
-            /* Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
+            /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(isNew)
                 setGroupParams(3, 'is_new');
 
-            /* Вакансия без опыта, todo повторная проверка */
+            /** Вакансия без опыта, todo повторная проверка */
             if(isJun)
                 setGroupParams(2, 'is_jun');
 
-            /* В вакансии указана зп */
+            /** В вакансии указана зп */
             if(vacancy.salary)
                 setGroupParams(1, 'is_salary');
 

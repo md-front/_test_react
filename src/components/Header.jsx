@@ -39,7 +39,7 @@ export default function Header(props) {
                                 className={ props[btn.disableName] ? styles[btn.className] : styles[btn.disableClassName] }
                                 onClick={ () => props.clearItems(btn.actionType) }>
                             { btn.text }
-                            <img src={ btn.img }/>
+                            <img src={ btn.img } alt="icon"/>
                         </button>
                     )}
                 </div>
