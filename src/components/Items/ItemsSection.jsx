@@ -269,6 +269,8 @@ export default class ItemsSection extends React.Component {
         let validVacancies = [];
         const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
 
+        alert(lastValidDate)
+
         vacancies.forEach(vacancy => {
             /* Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return

@@ -17,7 +17,7 @@ const btns = [
         className: 'del',
         disableClassName: 'del-disabled',
         disableName: 'isDelActive',
-        text: 'Очистить скрытые вакансии',
+        text: 'Вернуть скрытые вакансии',
         actionType: 'blacklist',
     },
 ]
