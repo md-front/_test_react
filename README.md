@@ -1,3 +1,5 @@
+[Deployed on github pages](https://md-front.github.io/_test_react/ "Необязательная подсказка")
+
 `Список вопросов к ревью:`
 
 > /components/Items/Items.jsx
