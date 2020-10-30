@@ -1,0 +1,93 @@
+@import "../../variables";
+
+@value customPurple: #5E72EB;
+@value customPurpleInactive: #CFD4F0;
+
+.section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px sectionPh 0;
+  background-color: backgroundColor;
+}
+
+.filter {
+  display: flex;
+  margin-bottom: 50px;
+  padding: 0 sectionInnerPr;
+
+  &-item {
+    margin-right: 5px;
+    padding: 5px 25px;
+    border-radius: 10px;
+    border: none;
+    background-color: customPurpleInactive;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+
+    &-active {
+      composes: filter-item;
+      background-color: customPurple;
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 sectionInnerPr;
+  font-weight: 500;
+  font-size: 24px;
+  color: customPurple;
+
+  /** "..." */
+  span {
+    display: block;
+    position: relative;
+    margin-bottom: 5px;
+    margin-left: 22px;
+    animation: dotFlashing infinite linear alternate;
+    animation-delay: .3s;
+
+    &:before,
+    &:after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      animation: dotFlashing infinite alternate;
+    }
+    &,
+    &:before,
+    &:after {
+      width: 7px;
+      height: 7px;
+      border-radius: 5px;
+      background-color: customPurple;
+      animation-duration: .6s;
+      color: customPurple;
+    }
+
+    &:before {
+      left: -12px;
+      animation-delay: 0s;
+    }
+
+    &:after {
+      left: 12px;
+      animation-delay: .6s;
+    }
+  }
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: customPurpleInactive;
+  }
+  50%,
+  100% {
+    background-color: customPurple;
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-// import styles from './ItemsSection.module.scss';
+import styles from '../../styles/components/Items/ItemsSection.module.scss';
 import { sortByReduction, checkItems, parseDateString } from '../../helpers';
 import ItemsInner from './ItemsInner';
 
@@ -29,6 +29,7 @@ export default class ItemsSection extends React.Component {
 
         this.favoritesAction = this.favoritesAction.bind(this);
         this.blacklistAction = this.blacklistAction.bind(this);
+        this.filterToggleItem = this.filterToggleItem.bind(this);
     }
 
     componentDidMount() {
@@ -62,7 +63,7 @@ export default class ItemsSection extends React.Component {
             },
         ]
 
-        /* todo ? как-то вынести за componentDidUpdate? */
+        /* todo ? стоит как-то вынести за componentDidUpdate? */
         ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
     }
 
@@ -70,6 +71,7 @@ export default class ItemsSection extends React.Component {
         return this.state.vacancies.length - Object.keys(this.props.blacklist[this.props.section.id]).length;
     }
 
+    /** Actions */
     activityCheck(action, prevAllProps){
         /** объекты { вакансия: item } / { item: группа } */
         const prevProps = prevAllProps[action.name][this.props.section.id];
@@ -157,7 +159,6 @@ export default class ItemsSection extends React.Component {
 
         this.setState({ groups });
     }
-
     blacklistAction(type, id, parentId) {
         let groups = [...this.state.groups];
         let vacancies = [...this.state.vacancies];
@@ -228,6 +229,20 @@ export default class ItemsSection extends React.Component {
         this.setState({ vacancies, groups });
     }
 
+    /** Filter actions */
+    filterToggleItem(isHidden, groupName) {
+        const groups = [...this.state.groups];
+        const group = groups.find(group => group.name === groupName);
+
+        group.is_hidden = !isHidden;
+
+        this.props.handleClickAction('filtered', this.props.section.id, { id: groupName })
+
+        this.props.handleLoaded(this.props.section.id, { groups })
+
+        this.setState({ groups })
+    }
+
     /** DATA */
     async getVacancies() {
         /* todo ? как лучше реализовать отдельный запрос */
@@ -244,7 +259,7 @@ export default class ItemsSection extends React.Component {
         if(window.LOAD_ALL_DATA)
             while(--pagesLeft > 0) {
                 const step = await this.getVacanciesStep(pagesLeft);
-                
+
                 if(!step.items) break;
 
                 result.push(...step.items);
@@ -342,7 +357,6 @@ export default class ItemsSection extends React.Component {
 
         return this.groupItems(Object.values(items));
     }
-
     groupItems(items) {
         const groups = {};
 
@@ -361,7 +375,10 @@ export default class ItemsSection extends React.Component {
             }
 
             if(!groups[groupType])
-                groups[groupType] = this.createGroup(groupType, sortValue)
+                groups[groupType] = this.createGroup(groupType, sortValue);
+
+            if(this.props.filtered.hasOwnProperty(groups[groupType].name))
+                groups[groupType].is_hidden = true;
 
             groups[groupType].items.push(item);
         })
@@ -373,25 +390,38 @@ export default class ItemsSection extends React.Component {
 
         return sortByReduction(Object.values(groups), 'sortValue');
     }
-
     createGroup(name, sortValue, items = []) {
         return {
             name,
             sortValue,
             haveVisibleItem: true,
-            items
+            items,
+            is_hidden: false,
         }
     }
 
     /** Render */
+    renderFilterGroups() {
+        return (
+            <div className={ styles.filter }>
+                { this.state.groups.map((group, index) =>
+                    group.haveVisibleItem &&
+                    <button type="button"
+                            className={ !group.is_hidden ? styles['filter-item-active'] : styles['filter-item'] }
+                            onClick={ () => this.filterToggleItem(group.is_hidden, group.name) }
+                            key={ index }>{ window.GROUP_NAMES[group.name] }</button>
+                )}
+            </div>
+        )
+    }
     renderItemsOnLoad() {
         return this.visibleVacancies ? this.renderItems() : this.renderItemsIsEmpty();
     }
     renderItems() {
         return (
-            this.state.groups.map((item, index) =>
-                item.haveVisibleItem &&
-                <ItemsInner itemsList={ item }
+            this.state.groups.map((group, index) =>
+                group.haveVisibleItem && !group.is_hidden &&
+                <ItemsInner itemsList={ group }
                             section={ this.props.section }
                             key={ index }
                             handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
@@ -403,13 +433,13 @@ export default class ItemsSection extends React.Component {
     }
 
     render() {
-
         return (
-            <section>
+            <section className={ styles.section }>
+                { this.state.isLoaded && this.renderFilterGroups() }
                 { this.state.isLoaded ?
                     this.renderItemsOnLoad()
                     :
-                    <h3>Загрузка...</h3>
+                    <div className={ styles.loading }>Загрузка <span/></div>
                 }
             </section>
         );

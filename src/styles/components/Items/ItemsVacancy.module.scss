@@ -1,7 +1,9 @@
+@import "../../variables";
+
 .link {
   display: block;
   padding-right: 70px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-size: 16px;
   color: lightskyblue;
   text-decoration: none;
@@ -43,21 +45,30 @@
   position: absolute;
   top: 50%;
   right: 0;
-  width: 20px;
-  height: 20px;
   border: none;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('../../../assets/del.svg');
   background-color: transparent;
   transform: translateY(-50%);
-  transition: transform .2s, opacity .2s;
+  transition: opacity .2s;
   opacity: 0;
   cursor: pointer;
 
   &:hover {
-    transform: scale(1.5) translateY(-50%);
+
+    svg {
+
+      *:not(g) {
+        fill: black;
+      }
+    }
+  }
+
+  svg {
+    width: 27px;
+
+    *:not(g) {
+      fill: lightgray;
+      transition: fill .2s;
+    }
   }
 }
 

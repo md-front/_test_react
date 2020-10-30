@@ -1,12 +1,30 @@
 .title {
-  margin: 0 40px 40px 0;
-  padding: 20px;
-  border: 4px solid lightblue;
+  margin-right: 20px;
+  padding: 15px 0;
   border-radius: 13px;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  transition: border-color .2s;
   cursor: pointer;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-color: #5E72EB;
+    transition: width .4s ease-in-out;
+  }
+
+  span {
+    display: inline-block;
+    min-width: 49px;
+    padding-left: 15px;
+    text-align: center;
+    color: #5E72EB;
+  }
 }
 
 .active {
@@ -16,5 +34,8 @@
 
 .active,
 .title:hover {
-  border-color: red;
+
+  &:after {
+    width: 100%;
+  }
 }

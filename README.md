@@ -1,17 +1,32 @@
 `Список вопросов к ревью:`
 
-> /src/components/Items/ItemsSection.jsx 233    
- Как лучше реализовать группировку отдельных запросов к api
- 
-> /src/components/Items/ItemsSection.jsx 6    
+> \components\Items\Items.jsx
+ Приемлемо ли апдейтить стейт из дочернего компонента? (кажется что нет)
+
+> /components/Items/ItemsSection.jsx
  Вынести "lang" параметры из всех компонентов глобально?
+
+> /components/Items/ItemsSection.jsx
+ Стоит как-то вынести activityCheck за componentDidUpdate?
+
+> /components/Items/ItemsSection.jsx
+ Стоит ли убрать в activityCheck if и всё проходить фильтром, стоит ли?
+
+> /components/Items/ItemsSection.jsx
+ FavoritesAction избавился от лишних if'ов, но выглядит довольно убого
+
+> /components/Items/ItemsSection.jsx
+ Как лучше реализовать группировку отдельных запросов к api
+
+> Стоит ли как-то изменить общую структуру приложения?
+
+> Какие ещё есть очевидные проблемы?
 
 `WIP`
 
-* Дизайн
+* Подготовить к ревью: "todo?"
 
-
-* Подготовить к ревью: "todo ?"
+* Предусмотреть "все фильтры выключены"
  
 `TODO:`
 
@@ -44,6 +59,7 @@
 
 `DONE:`
 
+* "Дизайн"
 * Правка даты с HH для safari
 * Закрывать алерт по клику вне тела + esc
 * Подготовить алерт с описанием функционала

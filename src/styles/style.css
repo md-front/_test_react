@@ -1,6 +1,7 @@
 * {
   font-family: 'Roboto';
   box-sizing: border-box;
+  outline: none;
 }
 
 body {
@@ -12,5 +13,12 @@ h1 {
 }
 
 .main {
-  padding: 20px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }

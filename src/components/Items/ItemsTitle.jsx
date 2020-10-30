@@ -16,7 +16,7 @@ export default function ItemsTitle(props) {
              onClick={ handleClick }>
             { section.name }
             { (section.is_active || section.groups) &&
-                <span>: { section.visibleVacancies > 0 ? section.visibleVacancies : '...' }</span>
+                <span>{ section.visibleVacancies > 0 ? section.visibleVacancies : '...' }</span>
             }
         </div>
     );

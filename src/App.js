@@ -3,6 +3,7 @@ import Main from './pages/Main';
 
 export default function App(props) {
 
+    console.clear();
 
 
     return (

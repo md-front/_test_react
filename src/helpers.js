@@ -2,6 +2,7 @@ module.exports = {
 
     /** Storage Actions */
     setLS(key, payload) {
+        console.log('setLs', key, localStorage.setItem(key, JSON.stringify(payload)))
         return localStorage.setItem(key, JSON.stringify(payload))
     },
     getLS(key) {

@@ -1,0 +1,16 @@
+@import '../variables';
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px sectionPh 20px;
+  background-color: backgroundColor;
+}
+
+.link {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: rgb(169, 169, 169);
+  text-decoration: underline;
+}

@@ -63,12 +63,13 @@ export default class extends React.Component {
                                     key={ index } />
                     )}
                 </div>
-                { this.state.sections.map((section, index) =>
+                { this.state.sections.map((section, index, sections) =>
                     section.is_active &&
                     <ItemsSection section={ section }
                                   key={ index }
                                   handleLoaded={ this.handleLoaded }
                                   handleClickAction={ this.props.handleClickAction }
+                                  filtered={ this.props.filtered[section.id] }
                                   favorites={ this.props.favorites }
                                   blacklist={ this.props.blacklist } />
                 )}

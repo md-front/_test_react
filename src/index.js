@@ -19,6 +19,14 @@ const REGIONS_PARAMS = [
     },
 ]
 
+window.GROUP_NAMES = {
+    is_fav: 'Избранное',
+    is_new: 'Новые',
+    is_jun: 'Для начинающих',
+    is_salary: 'С указанным окладом',
+    default: 'Без дополнительных параметров',
+}
+
 // Регулярки имени вакансии
 window.NEW_IN_DAYS = 1;
 window.NECESSARY = new RegExp(/front|фронт|js|javascript/i);

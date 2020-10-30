@@ -1,6 +1,7 @@
 import React from 'react';
 import { setLS, getLS } from '../helpers';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import Items from '../components/Items/Items';
 import Alert from "../components/Alert";
 
@@ -16,9 +17,10 @@ export default class Main extends React.Component {
          * blacklist: { 'ekb': [Вакансии] }
          */
         this.state = {
-            alertShowed: getLS('alert'),
+            showAlert: false,
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
+            filtered: this.getDataFromStorage('filtered'),
         }
 
         this.alertRef = React.createRef();
@@ -28,12 +30,6 @@ export default class Main extends React.Component {
         this.toggleAlert = this.toggleAlert.bind(this);
         this.alertClickOutside = this.alertClickOutside.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
-    }
-
-    componentDidMount() {
-
-        if(!this.state.alertShowed)
-            this.createAlertHandlers();
     }
 
     isBtnActive(type) {
@@ -49,13 +45,11 @@ export default class Main extends React.Component {
     /** Alert actions */
     toggleAlert(e) {
         e.stopPropagation()
-        const status = this.state.alertShowed;
+        const show = this.state.showAlert;
 
-        status ? this.createAlertHandlers() : this.removeAlertHandlers();
+        !show ? this.createAlertHandlers() : this.removeAlertHandlers();
 
-        setLS('alert',!status);
-
-        this.setState({ alertShowed: !status })
+        this.setState({ showAlert: !show })
     }
     createAlertHandlers() {
         document.addEventListener('click', this.alertClickOutside)
@@ -102,7 +96,7 @@ export default class Main extends React.Component {
         if(items.hasOwnProperty(params.id))
             delete items[params.id];
         else
-            items[params.id] = params.parentId;
+            items[params.id] = params.parentId || 0;
 
         const result = {...this.state[type]};
 
@@ -118,25 +112,29 @@ export default class Main extends React.Component {
     setItems(type, payload) {
         this.setState({ [type]: payload });
 
+        console.log('setItems',type, payload)
+
         setLS(type, payload);
     }
 
 
     render() {
         return (
-            !this.state.alertShowed ?
+            this.state.showAlert ?
                 <Alert closeAlert={ this.toggleAlert } alertRef={ this.alertRef }/>
                 :
                 <div className="main">
                     <Header clearItems={ this.clearItems }
                             isFavActive={ this.isBtnActive('favorites') }
-                            isDelActive={ this.isBtnActive('blacklist') }
-                            showAlert={ this.toggleAlert }/>
+                            isDelActive={ this.isBtnActive('blacklist') } />
 
                     <Items handleClickAction={ this.handleClickAction }
                            regions={ this.props.regions }
+                           filtered={ this.state.filtered }
                            favorites={ this.state.favorites }
                            blacklist={ this.state.blacklist } />
+
+                   <Footer showAlert={ this.toggleAlert }/>
                 </div>
         );
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import {ReactComponent as Del} from '../../assets/del.svg'
 import styles from '../../styles/components/Items/ItemsVacancy.module.scss';
 
 export default class ItemsVacancy extends React.Component {
@@ -60,7 +61,9 @@ export default class ItemsVacancy extends React.Component {
 
                 <button type="button"
                         className={ styles.del }
-                        onClick={ this.toggleBlacklist }/>
+                        onClick={ this.toggleBlacklist }>
+                    <Del/>
+                </button>
 
             </a>
         );
