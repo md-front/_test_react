@@ -1,6 +1,6 @@
 `Список вопросов к ревью:`
 
-> \components\Items\Items.jsx
+> /components/Items/Items.jsx
  Приемлемо ли апдейтить стейт из дочернего компонента? (кажется что нет)
 
 > /components/Items/ItemsSection.jsx
