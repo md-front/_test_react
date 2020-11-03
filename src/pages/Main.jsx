@@ -1,5 +1,5 @@
 import React from 'react';
-import { setLS, getLS } from '../helpers';
+import { setLS, getLS} from '../helpers';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Items from '../components/Items/Items';
@@ -12,9 +12,9 @@ export default class Main extends React.Component {
 
         /**
          *
-         * @type {{favorites: Object, blacklist: Object}}
-         * favorites: { 'ekb': [Работодатели] }
-         * blacklist: { 'ekb': [Вакансии] }
+         * favorites: { 'ekb': [{ Работодатель: регион}]}
+         * blacklist: { 'ekb': [{ Вакансия: работодатель}]}
+         * filtered: { 'ekb': [{ Работодатель}]}
          */
         this.state = {
             showAlert: false,
@@ -49,7 +49,7 @@ export default class Main extends React.Component {
 
         !show ? this.createAlertHandlers() : this.removeAlertHandlers();
 
-        this.setState({ showAlert: !show })
+        this.setState({ showAlert: !show})
     }
     createAlertHandlers() {
         document.addEventListener('click', this.alertClickOutside)
@@ -73,12 +73,11 @@ export default class Main extends React.Component {
     /** Store actions */
     getDataFromStorage(type) {
         const storage = getLS(type);
-        const empty = this.createEmptyStore(type);
 
-        if(!storage || Object.keys(storage) < Object.keys(empty))
-            return empty;
-        else
-            return storage;
+        if(!storage || !Object.keys(storage))
+            return this.createEmptyStore();
+
+        return storage;
     }
     createEmptyStore() {
         const result = {};
@@ -102,17 +101,15 @@ export default class Main extends React.Component {
 
         result[sectionId] = items;
 
-        this.setItems(type, result);
+        this.setStorage(type, result);
     }
     clearItems(type) {
-        const result = this.createEmptyStore(type);
+        const result = this.createEmptyStore();
 
-        this.setItems(type, result);
+        this.setStorage(type, result);
     }
-    setItems(type, payload) {
-        this.setState({ [type]: payload });
-
-        console.log('setItems',type, payload)
+    setStorage(type, payload) {
+        this.setState({ [type]: payload});
 
         setLS(type, payload);
     }
@@ -121,20 +118,21 @@ export default class Main extends React.Component {
     render() {
         return (
             this.state.showAlert ?
-                <Alert closeAlert={ this.toggleAlert } alertRef={ this.alertRef }/>
+                <Alert closeAlert={this.toggleAlert}
+                       alertRef={this.alertRef}/>
                 :
                 <div className="main">
-                    <Header clearItems={ this.clearItems }
-                            isFavActive={ this.isBtnActive('favorites') }
-                            isDelActive={ this.isBtnActive('blacklist') } />
+                    <Header clearItems={this.clearItems}
+                            isFavActive={this.isBtnActive('favorites')}
+                            isDelActive={this.isBtnActive('blacklist')} />
 
-                    <Items handleClickAction={ this.handleClickAction }
-                           regions={ this.props.regions }
-                           filtered={ this.state.filtered }
-                           favorites={ this.state.favorites }
-                           blacklist={ this.state.blacklist } />
+                    <Items handleClickAction={this.handleClickAction}
+                           regions={this.props.regions}
+                           filtered={this.state.filtered}
+                           favorites={this.state.favorites}
+                           blacklist={this.state.blacklist} />
 
-                   <Footer showAlert={ this.toggleAlert }/>
+                    <Footer showAlert={this.toggleAlert}/>
                 </div>
         );
     }

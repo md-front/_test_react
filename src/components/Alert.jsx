@@ -4,31 +4,31 @@ import styles from '../styles/components/Alert.module.scss';
 export default function Alert(props) {
 
     return (
-        <div className={ styles.alert }
-             ref={ props.alertRef }>
+        <div className={styles.alert}
+             ref={props.alertRef}>
             <h2>Описание функционала:</h2>
 
-            <button className={ styles.close }
-                    onClick={ props.closeAlert } />
+            <button className={styles.close}
+                    onClick={props.closeAlert} />
 
-            <div className={ styles.item }>
+            <div className={styles.item}>
                 <h3>В данный момент забираются вакансии с hh.ru по следующим принципам:</h3>
                 <ul>
-                    <li>Текст поиска - "frontend"; <span className={ styles.wip } title='Планируется вывод информации на основе ввода пользователя'>WIP</span></li>
+                    <li>Текст поиска - "frontend"; <span className={styles.wip} title='Планируется вывод информации на основе ввода пользователя'>WIP</span></li>
                     <li>
-                        Локации поиска: <span className={ styles.wip } title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
+                        Локации поиска: <span className={styles.wip} title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
                         <ul>
                             <li><i>Екатеринбург, Удалённая работа</i></li>
                         </ul>
                     </li>
                     <li>
-                        Вакансии фильтруется на наличие ключевых слов в названии: <span className={ styles.wip } title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
+                        Вакансии фильтруется на наличие ключевых слов в названии: <span className={styles.wip} title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
                         <ul>
                             <li><i>front|фронт|js|javascript</i></li>
                         </ul>
                     </li>
                     <li>
-                        Так же название вакансии не должно содержать: <span className={ styles.wip } title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
+                        Так же название вакансии не должно содержать: <span className={styles.wip} title='Планируется вывод информации на основе ввода пользователя'>WIP</span>
                         <ul>
                             <li><i>backend|fullstack|SQL|lead|ведущий|angular</i></li>
                         </ul>
@@ -40,19 +40,19 @@ export default function Alert(props) {
                         Работодатели группируются по следующим приоритетам:
                         <ul>
                             <li>
-                                <span className={ styles.fav }>Избранное</span> - формируются при наличии id работодателя соответствующей записи в localStorage;
+                                <span className={styles.fav}>Избранное</span> - формируются при наличии id работодателя соответствующей записи в localStorage;
                             </li>
                             <li>
-                                <span className={ styles.new }>Содержит новые вакансии</span> - формируются из работодателей, имеющих размещённую вакансию за последние сутки;
+                                <span className={styles.new}>Содержит новые вакансии</span> - формируются из работодателей, имеющих размещённую вакансию за последние сутки;
                             </li>
                             <li>
-                                <span className={ styles.jun }>Содержит вакансии для начинающих</span> - формируются из работодателей, содержащих вакансию с кейвордами <i>junior|стажер|младший</i>, в группах с высшим приоритетом данные работодатели выделены <span>зеленым заголовком</span>;
+                                <span className={styles.jun}>Содержит вакансии для начинающих</span> - формируются из работодателей, содержащих вакансию с кейвордами <i>junior|стажер|младший</i>, в группах с высшим приоритетом данные работодатели выделены <span>зеленым заголовком</span>;
                             </li>
                             <li>
-                                <span className={ styles.salary }>Содержит вакансии с указанным окладом</span> - вакансии с указанным окладом в группе с высшим приоритетом имеют символ <span>"$"</span>
+                                <span className={styles.salary}>Содержит вакансии с указанным окладом</span> - вакансии с указанным окладом в группе с высшим приоритетом имеют символ <span>"$"</span>
                             </li>
                             <li>
-                                <span className={ styles.default }>Без особых параметров</span>
+                                <span className={styles.default}>Без особых параметров</span>
                             </li>
                             <li>
                                 <span>Скрытые вакансии (не отображаются)</span> - формируются при наличии id вакансии соответствующей записи в localStorage;
@@ -61,7 +61,7 @@ export default function Alert(props) {
                     </li>
                 </ul>
             </div>
-            <div className={ styles.item }>
+            <div className={styles.item}>
                 <h3>Взаимодействие:</h3>
                 <ul>
                     <li>
@@ -92,7 +92,7 @@ export default function Alert(props) {
                         <span>При наведении на вакансию;</span>
                         <ul>
                             <li>Отображается иконка "удаления" вакансии;</li>
-                            <li>Отображается информация о вакансии: Оклад (при наличии), а так же краткое описание (если описание содержит поисковый запрос - он будет подсвечен в тексте);</li>
+                            <li>Отображается информация о вакансии: Оклад (при наличии), а так же краткое описание (при наличии > 100 символов, если описание содержит поисковый запрос - он будет подсвечен в тексте);</li>
                         </ul>
                     </li>
                     <li>

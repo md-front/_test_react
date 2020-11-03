@@ -22,3 +22,18 @@ main {
   flex-direction: column;
   flex-grow: 1;
 }
+
+button {
+  cursor: pointer;
+}
+[disabled],
+.disabled {
+  pointer-events: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1366px;
+  margin: 0 auto;
+  padding: 0 30px;
+}

@@ -1,11 +1,15 @@
 /*  todo вынести все цвета в переменные */
-@value favColor: #FFEFE1;
-@value newColor: #E6E1FF;
-@value junColor: #AFCBA6;
-@value salaryColor: #DCEDFA;
-@value defaultColor: #EEEFF5;
+$favColor: #fddbbd;
+$newColor: #a3d0f3;
+$junColor: #AFCBA6;
+$salaryColor: #ccc4f5;
+$defaultColor: #b3b3b3;
 
-@value backgroundColor: #F4F7FC;
+$customPurple: #5E72EB;
+$customPurpleL: #CFD4F0;
 
-@value sectionPh: 15px;
-@value sectionInnerPr: 25px;
+$backgroundColor: #F4F7FC;
+
+$shadowParams: 0 0 10px;
+
+$commonBorderRadius: 13px;

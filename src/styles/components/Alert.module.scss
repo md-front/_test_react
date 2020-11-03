@@ -47,15 +47,15 @@
 }
 .fav {
   composes: list-item;
-  background-color: favColor;
+  background-color: $favColor;
 }
 .new {
   composes: list-item;
-  background-color: newColor;
+  background-color: $newColor;
 }
 .jun {
   composes: list-item;
-  background-color: junColor;
+  background-color: $junColor;
 
   // "зеленым заголовком"
   ~ span {
@@ -65,7 +65,7 @@
 }
 .salary {
   composes: list-item;
-  background-color: salaryColor;
+  background-color: $salaryColor;
 
   // '$'
   ~ span {
@@ -74,7 +74,7 @@
 }
 .default {
   composes: list-item;
-  background-color: defaultColor;
+  background-color: $defaultColor;
 }
 
 .close {

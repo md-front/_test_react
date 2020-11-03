@@ -16,16 +16,16 @@ export default function ItemsItem(props) {
     }
 
     return (
-        <div className={ props.item.is_jun ? styles.jun : styles.item }>
-            <div className={ styles.title }
-                 onClick={ toggleFavorite }
+        <div className={props.item.is_jun ? styles.jun : styles.item}>
+            <div className={styles.title}
+                 onClick={toggleFavorite}
                  title="В избранное">
-                <h2>{ props.item.name }</h2>
+                <h2>{props.item.name}</h2>
 
-                { logoUrl && <img src={logoUrl['90']} alt="logo"/> }
+                {logoUrl && <img src={logoUrl['90']} alt="logo"/>}
             </div>
 
-            { props.item.items.map((vacancy, index) =>
+            {props.item.items.map((vacancy, index) =>
                 !vacancy.is_del &&
                 <ItemsVacancy vacancy={vacancy}
                               key={index}

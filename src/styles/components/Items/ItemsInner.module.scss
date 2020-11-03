@@ -1,46 +1,59 @@
 @import '../../variables';
+@import '../../media';
 
-.group {
-  margin-bottom: 30px;
-  border: 2px solid transparent;
-  padding: 0 25px 25px;
-  border-radius: 13px;
+@value groupPaddingH 25px;
+
+@media ($laptop) {
+  @value groupPaddingH 15px;
 }
 
-.title { // &[h3]
-  display: inline-block;
-  margin: 0 0 10px;
-  padding: 4px 15px;
-  border: 2px solid defaultColor;
-  border-radius: 13px;
-  background: #fff;
-  transform: translateY(-50%);
+
+.group {
+  margin: 0 calc(groupPaddingH * -1) 40px;
+  padding: 0 groupPaddingH 25px;
+  border: 2px solid transparent;
+  border-radius: $commonBorderRadius;
 }
 
 .is_fav {
   composes: group;
-  background-color: favColor;
+  border-color: $favColor;
 
   .title {
-    border-color: favColor;
+    border-color: $favColor;
+  }
+
+  /* vacancy description todo mixin */
+  a div {
+    box-shadow: $shadowParams $favColor;
   }
 }
 
 .is_new {
   composes: group;
-  background-color: newColor;
+  border-color: $newColor;
 
   .title {
-    border-color: newColor;
+    border-color: $newColor;
+  }
+
+  /* vacancy description todo mixin */
+  a div {
+    box-shadow: $shadowParams $newColor;
   }
 }
 
 .is_jun {
   composes: group;
-  background-color: junColor;
+  border-color: $junColor;
 
   .title {
-    border-color: junColor;
+    border-color: $junColor;
+  }
+
+  /* vacancy description todo mixin */
+  a div {
+    box-shadow: $shadowParams $junColor;
   }
 
   h2 { // item.title
@@ -50,10 +63,15 @@
 
 .is_salary {
   composes: group;
-  background-color: salaryColor;
+  border-color: $salaryColor;
 
   .title {
-    border-color: salaryColor;
+    border-color: $salaryColor;
+  }
+
+  /* vacancy description todo mixin */
+  a div {
+    box-shadow: $shadowParams $salaryColor;
   }
 
   // '$'
@@ -64,9 +82,26 @@
 
 .default {
   composes: group;
-  background-color: defaultColor;
+  border-color: $defaultColor;
 
   .title {
-    border-color: defaultColor;
+    border-color: $defaultColor;
   }
+
+  /* vacancy description todo mixin */
+  a div {
+    box-shadow: $shadowParams $defaultColor;
+  }
+}
+
+.title { // &[h3]
+  display: inline-block;
+  margin: 0;
+  padding: 4px 15px;
+  border: 2px solid $defaultColor;
+  border-radius: $commonBorderRadius;
+  background: $backgroundColor;
+  font-size: 16px;
+  font-weight: 500;
+  transform: translateY(-50%);
 }

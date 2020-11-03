@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../../styles/components/Items/ItemsSection.module.scss';
-import { sortByReduction, checkItems, parseDateString } from '../../helpers';
+import {sortByReduction, checkItems, parseDateString} from '../../helpers';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
@@ -24,30 +24,25 @@ export default class ItemsSection extends React.Component {
         this.state = {
             groups: props.section.groups || [],
             isLoaded: !!props.section.groups,
+            visibleVacancies: props.section.visibleVacancies || 0,
             vacancies: props.section.vacancies || []
         }
 
         this.favoritesAction = this.favoritesAction.bind(this);
         this.blacklistAction = this.blacklistAction.bind(this);
         this.filterToggleItem = this.filterToggleItem.bind(this);
+        this.visibleVacancies = this.visibleVacancies.bind(this);
     }
 
     componentDidMount() {
 
+        /** get initial data */
         if(!this.props.section.visibleVacancies)
             (async () => {
-                const vacancies = await this.getVacancies();
-                const groups = this.groupVacancies(vacancies);
+                const allVacancies = await this.getVacancies();
+                const [vacancies, groups] = this.groupVacancies(allVacancies);
 
-                const loadedData = {
-                    visibleVacancies: this.visibleVacancies(),
-                    groups,
-                    vacancies: this.state.vacancies
-                }
-
-                this.props.handleLoaded(this.props.section.id, loadedData);
-
-                this.setState({ groups, isLoaded: true })
+                this.updateData({groups, vacancies})
             })()
     }
     componentDidUpdate(prevAllProps) {
@@ -67,17 +62,31 @@ export default class ItemsSection extends React.Component {
         ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
     }
 
-    visibleVacancies() {
-        return this.state.vacancies.length - Object.keys(this.props.blacklist[this.props.section.id]).length;
+    visibleVacancies(groups = this.state.groups) {
+        let result = 0;
+
+        for(let i in groups) {
+            const group = groups[i];
+
+            if(!group.is_hidden)
+                group.items.forEach(item => {
+                    if(!item.haveVisibleItem)
+                        return;
+
+                    result += item.items.filter(vacancy => !vacancy.is_del).length;
+                })
+        }
+
+        return result;
     }
 
     /** Actions */
     activityCheck(action, prevAllProps){
-        /** объекты { вакансия: item } / { item: группа } */
+        /** del - {вакансия: item} / fav - {item: группа} / filter - {группа} */
         const prevProps = prevAllProps[action.name][this.props.section.id];
         const actualProps = this.props[action.name][this.props.section.id];
 
-        /** id вакансий */
+        /** id элементов */
         const prevIds = Object.keys(prevProps);
         const actualIds = Object.keys(actualProps);
 
@@ -155,9 +164,7 @@ export default class ItemsSection extends React.Component {
 
         groups = sortByReduction(groups, 'sortValue');
 
-        this.props.handleLoaded(this.props.section.id, { groups })
-
-        this.setState({ groups });
+        this.updateData({groups})
     }
     blacklistAction(type, id, parentId) {
         let groups = [...this.state.groups];
@@ -190,11 +197,14 @@ export default class ItemsSection extends React.Component {
         item.haveVisibleItem = checkItems(item.items, 'is_del', false);
 
         let topVacancySort = DEFAULT_SORT;
+
         item.items.forEach(vacancy => {
+            console.log('vacancy',vacancy, topVacancySort)
             if(!vacancy.is_del && vacancy.sort.value > topVacancySort.value)
                 topVacancySort = vacancy.sort;
         })
 
+        /** Изменение текущей группы */
         if(!item.is_fav && item.sort.value !== topVacancySort.value) {
             item.sort = topVacancySort;
 
@@ -210,23 +220,13 @@ export default class ItemsSection extends React.Component {
             prevGroup.items.splice(itemIndex, 1);
 
             newGroup.haveVisibleItem = checkItems(newGroup.items, 'haveVisibleItem');
-
-            groups = sortByReduction(groups, 'sortValue');
         }
 
         prevGroup.haveVisibleItem = checkItems(prevGroup.items, 'haveVisibleItem');
 
         groups = sortByReduction(groups, 'sortValue');
 
-        const updatedData = {
-            vacancies,
-            groups,
-            visibleVacancies: this.visibleVacancies()
-        }
-
-        this.props.handleLoaded(this.props.section.id, updatedData)
-
-        this.setState({ vacancies, groups });
+        this.updateData({vacancies, groups})
     }
 
     /** Filter actions */
@@ -236,11 +236,9 @@ export default class ItemsSection extends React.Component {
 
         group.is_hidden = !isHidden;
 
-        this.props.handleClickAction('filtered', this.props.section.id, { id: groupName })
+        this.props.handleClickAction('filtered', this.props.section.id, {id: groupName})
 
-        this.props.handleLoaded(this.props.section.id, { groups })
-
-        this.setState({ groups })
+        this.updateData({groups});
     }
 
     /** DATA */
@@ -265,7 +263,7 @@ export default class ItemsSection extends React.Component {
                 result.push(...step.items);
             }
 
-        this.setState({ vacancies: result })
+        this.setState({vacancies: result})
 
         return result;
     }
@@ -283,14 +281,12 @@ export default class ItemsSection extends React.Component {
             return new Error("Ошибка HTTP: " + response.status);
         }
     }
-    groupVacancies(vacancies) {
+    groupVacancies(allVacancies) {
         let items = {};
-        let validVacancies = [];
+        let vacancies = [];
         const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
 
-        // alert(lastValidDate)
-
-        vacancies.forEach(vacancy => {
+        allVacancies.forEach(vacancy => {
             /** Проверка на кейворды в имени  */
             if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
 
@@ -318,22 +314,21 @@ export default class ItemsSection extends React.Component {
             else
                 item.haveVisibleItem = true;
 
-            const isJun = vacancy.is_jun || vacancy.name.match(window.JUNIOR);
-            const isNew = parseDateString(vacancy.created_at) > lastValidDate;
-
             /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
-            if(isNew)
-                setGroupParams(3, 'is_new');
+            if(parseDateString(vacancy.created_at) > lastValidDate) {
+                setItemParams(3, 'is_new');
 
-            /** Вакансия без опыта, todo повторная проверка */
-            if(isJun)
-                setGroupParams(2, 'is_jun');
+                /** Вакансия без опыта */
+            } else if (vacancy.is_jun || vacancy.name.match(window.JUNIOR)) {
+                setItemParams(2, 'is_jun');
 
-            /** В вакансии указана зп */
-            if(vacancy.salary)
-                setGroupParams(1, 'is_salary');
+                /** В вакансии указана зп */
+            } else if (vacancy.salary) {
+                setItemParams(1, 'is_salary');
 
-            function setGroupParams(sortValue, paramName) {
+            }
+
+            function setItemParams(sortValue, paramName) {
                 const sort = {
                     name: paramName,
                     value: sortValue,
@@ -350,12 +345,10 @@ export default class ItemsSection extends React.Component {
             }
 
             item.items.push(vacancy);
-            validVacancies.push(vacancy);
+            vacancies.push(vacancy);
         })
 
-        this.setState({ vacancies: validVacancies })
-
-        return this.groupItems(Object.values(items));
+        return [vacancies, this.groupItems(Object.values(items))];
     }
     groupItems(items) {
         const groups = {};
@@ -399,31 +392,40 @@ export default class ItemsSection extends React.Component {
             is_hidden: false,
         }
     }
+    updateData(payload) {
+        const visibleVacancies = this.visibleVacancies(payload.groups);
+        const data = {...payload, visibleVacancies};
+
+        this.setState({...data, isLoaded: true});
+
+        this.props.handleLoaded(this.props.section.id, data)
+    }
 
     /** Render */
     renderFilterGroups() {
         return (
-            <div className={ styles.filter }>
-                { this.state.groups.map((group, index) =>
+            <div className={styles.filter}>
+                <div className={styles.title}>Отображение групп:</div>
+                {this.state.groups.map((group, index) =>
                     group.haveVisibleItem &&
                     <button type="button"
-                            className={ !group.is_hidden ? styles['filter-item-active'] : styles['filter-item'] }
-                            onClick={ () => this.filterToggleItem(group.is_hidden, group.name) }
-                            key={ index }>{ window.GROUP_NAMES[group.name] }</button>
+                            className={!group.is_hidden ? styles['filter-item-active'] : styles['filter-item']}
+                            onClick={() => this.filterToggleItem(group.is_hidden, group.name)}
+                            key={index}>{window.GROUP_NAMES[group.name]}</button>
                 )}
             </div>
         )
     }
     renderItemsOnLoad() {
-        return this.visibleVacancies ? this.renderItems() : this.renderItemsIsEmpty();
+        return this.state.visibleVacancies > 0 ? this.renderItems() : this.renderItemsIsEmpty();
     }
     renderItems() {
         return (
             this.state.groups.map((group, index) =>
                 group.haveVisibleItem && !group.is_hidden &&
-                <ItemsInner itemsList={ group }
-                            section={ this.props.section }
-                            key={ index }
+                <ItemsInner itemsList={group}
+                            section={this.props.section}
+                            key={index}
                             handleClickAction={(type, params) => this.props.handleClickAction(type, this.props.section.id, params)} />
             )
         )
@@ -434,13 +436,15 @@ export default class ItemsSection extends React.Component {
 
     render() {
         return (
-            <section className={ styles.section }>
-                { this.state.isLoaded && this.renderFilterGroups() }
-                { this.state.isLoaded ?
-                    this.renderItemsOnLoad()
-                    :
-                    <div className={ styles.loading }>Загрузка <span/></div>
-                }
+            <section className={styles.section}>
+                <div className="container">
+                    {this.state.isLoaded && this.renderFilterGroups()}
+                    {this.state.isLoaded ?
+                        this.renderItemsOnLoad()
+                        :
+                        <div className={styles.loading}>Загрузка <span/></div>
+                    }
+                </div>
             </section>
         );
     }

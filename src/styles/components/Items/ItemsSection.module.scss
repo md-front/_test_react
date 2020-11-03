@@ -1,46 +1,57 @@
 @import "../../variables";
 
-@value customPurple: #5E72EB;
-@value customPurpleInactive: #CFD4F0;
-
 .section {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  padding: 20px sectionPh 0;
-  background-color: backgroundColor;
+  padding: 20px 0 0;
+  background-color: $backgroundColor;
+
+  & > h3 {
+    color: $customPurple;
+  }
 }
 
 .filter {
   display: flex;
   margin-bottom: 50px;
-  padding: 0 sectionInnerPr;
+  align-items: center;
 
   &-item {
     margin-right: 5px;
     padding: 5px 25px;
-    border-radius: 10px;
+    border-radius: $commonBorderRadius;
     border: none;
-    background-color: customPurpleInactive;
+    background-color: $customPurpleL;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
     cursor: pointer;
+    transition: background-color .2s;
 
     &-active {
       composes: filter-item;
-      background-color: customPurple;
+    }
+
+    &-active,
+    &:hover {
+      background-color: $customPurple;
     }
   }
+}
+
+.title {
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .loading {
   display: flex;
   align-items: flex-end;
-  padding: 0 sectionInnerPr;
   font-weight: 500;
   font-size: 24px;
-  color: customPurple;
+  color: $customPurple;
 
   /** "..." */
   span {
@@ -65,9 +76,9 @@
       width: 7px;
       height: 7px;
       border-radius: 5px;
-      background-color: customPurple;
+      background-color: $customPurple;
       animation-duration: .6s;
-      color: customPurple;
+      color: $customPurple;
     }
 
     &:before {
@@ -84,10 +95,10 @@
 
 @keyframes dotFlashing {
   0% {
-    background-color: customPurpleInactive;
+    background-color: $customPurpleL;
   }
   50%,
   100% {
-    background-color: customPurple;
+    background-color: $customPurple;
   }
 }

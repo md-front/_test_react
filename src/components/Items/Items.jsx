@@ -39,7 +39,7 @@ export default class extends React.Component {
         activeSection.is_active = true;
         prevActiveSection.is_active = false;
 
-        this.setState({ sections , activeSectionId: id });
+        this.setState({sections , activeSectionId: id});
     }
     /* todo ? приемлемо ли апдейтить стейт из дочернего компонента? (кажется что нет) */
     handleLoaded(id, loadedData) {
@@ -49,29 +49,31 @@ export default class extends React.Component {
         for(let i in loadedData)
             activeSection[i] = loadedData[i]
 
-        this.setState({ sections });
+        this.setState({sections});
     }
 
     render() {
         return (
             <main>
-                <div className={ styles.nav }>
-                    { this.state.sections.map((section, index) =>
-                        <ItemsTitle section={ section }
-                                    quantity={ this.state.activeQuantity }
-                                    handleClick={ this.handleClickSectionTitle }
-                                    key={ index } />
-                    )}
+                <div className="container">
+                    <div className={styles.nav}>
+                        {this.state.sections.map((section, index) =>
+                            <ItemsTitle section={section}
+                                        quantity={this.state.activeQuantity}
+                                        handleClick={this.handleClickSectionTitle}
+                                        key={index} />
+                        )}
+                    </div>
                 </div>
-                { this.state.sections.map((section, index, sections) =>
+                {this.state.sections.map((section, index) =>
                     section.is_active &&
-                    <ItemsSection section={ section }
-                                  key={ index }
-                                  handleLoaded={ this.handleLoaded }
-                                  handleClickAction={ this.props.handleClickAction }
-                                  filtered={ this.props.filtered[section.id] }
-                                  favorites={ this.props.favorites }
-                                  blacklist={ this.props.blacklist } />
+                    <ItemsSection section={section}
+                                  key={index}
+                                  handleLoaded={this.handleLoaded}
+                                  handleClickAction={this.props.handleClickAction}
+                                  filtered={this.props.filtered[section.id]}
+                                  favorites={this.props.favorites}
+                                  blacklist={this.props.blacklist} />
                 )}
             </main>
         );

@@ -1,12 +1,16 @@
+@import '../../variables.scss';
+
 .title {
+  display: flex;
   margin-right: 20px;
-  padding: 15px 0;
-  border-radius: 13px;
-  font-size: 28px;
-  font-weight: 700;
+  align-items: center;
+  padding: 12px 0;
+  border-radius: $commonBorderRadius;
+  font-size: 24px;
   cursor: pointer;
   position: relative;
 
+  /** line */
   &:after {
     content: '';
     position: absolute;
@@ -14,28 +18,72 @@
     left: 0;
     width: 0;
     height: 4px;
-    background-color: #5E72EB;
+    background-color: $customPurple;
     transition: width .4s ease-in-out;
   }
 
+  /** text */
+  div {
+    color: transparent;
+
+    /** visible text */
+    &:before {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      font-weight: 400;
+      color: #a7a7a7;
+      transform: translateY(-50%);
+      transition: color .2s;
+    }
+  }
+
+  /** num */
   span {
     display: inline-block;
-    min-width: 49px;
-    padding-left: 15px;
+    min-width: 40px;
+    padding-left: 8px;
     text-align: center;
-    color: #5E72EB;
+    color: #DADADA;
+    font-weight: 500;
+    transition: color .2s;
   }
 }
 
 .active {
   composes: title;
   cursor: default;
+
+  /** line */
+  &:after {
+    width: 100%;
+  }
+
+  /** text */
+  div {
+
+    /** visible text */
+    &:before {
+      font-weight: 500;
+    }
+  }
 }
 
 .active,
 .title:hover {
 
-  &:after {
-    width: 100%;
+  /** text */
+  div {
+
+    /** visible text */
+    &:before {
+      color: black;
+    }
+  }
+
+  /** num */
+  span {
+    color: #AEB8F5;
   }
 }

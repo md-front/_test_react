@@ -1,10 +1,13 @@
 @import '../variables';
 
 .footer {
+  background-color: $backgroundColor;
+}
+
+.inner {
   display: flex;
   justify-content: flex-end;
-  padding: 5px sectionPh 20px;
-  background-color: backgroundColor;
+  padding: 5px 0 20px;
 }
 
 .link {

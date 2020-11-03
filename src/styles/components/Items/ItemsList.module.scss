@@ -1,10 +1,13 @@
+@import '../../media';
+@import '../../variables';
+
 .items {
   display: grid;
-  grid-template-columns: repeat(5, calc(20% - 20px));
+  grid-template-columns: repeat(4, calc(25% - 15px));
   grid-gap: 20px;
   flex-wrap: wrap;
 
-  @media (max-width: 1400px) {
-    grid-template-columns: repeat(4, calc(25% - 20px));
+  @media ($laptop) {
+    grid-template-columns: repeat(3, calc(33.33% - 15px));
   }
 }

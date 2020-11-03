@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './styles/style.css';
 import App from './App';
 
-// debug
+/** Debug */
 window.LOAD_ALL_DATA = true;
 
 const REGIONS_PARAMS = [
@@ -27,16 +27,15 @@ window.GROUP_NAMES = {
     default: 'Без дополнительных параметров',
 }
 
-// Регулярки имени вакансии
 window.NEW_IN_DAYS = 1;
+
 window.NECESSARY = new RegExp(/front|фронт|js|javascript/i);
 window.UNNECESSARY = new RegExp(/backend|fullstack|SQL|lead|ведущий|angular/i);
 window.JUNIOR = new RegExp(/junior|стажер|младший/i);
-/* window.COMPANY_BLACKLIST = ['4932875','46587']; */
 
 ReactDOM.render(
   <React.StrictMode>
-    <App regions={ REGIONS_PARAMS } />
+    <App regions={REGIONS_PARAMS } />
   </React.StrictMode>,
   document.getElementById('root')
 );
