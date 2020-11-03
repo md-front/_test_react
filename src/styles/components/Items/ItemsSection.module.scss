@@ -29,13 +29,17 @@
     cursor: pointer;
     transition: background-color .2s;
 
-    &-active {
-      composes: filter-item;
-    }
-
     &-active,
     &:hover {
       background-color: $customPurple;
+    }
+
+    &-active {
+      composes: filter-item;
+
+      &:hover {
+        background-color: $customPurpleH;
+      }
     }
   }
 }
@@ -70,6 +74,7 @@
       top: 0;
       animation: dotFlashing infinite alternate;
     }
+
     &,
     &:before,
     &:after {
