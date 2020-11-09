@@ -1,0 +1,379 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Рендер 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <header>
+        <div
+          class="container"
+        >
+          <div
+            class="actions"
+          >
+            <h1
+              class="title"
+            >
+              Поиск вакансий
+            </h1>
+            <div
+              class="btns"
+            >
+              <button
+                class="fav-disabled"
+                type="button"
+              >
+                Очистить избранное
+              </button>
+              <button
+                class="del-disabled"
+                type="button"
+              >
+                Отобразить скрытые вакансии
+              </button>
+            </div>
+          </div>
+          <form
+            class="form"
+            title="work in progress"
+          >
+            <div
+              class="form__inner"
+            >
+              <input
+                class="form__input"
+                disabled=""
+                placeholder="Frontend"
+                type="text"
+                value="Frontend"
+              />
+              <button
+                class="form__btn"
+                disabled=""
+                type="submit"
+              >
+                Найти
+              </button>
+            </div>
+            <button
+              class="form__more"
+              disabled=""
+              type="button"
+            >
+              <svg>
+                search-more.svg
+              </svg>
+            </button>
+          </form>
+        </div>
+      </header>
+    </div>
+  </body>,
+  "container": <div>
+    <header>
+      <div
+        class="container"
+      >
+        <div
+          class="actions"
+        >
+          <h1
+            class="title"
+          >
+            Поиск вакансий
+          </h1>
+          <div
+            class="btns"
+          >
+            <button
+              class="fav-disabled"
+              type="button"
+            >
+              Очистить избранное
+            </button>
+            <button
+              class="del-disabled"
+              type="button"
+            >
+              Отобразить скрытые вакансии
+            </button>
+          </div>
+        </div>
+        <form
+          class="form"
+          title="work in progress"
+        >
+          <div
+            class="form__inner"
+          >
+            <input
+              class="form__input"
+              disabled=""
+              placeholder="Frontend"
+              type="text"
+              value="Frontend"
+            />
+            <button
+              class="form__btn"
+              disabled=""
+              type="submit"
+            >
+              Найти
+            </button>
+          </div>
+          <button
+            class="form__more"
+            disabled=""
+            type="button"
+          >
+            <svg>
+              search-more.svg
+            </svg>
+          </button>
+        </form>
+      </div>
+    </header>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`Рендер default 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <header>
+        <div
+          class="container"
+        >
+          <div
+            class="actions"
+          >
+            <h1
+              class="title"
+            >
+              Поиск вакансий
+            </h1>
+            <div
+              class="btns"
+            >
+              <button
+                class="fav-disabled"
+                type="button"
+              >
+                Очистить избранное
+              </button>
+              <button
+                class="del-disabled"
+                type="button"
+              >
+                Отобразить скрытые вакансии
+              </button>
+            </div>
+          </div>
+          <form
+            class="form"
+            title="work in progress"
+          >
+            <div
+              class="form__inner"
+            >
+              <input
+                class="form__input"
+                disabled=""
+                placeholder="Frontend"
+                type="text"
+                value="Frontend"
+              />
+              <button
+                class="form__btn"
+                disabled=""
+                type="submit"
+              >
+                Найти
+              </button>
+            </div>
+            <button
+              class="form__more"
+              disabled=""
+              type="button"
+            >
+              <svg>
+                search-more.svg
+              </svg>
+            </button>
+          </form>
+        </div>
+      </header>
+    </div>
+  </body>,
+  "container": <div>
+    <header>
+      <div
+        class="container"
+      >
+        <div
+          class="actions"
+        >
+          <h1
+            class="title"
+          >
+            Поиск вакансий
+          </h1>
+          <div
+            class="btns"
+          >
+            <button
+              class="fav-disabled"
+              type="button"
+            >
+              Очистить избранное
+            </button>
+            <button
+              class="del-disabled"
+              type="button"
+            >
+              Отобразить скрытые вакансии
+            </button>
+          </div>
+        </div>
+        <form
+          class="form"
+          title="work in progress"
+        >
+          <div
+            class="form__inner"
+          >
+            <input
+              class="form__input"
+              disabled=""
+              placeholder="Frontend"
+              type="text"
+              value="Frontend"
+            />
+            <button
+              class="form__btn"
+              disabled=""
+              type="submit"
+            >
+              Найти
+            </button>
+          </div>
+          <button
+            class="form__more"
+            disabled=""
+            type="button"
+          >
+            <svg>
+              search-more.svg
+            </svg>
+          </button>
+        </form>
+      </div>
+    </header>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

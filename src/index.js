@@ -2,22 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/style.css';
 import App from './App';
+import REGIONS_PARAMS from './REGIONS_PARAMS'
 
 /** Debug */
-window.LOAD_ALL_DATA = true;
-
-const REGIONS_PARAMS = [
-    {
-        'id': 'ekb',
-        'name': 'Екатеринбург',
-        'location': 'area=3',
-    },
-    {
-        'id': 'remote',
-        'name': 'Удалённо',
-        'location': 'schedule=remote'
-    },
-]
+window.LOAD_ALL_DATA = false;
 
 window.GROUP_NAMES = {
     is_fav: 'Избранное',
