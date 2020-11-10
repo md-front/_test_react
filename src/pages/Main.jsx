@@ -21,15 +21,22 @@ export default class Main extends React.Component {
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
             filtered: this.getDataFromStorage('filtered'),
+            /* TODO переделать на местные, и всё завязки делать тут! */
+            ...this.props.defaultSearchParams
         }
 
         this.alertRef = React.createRef();
 
+        this.search = this.search.bind(this);
         this.clearItems = this.clearItems.bind(this);
         this.closeByEsc = this.closeByEsc.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
         this.alertClickOutside = this.alertClickOutside.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
+    }
+
+    search(payload) {
+        this.setState({regions: payload.regions})
     }
 
     isBtnActive(type) {
@@ -73,16 +80,22 @@ export default class Main extends React.Component {
     /** Store actions */
     getDataFromStorage(type) {
         const storage = getLS(type);
+        const emptyStorage = this.createEmptyStore();
 
-        if(!storage || !Object.keys(storage))
-            return this.createEmptyStore();
+        if(!storage)
+            return emptyStorage;
+
+        for(let region in emptyStorage) {
+            if(!storage.hasOwnProperty(region))
+                storage[region] = {}
+        }
 
         return storage;
     }
     createEmptyStore() {
         const result = {};
 
-        this.props.regions.forEach(region => result[region.id] = {})
+        this.props.defaultSearchParams.regions.forEach(region => result[region.id] = {})
 
         return result;
     }
@@ -123,11 +136,13 @@ export default class Main extends React.Component {
                 :
                 <div className="main">
                     <Header clearItems={this.clearItems}
+                            search={this.search}
                             isFavActive={this.isBtnActive('favorites')}
-                            isDelActive={this.isBtnActive('blacklist')} />
+                            isDelActive={this.isBtnActive('blacklist')}
+                            defaultSearchParams={this.props.defaultSearchParams} />
 
                     <Items handleClickAction={this.handleClickAction}
-                           regions={this.props.regions}
+                           regions={this.state.regions}
                            filtered={this.state.filtered}
                            favorites={this.state.favorites}
                            blacklist={this.state.blacklist} />

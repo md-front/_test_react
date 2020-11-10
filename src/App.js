@@ -5,7 +5,7 @@ export default function App(props) {
 
     return (
         <div>
-            <Main regions={props.regions }/>
+            <Main defaultSearchParams={props.defaultSearchParams}/>
         </div>
     );
 }

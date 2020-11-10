@@ -1,5 +1,5 @@
 import React from 'react';
-import {ReactComponent as More} from '../assets/search-more.svg'
+import Form from './Form';
 import styles from '../styles/components/Header.module.scss';
 
 const btns = [
@@ -40,24 +40,8 @@ export default function Header(props) {
                     </div>
                 </div>
 
-                <form className={styles['form']} onSubmit={e => e.preventDefault()} title="work in progress">
-                    <div className={styles['form__inner']}>
-                        <input className={styles['form__input']}
-                               type="text"
-                               placeholder="Frontend"
-                               defaultValue="Frontend"
-                               disabled/>
-                        <button className={styles['form__btn']}
-                                type="submit"
-                                disabled>Найти</button>
-                    </div>
-
-                    <button type="button"
-                            className={styles['form__more']}
-                            disabled>
-                        <More/>
-                    </button>
-                </form>
+                <Form search={props.search}
+                      defaultSearchParams={props.defaultSearchParams}/>
             </div>
         </header>
     );

@@ -141,10 +141,14 @@ export default class ItemsSection extends React.Component {
 
         prevGroup = groups.find(group => group.sortValue === currentParams.parentId);
 
+        if(!prevGroup) return;
+
         item = prevGroup.items.find((item, index) => {
             itemIndex = index;
             return item.id === id;
         })
+
+        if(!item) return;
 
         newGroup = groups.find(group => group.sortValue === currentParams.newGroupId(item));
 
@@ -171,6 +175,8 @@ export default class ItemsSection extends React.Component {
         let vacancies = [...this.state.vacancies];
 
         const vacancy = vacancies.find(vacancy => vacancy.id === id);
+
+        if(!vacancy) return;
 
         vacancy[ACTION_TYPES[type]] = !vacancy[ACTION_TYPES[type]];
 
