@@ -42,8 +42,12 @@ export default class ItemsSection extends React.Component {
                 const allVacancies = await this.getVacancies();
                 const [vacancies, groups] = this.groupVacancies(allVacancies);
 
+                console.log('!!!', groups, vacancies)
+
                 this.updateData({groups, vacancies})
             })()
+        else
+            console.log('this.props.section', this.props.section)
     }
     componentDidUpdate(prevAllProps) {
 
@@ -205,7 +209,6 @@ export default class ItemsSection extends React.Component {
         let topVacancySort = DEFAULT_SORT;
 
         item.items.forEach(vacancy => {
-            console.log('vacancy',vacancy, topVacancySort)
             if(!vacancy.is_del && vacancy.sort.value > topVacancySort.value)
                 topVacancySort = vacancy.sort;
         })
@@ -274,7 +277,9 @@ export default class ItemsSection extends React.Component {
         return result;
     }
     async getVacanciesStep(pageNum = 0, exp = 'between1And3') {
-        let response = await fetch(`https://api.hh.ru/vacancies?text=frontend&${this.props.section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 3}&page=${pageNum}&experience=${exp}`);
+
+        let response = await fetch(`https://api.hh.ru/vacancies?text=${this.props.searchParams.name}&${this.props.section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 3}&page=${pageNum}&experience=${exp}`);
+
 
         if (response.ok) {
             const json = await response.json();
@@ -294,7 +299,16 @@ export default class ItemsSection extends React.Component {
 
         allVacancies.forEach(vacancy => {
             /** Проверка на кейворды в имени  */
-            if(!vacancy.name.match(window.NECESSARY) || vacancy.name.match(window.UNNECESSARY)) return
+            const necessary = this.props.searchParams.necessary;
+            const unnecessary = this.props.searchParams.unnecessary;
+
+            const toRegExp = str => new RegExp(str.split(', ').join('|'), 'i');
+
+            console.log(vacancy.name, toRegExp(necessary), vacancy.name.match(toRegExp(necessary)))
+
+            if((necessary && !vacancy.name.match(toRegExp(necessary))) || (unnecessary && vacancy.name.match(unnecessary))) return
+
+            console.log(vacancy)
 
             const employerId = vacancy.employer.id;
 

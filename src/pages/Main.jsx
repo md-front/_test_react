@@ -22,7 +22,7 @@ export default class Main extends React.Component {
             blacklist: this.getDataFromStorage('blacklist'),
             filtered: this.getDataFromStorage('filtered'),
             /* TODO переделать на местные, и всё завязки делать тут! */
-            ...this.props.defaultSearchParams
+            searchParams: { ...this.props.defaultSearchParams }
         }
 
         this.alertRef = React.createRef();
@@ -36,7 +36,7 @@ export default class Main extends React.Component {
     }
 
     search(payload) {
-        this.setState({regions: payload.regions})
+        this.setState({searchParams: { ...payload }})
     }
 
     isBtnActive(type) {
@@ -139,10 +139,10 @@ export default class Main extends React.Component {
                             search={this.search}
                             isFavActive={this.isBtnActive('favorites')}
                             isDelActive={this.isBtnActive('blacklist')}
-                            defaultSearchParams={this.props.defaultSearchParams} />
+                            searchParams={this.state.searchParams} />
 
                     <Items handleClickAction={this.handleClickAction}
-                           regions={this.state.regions}
+                           searchParams={this.state.searchParams}
                            filtered={this.state.filtered}
                            favorites={this.state.favorites}
                            blacklist={this.state.blacklist} />

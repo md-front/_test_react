@@ -41,7 +41,7 @@ export default function Header(props) {
                 </div>
 
                 <Form search={props.search}
-                      defaultSearchParams={props.defaultSearchParams}/>
+                      searchParams={props.searchParams}/>
             </div>
         </header>
     );

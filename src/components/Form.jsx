@@ -9,7 +9,7 @@ export default class Form extends React.Component {
 
         this.state = {
             showMore: true,
-            ...this.props.defaultSearchParams
+            ...this.props.searchParams
         };
 
         this.toggle = this.toggle.bind(this);

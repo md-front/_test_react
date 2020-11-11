@@ -9,11 +9,13 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
 
-        this.props.regions[0].is_active = true;
+        const regions = this.props.searchParams.regions;
+
+        regions[0].is_active = true;
 
         this.state = {
-            sections: this.props.regions,
-            activeSectionId: this.props.regions[0].id,
+            sections: regions,
+            activeSectionId: regions[0].id,
         }
 
         this.handleLoaded = this.handleLoaded.bind(this);
@@ -46,6 +48,8 @@ export default class extends React.Component {
         const sections = this.state.sections;
         const activeSection = sections.find(section => section.id === id);
 
+        console.log('handleLoaded', activeSection, loadedData)
+
         for(let i in loadedData)
             activeSection[i] = loadedData[i]
 
@@ -69,6 +73,7 @@ export default class extends React.Component {
                     section.is_active &&
                     <ItemsSection section={section}
                                   key={index}
+                                  searchParams={this.props.searchParams}
                                   handleLoaded={this.handleLoaded}
                                   handleClickAction={this.props.handleClickAction}
                                   filtered={this.props.filtered[section.id]}
