@@ -15,6 +15,12 @@ module.exports = {
     sortByIncreasing(arr, param) {
         return arr.sort((a,b) => a[param] - b[param]);
     },
+    isObjectsEqual(arr1, arr2) {
+        return JSON.stringify(arr1) === JSON.stringify(arr2)
+    },
+    cloneObj(obj) {
+        return JSON.parse(JSON.stringify(obj))
+    },
 
     /**  Date */
     parseDateString(dateString) {

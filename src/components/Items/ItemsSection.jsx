@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../../styles/components/Items/ItemsSection.module.scss';
-import {sortByReduction, checkItems, parseDateString} from '../../helpers';
+import {sortByReduction, checkItems, parseDateString, isObjectsEqual} from '../../helpers';
 import ItemsInner from './ItemsInner';
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
@@ -37,17 +37,20 @@ export default class ItemsSection extends React.Component {
     componentDidMount() {
 
         /** get initial data */
-        if(!this.props.section.visibleVacancies)
-            (async () => {
-                const allVacancies = await this.getVacancies();
-                const [vacancies, groups] = this.groupVacancies(allVacancies);
+        // if(!this.props.section.visibleVacancies)
+        //     this.loadData()
 
-                console.log('!!!', groups, vacancies)
 
-                this.updateData({groups, vacancies})
-            })()
-        else
-            console.log('this.props.section', this.props.section)
+        /* TODO глобально менять структуру */
+        this.loadData()
+    }
+    async loadData() {
+        const allVacancies = await this.getVacancies();
+        const [vacancies, groups] = this.groupVacancies(allVacancies);
+
+        console.log('loadData:', this.props.section.id, vacancies)
+
+        this.updateData({groups, vacancies})
     }
     componentDidUpdate(prevAllProps) {
 
@@ -64,6 +67,9 @@ export default class ItemsSection extends React.Component {
 
         /* todo ? стоит как-то вынести за componentDidUpdate? */
         ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
+
+        if(!isObjectsEqual(prevAllProps.searchParams, this.props.searchParams))
+            this.loadData()
     }
 
     visibleVacancies(groups = this.state.groups) {
@@ -304,11 +310,9 @@ export default class ItemsSection extends React.Component {
 
             const toRegExp = str => new RegExp(str.split(', ').join('|'), 'i');
 
-            console.log(vacancy.name, toRegExp(necessary), vacancy.name.match(toRegExp(necessary)))
+            // console.log(vacancy.name, necessary, !vacancy.name.match(toRegExp(necessary)))
 
-            if((necessary && !vacancy.name.match(toRegExp(necessary))) || (unnecessary && vacancy.name.match(unnecessary))) return
-
-            console.log(vacancy)
+            if((necessary && !vacancy.name.match(toRegExp(necessary))) || (unnecessary && vacancy.name.match(unnecessary))) return;
 
             const employerId = vacancy.employer.id;
 
@@ -335,11 +339,11 @@ export default class ItemsSection extends React.Component {
                 item.haveVisibleItem = true;
 
             /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
-            if(parseDateString(vacancy.created_at) > lastValidDate) {
+            if(parseDateString(vacancy.created_at) > lastValidDate)
                 setItemParams(3, 'is_new');
 
-                /** Вакансия без опыта */
-            } else if (vacancy.is_jun || vacancy.name.match(window.JUNIOR)) {
+            /** Вакансия без опыта */
+            if (vacancy.is_jun || vacancy.name.match(window.JUNIOR)) {
                 setItemParams(2, 'is_jun');
 
                 /** В вакансии указана зп */

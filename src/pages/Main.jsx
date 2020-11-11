@@ -1,5 +1,5 @@
 import React from 'react';
-import { setLS, getLS} from '../helpers';
+import {setLS, getLS} from '../helpers';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Items from '../components/Items/Items';
@@ -12,9 +12,9 @@ export default class Main extends React.Component {
 
         /**
          *
-         * favorites: { 'ekb': [{ Работодатель: регион}]}
-         * blacklist: { 'ekb': [{ Вакансия: работодатель}]}
-         * filtered: { 'ekb': [{ Работодатель}]}
+         * favorites: {'ekb': [{Работодатель: регион}]}
+         * blacklist: {'ekb': [{Вакансия: работодатель}]}
+         * filtered: {'ekb': [{Работодатель}]}
          */
         this.state = {
             showAlert: false,
@@ -22,7 +22,7 @@ export default class Main extends React.Component {
             blacklist: this.getDataFromStorage('blacklist'),
             filtered: this.getDataFromStorage('filtered'),
             /* TODO переделать на местные, и всё завязки делать тут! */
-            searchParams: { ...this.props.defaultSearchParams }
+            searchParams: this.props.defaultSearchParams
         }
 
         this.alertRef = React.createRef();
@@ -36,7 +36,7 @@ export default class Main extends React.Component {
     }
 
     search(payload) {
-        this.setState({searchParams: { ...payload }})
+        this.setState({searchParams: {...payload }})
     }
 
     isBtnActive(type) {
@@ -56,7 +56,7 @@ export default class Main extends React.Component {
 
         !show ? this.createAlertHandlers() : this.removeAlertHandlers();
 
-        this.setState({ showAlert: !show})
+        this.setState({showAlert: !show})
     }
     createAlertHandlers() {
         document.addEventListener('click', this.alertClickOutside)
@@ -122,7 +122,7 @@ export default class Main extends React.Component {
         this.setStorage(type, result);
     }
     setStorage(type, payload) {
-        this.setState({ [type]: payload});
+        this.setState({[type]: payload});
 
         setLS(type, payload);
     }

@@ -16,32 +16,32 @@ window.GROUP_NAMES = {
 
 const DEFAULT_SEARCH_PARAMS = {
     name: 'Frontend',
-    necessary: 'front, фронт, js, javascript',
+    necessary: 'front, фронт, js, javascript, react',
     unnecessary: 'backend, fullstack, SQL, lead, ведущий, angular',
     regions: [
-        {
+        /*{
             'id': 'msk',
             'name': 'Москва',
             'location': 'area=1',
             checked: false,
         },
-        /*{
+        {
             'id': 'spb',
             'name': 'Санкт-Петербург',
             'location': 'area=2',
             checked: false,
-        },
+        },*/
         {
             'id': 'ekb',
             'name': 'Екатеринбург',
             'location': 'area=3',
             checked: true,
-        },*/
+        },
         {
             'id': 'remote',
             'name': 'Удалённо',
             'location': 'schedule=remote',
-            checked: true,
+            checked: false,
         }
     ]
 }

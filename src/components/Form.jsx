@@ -1,4 +1,5 @@
 import React from 'react';
+import {cloneObj} from '../helpers';
 import {ReactComponent as More} from '../assets/search-more.svg'
 import styles from '../styles/components/Form.module.scss';
 
@@ -12,10 +13,12 @@ export default class Form extends React.Component {
             ...this.props.searchParams
         };
 
+        this.clear = this.clear.bind(this);
         this.toggle = this.toggle.bind(this);
         this.submit = this.submit.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.setDefaultParams = this.setDefaultParams.bind(this);
     }
 
     toggle() {
@@ -27,9 +30,12 @@ export default class Form extends React.Component {
     }
 
     handleClick(e) {
-        let regions = [...this.state.regions];
+        const regions = cloneObj(this.state.regions);
         const region = regions.find(region => region.id === e.target.id);
         region.checked = !region.checked;
+
+        if(region.is_active)
+            region.is_active = false;
 
         this.setState({regions})
     }
@@ -43,6 +49,18 @@ export default class Form extends React.Component {
             unnecessary: this.state.unnecessary,
             regions: this.state.regions,
         })
+    }
+
+    clear() {
+        this.setState({
+            name: '',
+            necessary: '',
+            unnecessary: '',
+        })
+    }
+
+    setDefaultParams() {
+        console.log('setDefaultParams')
     }
 
     render() {
@@ -65,6 +83,16 @@ export default class Form extends React.Component {
                         className={styles.toggle}
                         onClick={this.toggle}>
                     <More/>
+                </button>
+
+                <button type="button"
+                        onClick={this.setDefaultParams}>
+                    Подставить стандартный поиск
+                </button>
+
+                <button type="button"
+                        onClick={this.clear}>
+                    Очистить
                 </button>
 
                 <div className={this.state.showMore ? styles.inner : styles.hidden}>

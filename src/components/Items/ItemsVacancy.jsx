@@ -55,7 +55,7 @@ export default class ItemsVacancy extends React.Component {
                     <span className={styles.salary}>{salary.from}{salary.from && salary.to ? ' - ' : ''}{salary.to}</span>
                     }
                     {haveDescription &&
-                    <span className={styles.description} dangerouslySetInnerHTML={{ __html: this.props.vacancy.snippet.requirement }} />
+                    <span className={styles.description} dangerouslySetInnerHTML={{__html: this.props.vacancy.snippet.requirement }} />
                     }
                 </div>
                 }

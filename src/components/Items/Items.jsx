@@ -1,25 +1,33 @@
 import React from 'react';
+import {isObjectsEqual} from '../../helpers';
 import styles from '../../styles/components/Items/Items.module.scss';
 import ItemsSection from './ItemsSection';
 import ItemsTitle from "./ItemsTitle";
 
 
-export default class extends React.Component {
+export default class Items extends React.Component {
 
     constructor(props) {
         super(props);
 
-        const regions = this.props.searchParams.regions;
-
-        regions[0].is_active = true;
+        const firstActive = this.props.searchParams.regions.find(region => region.checked);
+        firstActive.is_active = true;
 
         this.state = {
-            sections: regions,
-            activeSectionId: regions[0].id,
+            sections: this.props.searchParams.regions,
+            activeSectionId: firstActive.id,
         }
 
         this.handleLoaded = this.handleLoaded.bind(this);
         this.handleClickSectionTitle = this.handleClickSectionTitle.bind(this);
+    }
+
+    componentDidUpdate(prevAllProps) {
+        const regions = this.props.searchParams.regions;
+
+        /* TODO выпилить этот ад. Redux? */
+        if(!isObjectsEqual(regions, this.state.sections))
+            this.setState({sections: regions})
     }
 
     handleClickSectionTitle(id) {
@@ -48,8 +56,6 @@ export default class extends React.Component {
         const sections = this.state.sections;
         const activeSection = sections.find(section => section.id === id);
 
-        console.log('handleLoaded', activeSection, loadedData)
-
         for(let i in loadedData)
             activeSection[i] = loadedData[i]
 
@@ -62,6 +68,7 @@ export default class extends React.Component {
                 <div className="container">
                     <div className={styles.nav}>
                         {this.state.sections.map((section, index) =>
+                            section.checked &&
                             <ItemsTitle section={section}
                                         quantity={this.state.activeQuantity}
                                         handleClick={this.handleClickSectionTitle}
