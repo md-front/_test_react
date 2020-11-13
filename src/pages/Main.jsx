@@ -131,21 +131,21 @@ export default class Main extends React.Component {
     render() {
         return (
             this.state.showAlert ?
-                <Alert closeAlert={this.toggleAlert}
-                       alertRef={this.alertRef}/>
+                <Alert alertRef={this.alertRef}
+                       closeAlert={this.toggleAlert}/>
                 :
                 <div className="main">
-                    <Header clearItems={this.clearItems}
-                            search={this.search}
+                    <Header search={this.search}
+                            clearItems={this.clearItems}
+                            searchParams={this.state.searchParams}
                             isFavActive={this.isBtnActive('favorites')}
-                            isDelActive={this.isBtnActive('blacklist')}
-                            searchParams={this.state.searchParams} />
+                            isDelActive={this.isBtnActive('blacklist')} />
 
-                    <Items handleClickAction={this.handleClickAction}
-                           searchParams={this.state.searchParams}
-                           filtered={this.state.filtered}
+                    <Items filtered={this.state.filtered}
                            favorites={this.state.favorites}
-                           blacklist={this.state.blacklist} />
+                           blacklist={this.state.blacklist}
+                           searchParams={this.state.searchParams}
+                           handleClickAction={this.handleClickAction} />
 
                     <Footer showAlert={this.toggleAlert}/>
                 </div>

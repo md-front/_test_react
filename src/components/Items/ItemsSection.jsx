@@ -48,8 +48,6 @@ export default class ItemsSection extends React.Component {
         const allVacancies = await this.getVacancies();
         const [vacancies, groups] = this.groupVacancies(allVacancies);
 
-        console.log('loadData:', this.props.section.id, vacancies)
-
         this.updateData({groups, vacancies})
     }
     componentDidUpdate(prevAllProps) {
@@ -68,6 +66,7 @@ export default class ItemsSection extends React.Component {
         /* todo ? стоит как-то вынести за componentDidUpdate? */
         ACTIONS.forEach(action => this.activityCheck(action, prevAllProps));
 
+        /* TODO костыль! */
         if(!isObjectsEqual(prevAllProps.searchParams, this.props.searchParams))
             this.loadData()
     }
@@ -301,18 +300,16 @@ export default class ItemsSection extends React.Component {
     groupVacancies(allVacancies) {
         let items = {};
         let vacancies = [];
-        const lastValidDate = new Date(new Date() - (window.NEW_IN_DAYS * 24 * 60 * 60 * 1000));
+        const lastValidDate = new Date(new Date() - (+this.props.searchParams.newInDays * 24 * 60 * 60 * 1000));
 
         allVacancies.forEach(vacancy => {
             /** Проверка на кейворды в имени  */
             const necessary = this.props.searchParams.necessary;
             const unnecessary = this.props.searchParams.unnecessary;
 
-            const toRegExp = str => new RegExp(str.split(', ').join('|'), 'i');
+            const toRegExp = arr => new RegExp(arr.join('|'), 'i');
 
-            // console.log(vacancy.name, necessary, !vacancy.name.match(toRegExp(necessary)))
-
-            if((necessary && !vacancy.name.match(toRegExp(necessary))) || (unnecessary && vacancy.name.match(unnecessary))) return;
+            if((necessary.length && !vacancy.name.match(toRegExp(necessary))) || (unnecessary.length && vacancy.name.match(unnecessary))) return;
 
             const employerId = vacancy.employer.id;
 

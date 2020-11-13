@@ -16,10 +16,11 @@ window.GROUP_NAMES = {
 
 const DEFAULT_SEARCH_PARAMS = {
     name: 'Frontend',
-    necessary: 'front, фронт, js, javascript, react',
-    unnecessary: 'backend, fullstack, SQL, lead, ведущий, angular',
+    necessary: ['front', 'фронт', 'js', 'javascript', 'react'],
+    unnecessary: ['backend', 'fullstack', 'SQL', 'lead', 'ведущий', 'angular'],
+    newInDays: 1,
     regions: [
-        /*{
+        {
             'id': 'msk',
             'name': 'Москва',
             'location': 'area=1',
@@ -30,7 +31,7 @@ const DEFAULT_SEARCH_PARAMS = {
             'name': 'Санкт-Петербург',
             'location': 'area=2',
             checked: false,
-        },*/
+        },
         {
             'id': 'ekb',
             'name': 'Екатеринбург',
@@ -39,22 +40,59 @@ const DEFAULT_SEARCH_PARAMS = {
         },
         {
             'id': 'remote',
-            'name': 'Удалённо',
+            'name': 'Удалённые вакансии',
             'location': 'schedule=remote',
-            checked: false,
+            checked: true,
         }
     ]
 }
 
-window.NEW_IN_DAYS = 1;
+/* TODO вынести отдельно */
+const SEARCH_PARAMS = (() => {
+    let result = {};
+    const urlParams = (new URL(document.location)).searchParams;
 
-// window.NECESSARY = new RegExp(/front|фронт|js|javascript/i);
-// window.UNNECESSARY = new RegExp(/backend|fullstack|SQL|lead|ведущий|angular/i);
+    if(!urlParams.toString())
+        return DEFAULT_SEARCH_PARAMS;
+
+    for(let param in DEFAULT_SEARCH_PARAMS) {
+        let dataFromUrl = urlParams.get(param);
+        let tempData;
+        const isKeyword = param === 'necessary' || param === 'unnecessary';
+        const needDefaultValue = param === 'newInDays' || param === 'regions' /* || param === 'name'*/
+        const emptyValue = (()=> {
+
+            if(needDefaultValue)
+                return DEFAULT_SEARCH_PARAMS[param];
+
+            if(isKeyword)
+                return [];
+
+            return ''
+        })();
+
+        if(dataFromUrl && isKeyword) {
+            tempData = dataFromUrl.split(',');
+        } else if(dataFromUrl && param === 'regions') {
+            tempData = [...DEFAULT_SEARCH_PARAMS.regions];
+            dataFromUrl = dataFromUrl.split(',');
+
+            tempData.forEach(region => region.checked = dataFromUrl.includes(region.id))
+        } else {
+            tempData = dataFromUrl;
+        }
+
+        result[param] = tempData ? tempData : emptyValue;
+    }
+
+    return result;
+})()
+
 window.JUNIOR = new RegExp(/junior|стажер|младший/i);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App defaultSearchParams={DEFAULT_SEARCH_PARAMS} />
+    <App defaultSearchParams={SEARCH_PARAMS} />
   </React.StrictMode>,
   document.getElementById('root')
 );

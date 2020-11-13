@@ -3,11 +3,11 @@
 
 .items {
   display: grid;
-  grid-template-columns: repeat(4, calc(25% - 15px));
+  grid-template-columns: repeat(3, calc(33.33% - 15px));
   grid-gap: 20px;
   flex-wrap: wrap;
 
   @media ($laptop) {
-    grid-template-columns: repeat(3, calc(33.33% - 15px));
+    //grid-template-columns: repeat(3, calc(33.33% - 15px));
   }
 }
