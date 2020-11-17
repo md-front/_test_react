@@ -1,8 +1,12 @@
 import React from 'react';
+import Select from 'rc-select';
+import ReactTooltip from 'react-tooltip/dist/index';
 import {cloneObj} from '../helpers';
+import {ReactComponent as Info} from '../assets/info.svg'
 import {ReactComponent as Share} from '../assets/share.svg'
 import {ReactComponent as More} from '../assets/search-more.svg'
 import styles from '../styles/components/Form.module.scss';
+import '../styles/vendor/select.scss';
 
 export default class Form extends React.Component {
 
@@ -11,10 +15,13 @@ export default class Form extends React.Component {
 
         this.state = {
             showMore: true,
-            copiedUrl: '',
             necessaryInput: '',
             unnecessaryInput: '',
-            // url,
+            url: '',
+            keyWordTooltip: {
+                type: '',
+                text: ''
+            },
             ...this.props.searchParams
         };
 
@@ -25,38 +32,22 @@ export default class Form extends React.Component {
         this.submit = this.submit.bind(this);
         this.addKeyword = this.addKeyword.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.handleSelect= this.handleSelect.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.clearKeywords= this.clearKeywords.bind(this);
         this.defaultValidation= this.defaultValidation.bind(this);
         // this.setDefaultParams = this.setDefaultParams.bind(this);
-    }
-
-    componentDidMount() {
-        this.setUrl();
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
     }
 
     defaultValidation() {
-        return !this.state.name || !this.state.regions.some(region => region.checked)
+        return this.state.name && this.state.regions.some(region => region.checked) && this.state.experience.some(region => region.checked)
     }
 
     clearKeywords() {
         this.setState({
             necessary: [],
             unnecessary: [],
-        }, this.setUrl)
-    }
-
-    setUrl() {
-        const name = this.state.name;
-        const necessary = this.state.necessary.length ? this.state.necessary.join(',') : null;
-        const unnecessary = this.state.unnecessary.length ? this.state.unnecessary.join(',') : null;
-        const newInDays = this.state.newInDays;
-        const regions = this.state.regions.reduce((activeRegions, region) => region.checked ? activeRegions += `${region.id},` : activeRegions,'').slice(0, -1);
-
-        const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&newInDays=${newInDays}${necessary ? '&necessary='+necessary : ''}${unnecessary ? '&unnecessary='+unnecessary : ''}`
-
-        this.setState({'url': url});
+        })
     }
 
     toggle() {
@@ -64,27 +55,62 @@ export default class Form extends React.Component {
     }
 
     handleChange(e) {
-        const callback = e.target.id === 'name' ? this.setUrl : '';
-
-        this.setState({[e.target.id]: e.target.value}, callback);
+        this.setState({[e.target.id]: e.target.value});
     }
 
-    handleSelect(e) {
-        this.setState({[e.target.id]: e.target.value}, this.setUrl);
+    handleChangeSelect(value) {
+        this.setState({newInDays: value});
     }
 
-    addKeyword(id) {
-        const inputName = `${id}Input`
+    addKeyword(name) {
+        const inputName = `${name}Input`
         const inputValue = this.state[inputName];
-        const keywords = [...this.state[id]];
+        const keywords = this.state[name];
+        const diffName = ['necessary','unnecessary'].find(difName => difName !== name);
+        let differentKeywords = this.state[diffName];
+        let keyWordTooltip = {};
 
-        if(!keywords.includes(inputValue))
+        if(!keywords.includes(inputValue)) {
             keywords.push(inputValue)
+            removeFromDifferentKeywords();
+        } else {
+            keyWordTooltip = {
+                type: 'error',
+                text: `"${inputValue}" уже присутствует в фильтре`
+            }
+        }
 
         this.setState({
-            [id]: keywords,
-            [inputName]: ''
-        }, this.setUrl)
+            [name]: keywords,
+            [diffName]: differentKeywords,
+            [inputName]: '',
+            keyWordTooltip
+        }, showTooltip)
+
+
+        function removeFromDifferentKeywords() {
+            if(!differentKeywords.includes(inputValue)) return;
+            differentKeywords = differentKeywords.filter(keyword => keyword !== inputValue);
+
+            keyWordTooltip = {
+                type: 'dark',
+                text: `"${inputValue}" перенесено из ${diffName === 'necessary' ? 'ключевых слов' : 'исключающих слов'}`
+            }
+        }
+        function showTooltip() {
+            if(!this.state.keyWordTooltip.text) return;
+
+            ReactTooltip.show(this[`${name}Tooltip`]);
+            setTimeout(()=>{
+                ReactTooltip.hide(this[`${name}Tooltip`]);
+                this.setState({
+                    keyWordTooltip: {
+                        type: '',
+                        text: ''
+                    }
+                })
+            },2000);
+        }
     }
 
     removeKeyword(id, value) {
@@ -92,19 +118,18 @@ export default class Form extends React.Component {
         keywords = keywords.filter(keyword => keyword !== value);
 
         this.setState({[id]: keywords})
-
-        this.setUrl();
     }
 
-    handleClick(e) {
-        const regions = cloneObj(this.state.regions);
-        const region = regions.find(region => region.id === e.target.id);
-        region.checked = !region.checked;
+    handleClick(e, paramName) {
+        const params = cloneObj(this.state[paramName]);
+        const param = params.find(param => param.id === e.target.id);
+        param.checked = !param.checked;
 
-        if(region.is_active)
-            region.is_active = false;
+        /* TODO ? */
+        if(param.is_active)
+            param.is_active = false;
 
-        this.setState({regions}, this.setUrl)
+        this.setState({[paramName]: params})
     }
 
     submit(e) {
@@ -112,9 +137,10 @@ export default class Form extends React.Component {
 
         this.props.search({
             name: this.state.name,
+            regions: this.state.regions,
+            experience: this.state.experience,
             necessary: this.state.necessary,
             unnecessary: this.state.unnecessary,
-            regions: this.state.regions,
             newInDays: this.state.newInDays,
         })
     }
@@ -124,9 +150,20 @@ export default class Form extends React.Component {
     }*/
 
     share() {
-        window.navigator.clipboard.writeText(this.state.url)
+        const name = this.state.name;
+        const necessary = this.state.necessary.length ? this.state.necessary.join(',') : null;
+        const unnecessary = this.state.unnecessary.length ? this.state.unnecessary.join(',') : null;
+        const newInDays = this.state.newInDays;
+        const regions = transformToUrlFormat(this.state.regions);
+        const experience = transformToUrlFormat(this.state.experience);
 
-        this.setState({copiedUrl: this.state.url})
+        const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&experience=${experience}&newInDays=${newInDays}${necessary ? '&necessary='+necessary : ''}${unnecessary ? '&unnecessary='+unnecessary : ''}`
+
+        window.navigator.clipboard.writeText(url);
+
+        function transformToUrlFormat(arr) {
+            return arr.reduce((sum, item) => item.checked ? sum += `${item.id},` : sum,'').slice(0, -1)
+        }
     }
 
     render() {
@@ -134,37 +171,38 @@ export default class Form extends React.Component {
             {
                 label: 'Добавить ключевое слово',
                 id: 'necessary',
-                placeholder: 'Кадрам',
+                placeholder: 'По персоналу',
+                tooltip: 'Отображаемые акансии будут содержать хотя-бы одно ключевое слово',
                 value: this.state.necessaryInput,
             },
             {
                 label: 'Добавить исключающее ключевое слово',
                 id: 'unnecessary',
-                placeholder: 'Продажам',
+                placeholder: 'По продажам',
+                tooltip: 'Названия вакансий с данным словом будут скрыты',
                 value: this.state.unnecessaryInput,
             }
         ]
-
         const newInDaysOptions = [
             {
                 value: 1,
-                title: '1 день'
+                label: '1 день'
             },
             {
                 value: 2,
-                title: '2 дня'
+                label: '2 дня'
             },
             {
                 value: 3,
-                title: '3 дня'
+                label: '3 дня'
             },
             {
                 value: 7,
-                title: '1 неделю'
+                label: '1 неделю'
             },
             {
                 value: 14,
-                title: '2 недели'
+                label: '2 недели'
             },
         ]
 
@@ -173,8 +211,8 @@ export default class Form extends React.Component {
                   onSubmit={this.submit}>
 
                 <div className={styles.inner}>
-                    <label>
-                        <span className={styles.label}>Вакансия:</span>
+                    <label className={styles.item}>
+                        <span className={styles.label}>Вакансия <sup>*</sup></span>
 
                         <input className={styles.input}
                                type="text"
@@ -184,15 +222,16 @@ export default class Form extends React.Component {
                                onChange={this.handleChange}/>
                     </label>
 
-                    <div className={styles.regions}>
-                        <div className={styles.label}>Регионы поиска:</div>
+                    <div className={styles.item}>
+                        <div className={styles.label}>Регионы поиска <sup>*</sup></div>
 
-                        <div className={styles.regionsInner}>
+                        <div className={styles.checkboxWrap}>
                             {this.state.regions.map((region, index) =>
-                                <label key={index}>
+                                <label key={index}
+                                       className={styles.checkbox}>
                                     <input type="checkbox"
                                            checked={region.checked}
-                                           onChange={this.handleClick}
+                                           onChange={e =>this.handleClick(e, 'regions')}
                                            id={region.id}/>
                                     <span/>
                                     <span>{region.name}</span>
@@ -201,10 +240,28 @@ export default class Form extends React.Component {
                         </div>
                     </div>
 
+                    <div className={styles.item}>
+                        <span className={styles.label}>Опыт <sup>*</sup></span>
+
+                        <div className={styles.checkboxWrap}>
+                            {this.state.experience.map((experience, index) =>
+                                <label key={index}
+                                       className={styles.checkbox}>
+                                    <input type="checkbox"
+                                           checked={experience.checked}
+                                           onChange={e => this.handleClick(e, 'experience')}
+                                           id={experience.id}/>
+                                    <span/>
+                                    <span>{experience.name}</span>
+                                </label>
+                            )}
+                        </div>
+                    </div>
+
                     <div className={styles.btns}>
                         {/* TODO this.state.regions.some оптимизировать */}
                         <button className={styles.btn}
-                                disabled={this.defaultValidation()}
+                                disabled={!this.defaultValidation()}
                                 type="submit">Поиск</button>
 
                         <button type="button"
@@ -220,7 +277,12 @@ export default class Form extends React.Component {
                     {keyWordFields.map((keyWord, index) =>
                         <label className={styles.keyword}
                                key={index}>
-                            <span className={styles.label}>{keyWord.label}</span>
+
+                            <span className={styles.label}>
+                                {keyWord.label} <Info data-tip={keyWord.tooltip}
+                                                      data-effect="solid"/>
+                                <ReactTooltip />
+                            </span>
 
                             <input className={styles.input}
                                    type="text"
@@ -232,41 +294,44 @@ export default class Form extends React.Component {
                             <button type="button"
                                     className={styles.btnKeyword}
                                     disabled={!keyWord.value}
-                                    onClick={() => this.addKeyword(keyWord.id)}>+</button>
+                                    onClick={() => this.addKeyword(keyWord.id)}
+                                    data-tip={this.state.keyWordTooltip.text}
+                                    data-type={this.state.keyWordTooltip.type}
+                                    data-effect="solid"
+                                    data-iscapture={true}
+                                    ref={ref => {this[`${keyWord.id}Tooltip`] = ref}}
+                                    data-event='custom'>+</button>
+                            <ReactTooltip />
                         </label>
                     )}
 
-                    <label>
+                    <label className={styles.item}>
                         <span className={styles.label}>Учитывать "новые" за</span>
-                        <select id="newInDays"
-                                onChange={this.handleSelect}>
-                            {newInDaysOptions.map((option, index) =>
-                                <option value={option.value}
-                                        key={index}
-                                        selected={+this.state.newInDays === option.value}>
-                                    {option.title}
-                                </option>
-                            )}
-                        </select>
+
+                        <Select id="newInDays"
+                                prefixCls="select"
+                                defaultValue={+this.state.newInDays}
+                                options={newInDaysOptions}
+                                onChange={this.handleChangeSelect}
+                                menuItemSelectedIcon=""
+                                showSearch={false} />
                     </label>
 
 
                     <div className={styles.btns}>
-                        {this.state.url === this.state.copiedUrl ?
-                            <button type="button"
-                                    disabled
-                                    className={styles.btnCopy}>
-                                <span>Скопировано!</span>
-                            </button>
-                            :
-                            <button type="button"
-                                    className={styles.btnCopy}
-                                    disabled={this.defaultValidation()}
-                                    onClick={this.share}>
-                                <Share />
-                                <span>Скопировать ссылку</span>
-                            </button>
-                        }
+                        <button type="button"
+                                className={styles.btnCopy}
+                                disabled={!this.defaultValidation()}
+                                onClick={this.share}
+                                data-tip="Скопировано!"
+                                data-effect="solid"
+                                data-delay-hide='2000'
+                                data-iscapture={true}
+                                data-event='click'>
+                            <Share />
+                            <span>Скопировать ссылку</span>
+                        </button>
+                        <ReactTooltip globalEventOff='click' />
                     </div>
 
 

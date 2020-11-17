@@ -257,31 +257,30 @@ export default class ItemsSection extends React.Component {
 
     /** DATA */
     async getVacancies() {
-        /* todo ? как лучше реализовать отдельный запрос */
-        let zeroStep = await this.getVacanciesStep(0,'noExperience');
-        let result = zeroStep.vacancies.map(item => {
-            item.is_jun = true;
-            return item;
-        });
+        const experience = this.props.searchParams.experience.filter(exp => exp.checked);
+        const result = [];
 
-        let firstStep = await this.getVacanciesStep();
-        result = [...result, ...firstStep.vacancies];
-        let pagesLeft = firstStep.pagesLeft;
+        for (const exp of experience) {
+            const firstStep = await this.getVacanciesStep(0,exp.id);
 
-        if(window.LOAD_ALL_DATA)
-            while(--pagesLeft > 0) {
-                const step = await this.getVacanciesStep(pagesLeft);
+            result.push(...firstStep.vacancies);
+            let pagesLeft = firstStep.pagesLeft;
 
-                if(!step.items) break;
+            if(window.LOAD_ALL_DATA)
+                while(--pagesLeft > 0) {
+                    const step = await this.getVacanciesStep(pagesLeft,exp.id);
 
-                result.push(...step.items);
-            }
+                    if(!step.vacancies) break;
+
+                    result.push(...step.vacancies);
+                }
+        }
 
         this.setState({vacancies: result})
 
         return result;
     }
-    async getVacanciesStep(pageNum = 0, exp = 'between1And3') {
+    async getVacanciesStep(pageNum, exp) {
 
         let response = await fetch(`https://api.hh.ru/vacancies?text=${this.props.searchParams.name}&${this.props.section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 3}&page=${pageNum}&experience=${exp}`);
 

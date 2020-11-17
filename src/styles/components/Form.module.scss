@@ -8,16 +8,40 @@
 }
 
 .label {
-  display: block;
+  display: flex;
   width: 100%;
   margin-bottom: 15px;
+  align-items: center;
   font-weight: 500;
+
+  /** info icon */
+  svg {
+    width: 18px;
+    margin-left: 15px;
+
+    &:hover {
+
+      *:not(g) {
+        fill: $customPurple;
+      }
+    }
+
+    *:not(g) {
+      fill: $defaultColor;
+      transition: fill .4s;
+    }
+  }
+
+  sup {
+    margin-left: 2px;
+    transform: translateY(-2px);
+  }
 }
 
 .inner {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, calc(33.33% - 20px));
+  grid-template-columns: repeat(3, calc((100% - 225px - 140px) / 3)) 225px;
   justify-content: space-between;
 }
 .hidden {
@@ -33,9 +57,15 @@
   border-top: 2px solid #EEEFF5;
 }
 
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .btns {
   display: flex;
-  grid-column: 3;
+  grid-column: 4;
   justify-content: flex-end;
   align-self: flex-end;
 }
@@ -45,12 +75,17 @@
   height: 54px;
   padding: 10px 20px;
   border-radius: $commonBorderRadius;
-  border: 1px solid $borderColor;
-  background: #F4F7FC;
+  border: 2px solid $borderColor;
+  background-color: $backgroundColor;
   font-size: 18px;
+  transition: background-color .2s;
 
   &::placeholder {
     color: lightgray;
+  }
+
+  &:focus {
+    background-color: #fff;
   }
 
   &[disabled] {
@@ -98,24 +133,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 17px 53px;
-  border: 1px solid $borderColor;
+  padding: 14px 53px;
+  border: 2px solid $borderColor;
   border-radius: $commonBorderRadius;
   background: $customPurple;
   font-size: 16px;
   font-weight: 500;
   color: #fff;
   white-space: nowrap;
-  transition: background-color .4s, color .4s;
+  transition: background-color .4s, color .4s, opacity .2s;
 
   &[disabled] {
     opacity: .6;
   }
 
   svg {
-    width: 15px;
-    height: 15px;
-    margin-right: 10px;
+    min-width: 16px;
+    height: 16px;
+    margin-right: 7px;
 
     *:not(g) {
       fill: currentColor;
@@ -130,8 +165,8 @@
   align-self: flex-end;
   margin-left: 10px;
   padding: 17px 20px;
-  background: #FDFDFD;
-  border: 1px solid $borderColor;
+  background-color: #FDFDFD;
+  border: 2px solid $borderColor;
   font-size: 16px;
   color: $customPurple;
 
@@ -159,8 +194,8 @@
   margin-left: 9px;
   align-items: center;
   justify-content: center;
-  background: #FDFDFD;
-  border: 1px solid $borderColor;
+  background-color: #FDFDFD;
+  border: 2px solid $borderColor;
   border-radius: $commonBorderRadius;
   transition: background-color .4s;
 
@@ -189,18 +224,19 @@
   }
 }
 
-.regions {
-  margin-right: auto;
+.checkboxWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px 10px;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
 
-  label {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    cursor: pointer;
-
-    &:hover {
-      color: $customPurple;
-    }
+  &:hover {
+    color: $customPurple;
   }
 
   input {
@@ -236,13 +272,9 @@
   }
 }
 
-.regionsInner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px 10px;
-}
-
 .keyword {
+  composes: item;
+
   position: relative;
 
   input {
@@ -281,3 +313,6 @@
     color: $customRed;
   }
 }
+
+/* in ../styles/vendor/select.scss */
+.select {}

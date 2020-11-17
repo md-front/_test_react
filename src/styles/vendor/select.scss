@@ -1,0 +1,75 @@
+@import '../variables';
+
+.select {
+  cursor: pointer;
+  position: relative;
+
+  &-open {
+
+    .select {
+
+      &-selection-item {
+        border-radius: $commonBorderRadius $commonBorderRadius 0 0;
+        background-color: #fff;
+      }
+
+      &-arrow {
+        transform: translateY(-50%) scaleY(-1);
+      }
+    }
+  }
+
+  &-arrow {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 16px;
+    height: 16px;
+    background-image: url('../../assets/arrow.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: translateY(-50%);
+    transition: transform .2s;
+  }
+
+  /** active label */
+  &-selection-item {
+    display: block;
+    padding: 16px 20px;
+    border-radius: $commonBorderRadius;
+    border: 2px solid $borderColor;
+    background-color: $backgroundColor;
+    transition: background-color .2s;
+  }
+
+  &-dropdown {
+    border-radius: 0 0 $commonBorderRadius $commonBorderRadius;
+    border: 2px solid $borderColor;
+    background-color: #fff;
+
+
+
+    &-hidden {
+      display: none;
+    }
+
+    /** option */
+    [aria-selected] {
+      padding: 10px 20px;
+      cursor: pointer;
+
+      &:hover {
+        font-weight: 500;
+      }
+
+      &[aria-selected="true"] {
+        background-color: $customPurpleL;
+      }
+    }
+  }
+
+  /** input */
+  &-selection-search-input {
+    display: none;
+  }
+}

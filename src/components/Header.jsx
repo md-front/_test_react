@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './Form';
 import styles from '../styles/components/Header.module.scss';
+import Main from "../pages/Main";
 
 const btns = [
     {
