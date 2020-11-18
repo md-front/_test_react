@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import {ReactComponent as Del} from '../../assets/del.svg'
 import styles from '../../styles/components/Items/ItemsVacancy.module.scss';
 
@@ -36,7 +37,19 @@ export default class ItemsVacancy extends React.Component {
     render() {
         const vacancy = this.props.vacancy;
         const salary = vacancy.salary;
-        const haveDescription = vacancy.snippet && vacancy.snippet.requirement && vacancy.snippet.requirement.length > 100;
+        const validDescription = vacancy.snippet && vacancy.snippet.requirement && vacancy.snippet.requirement.length > 100;
+
+
+        const highlightClass = classNames({
+            text: true,
+            'text--exp6': vacancy.exp6,
+            'text--exp3': vacancy.exp3,
+            'text--is_jun': vacancy.is_jun,
+            // 'text--is_new': vacancy.is_new,
+            // 'text--is_salary': vacancy.is_salary,
+        });
+
+        console.log('vacancyClass:',highlightClass)
 
         return (
             <a href={vacancy.alternate_url}
@@ -45,16 +58,24 @@ export default class ItemsVacancy extends React.Component {
                onMouseLeave={this.handleMouseHover}
                target="_blank"
                rel="noopener noreferrer">
-                <span className={styles.text} >
-                    <span>{salary && '$'}&nbsp;</span>{vacancy.name}
+                <span className={highlightClass} >
+                    {salary &&
+                        <span className={'isSalary'}>$&nbsp;</span>
+                    }
+                    {vacancy.name}
                 </span>
+                {vacancy.is_new &&
+                <sup className={styles.new}>
+                    &nbsp;NEW
+                </sup>
+                }
 
-                {this.state.isHover && haveDescription &&
-                <div className={styles.popup}>
+                {this.state.isHover && (salary || validDescription) &&
+                <div className={'popup'}>
                     {salary &&
                     <span className={styles.salary}>{salary.from}{salary.from && salary.to ? ' - ' : ''}{salary.to} {salary.currency === 'RUR' ? 'Р' : '$'}</span>
                     }
-                    {haveDescription &&
+                    {validDescription &&
                     <span className={styles.description} dangerouslySetInnerHTML={{__html: this.props.vacancy.snippet.requirement }} />
                     }
                 </div>

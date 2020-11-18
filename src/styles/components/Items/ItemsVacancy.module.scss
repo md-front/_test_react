@@ -1,17 +1,21 @@
 @import "../../variables";
 
 .link {
-  display: block;
-  padding-right: 70px;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding-right: 40px;
+  margin-bottom: 15px;
   font-size: 15px;
-  color: lightskyblue;
+  //color: black;
   text-decoration: none;
   position: relative;
   transition: color .2s;
 
   &:visited {
-    color: lightgray;
+
+    :global(.text) {
+      color: lightgray;
+    }
   }
 
   &:last-child {
@@ -19,24 +23,15 @@
   }
 
   &:hover {
-    color: cornflowerblue;
+    //color: cornflowerblue !important;
+
+    :global(.text) {
+      color: cornflowerblue;
+    }
 
     .del  {
       opacity: 1;
     }
-  }
-}
-
-.text {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  // '$'
-  & > span {
-    font-weight: 700;
-    color: lightcoral;
   }
 }
 
@@ -57,7 +52,7 @@
     svg {
 
       *:not(g) {
-        fill: black;
+        fill: $textColor;
       }
     }
   }
@@ -72,8 +67,18 @@
   }
 }
 
-.popup {
-  color: black;
+:global(.isSalary),
+.new {
+  font-weight: 700;
+}
+.new {
+  font-size: 11px;
+  color: $newColor;
+  transform: translateY(-3px);
+}
+
+:global(.popup) {
+  color: $textColor;
   background: #fff;
   position: absolute;
   top: calc(100% + 5px);
@@ -86,12 +91,37 @@
 
 .salary {
   display: block;
-  margin-bottom: 5px;
   font-weight: 700;
 }
 
-.description highlighttext {
-  margin: -2px 0;
-  padding: 2px;
-  background-color: #ffff90;
+.description {
+  display: block;
+  margin-top: 5px;
+
+  highlighttext {
+    margin: -2px 0;
+    padding: 2px;
+    background-color: #ffff90;
+  }
+}
+
+:global(.text) {
+  display: block;
+  max-width: 200px;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  //color: $textColor;
+  color: $linkColor;
+
+  &--is_jun {
+    color: $junColor;
+  }
+  &--exp3 {
+    color: $exp3Color;
+  }
+  &--exp6 {
+    color: $exp6Color;
+  }
 }

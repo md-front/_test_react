@@ -1,7 +1,7 @@
 import React from 'react';
 import {isObjectsEqual} from '../../helpers';
 import styles from '../../styles/components/Items/Items.module.scss';
-import ItemsSection from './ItemsSection';
+import __ItemsSection from './ItemsSection';
 import ItemsTitle from "./ItemsTitle";
 
 
@@ -78,14 +78,14 @@ export default class Items extends React.Component {
                 </div>
                 {this.state.sections.map((section, index) =>
                     section.is_active &&
-                    <ItemsSection section={section}
-                                  key={index}
-                                  searchParams={this.props.searchParams}
-                                  handleLoaded={this.handleLoaded}
-                                  handleClickAction={this.props.handleClickAction}
-                                  filtered={this.props.filtered[section.id]}
-                                  favorites={this.props.favorites}
-                                  blacklist={this.props.blacklist} />
+                    <__ItemsSection section={section}
+                                    key={index}
+                                    searchParams={this.props.searchParams}
+                                    handleLoaded={this.handleLoaded}
+                                    handleClickAction={this.props.handleClickAction}
+                                    filtered={this.props.filtered[section.id]}
+                                    favorites={this.props.favorites}
+                                    blacklist={this.props.blacklist} />
                 )}
             </main>
         );

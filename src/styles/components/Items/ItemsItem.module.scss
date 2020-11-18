@@ -9,14 +9,6 @@
   background-color: #fff;
 }
 
-.jun {
-  composes: item;
-
-  h2 {
-    color: limegreen;
-  }
-}
-
 .title {
   display: flex;
   min-height: 40px;
@@ -26,7 +18,7 @@
   cursor: pointer;
 
   &:hover h2 {
-    color: orange;
+    color: $favColor;
   }
 
   h2 {

@@ -2,13 +2,12 @@ import React from 'react';
 import styles from '../../styles/components/Items/ItemsInner.module.scss';
 import ItemsList from './ItemsList';
 
-export default function ItemsInner(props) {
+const ItemsInner = ({itemsList, handleClickAction}) => (
+    <div className={styles[itemsList.name]}>
+        <h3 className={styles.title}>{window.GROUP_NAMES[itemsList.name]}</h3>
+        <ItemsList items={itemsList.items}
+                   handleClickAction={handleClickAction} />
+    </div>
+)
 
-    return (
-        <div className={styles[props.itemsList.name]}>
-            <h3 className={styles.title}>{window.GROUP_NAMES[props.itemsList.name]}</h3>
-            <ItemsList items={props.itemsList.items}
-                       handleClickAction={props.handleClickAction} />
-        </div>
-    );
-}
+export default ItemsInner;

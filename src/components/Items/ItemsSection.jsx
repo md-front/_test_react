@@ -9,7 +9,7 @@ const ACTION_TYPES = {
     blacklist: 'is_del',
 }
 
-const FAVORITE_SORT_VALUE = 4;
+const FAVORITE_SORT_VALUE = 6;
 
 const DEFAULT_SORT = {
     name: 'default',
@@ -261,9 +261,10 @@ export default class ItemsSection extends React.Component {
         const result = [];
 
         for (const exp of experience) {
+            let expResult = [];
             const firstStep = await this.getVacanciesStep(0,exp.id);
 
-            result.push(...firstStep.vacancies);
+            expResult.push(...firstStep.vacancies);
             let pagesLeft = firstStep.pagesLeft;
 
             if(window.LOAD_ALL_DATA)
@@ -272,11 +273,27 @@ export default class ItemsSection extends React.Component {
 
                     if(!step.vacancies) break;
 
-                    result.push(...step.vacancies);
+                    expResult.push(...step.vacancies);
                 }
+
+            const expParams = {
+                noExperience: 'is_jun',
+                between1And3: '_default',
+                between3And6: 'exp3',
+                moreThan6: 'exp6',
+            }
+
+            /* TODO !!!!11 */
+
+            expResult = expResult.map(vacancy => {
+                vacancy[expParams[exp.id]] = true;
+                return vacancy;
+            });
+
+            result.push(...expResult);
         }
 
-        this.setState({vacancies: result})
+        // this.setState({vacancies: result})
 
         return result;
     }
@@ -336,17 +353,21 @@ export default class ItemsSection extends React.Component {
 
             /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS, не добавленная в избранное */
             if(parseDateString(vacancy.created_at) > lastValidDate)
-                setItemParams(3, 'is_new');
+                setItemParams(5, 'is_new');
+
+            if(vacancy.exp6)
+                setItemParams(4, 'exp6');
+
+            if(vacancy.exp3)
+                setItemParams(3, 'exp3');
 
             /** Вакансия без опыта */
-            if (vacancy.is_jun || vacancy.name.match(window.JUNIOR)) {
+            if (vacancy.is_jun || vacancy.name.match(window.JUNIOR))
                 setItemParams(2, 'is_jun');
 
-                /** В вакансии указана зп */
-            } else if (vacancy.salary) {
+            /** В вакансии указана зп */
+            if (vacancy.salary)
                 setItemParams(1, 'is_salary');
-
-            }
 
             function setItemParams(sortValue, paramName) {
                 const sort = {
@@ -360,7 +381,7 @@ export default class ItemsSection extends React.Component {
                 if(vacancy.sort.value < sortValue)
                     vacancy.sort = sort;
 
-                item[paramName] = true;
+                // item[paramName] = true;
                 vacancy[paramName] = true;
             }
 
@@ -429,7 +450,7 @@ export default class ItemsSection extends React.Component {
                 {this.state.groups.map((group, index) =>
                     group.haveVisibleItem &&
                     <button type="button"
-                            className={!group.is_hidden ? styles['filter-item-active'] : styles['filter-item']}
+                            className={group.is_hidden ? styles.filterItem : styles.filterItemActive}
                             onClick={() => this.filterToggleItem(group.is_hidden, group.name)}
                             key={index}>{window.GROUP_NAMES[group.name]}</button>
                 )}

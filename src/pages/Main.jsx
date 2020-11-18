@@ -14,7 +14,7 @@ export default class Main extends React.Component {
          *
          * favorites: {'ekb': [{Работодатель: регион}]}
          * blacklist: {'ekb': [{Вакансия: работодатель}]}
-         * filtered: {'ekb': [{Работодатель}]}
+         * filtered: {'ekb': [{id_группы}]}
          */
         this.state = {
             showAlert: false,

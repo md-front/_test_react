@@ -1,16 +1,15 @@
 @import '../../variables';
 @import '../../media';
 
-@value groupPaddingH 25px;
+$groupPaddingH: 25px;
 
 @media ($laptop) {
-  @value groupPaddingH 15px;
+  $groupPaddingH: 15px;
 }
 
-
 .group {
-  margin: 0 calc(groupPaddingH * -1) 40px;
-  padding: 0 groupPaddingH 25px;
+  margin: 0 ($groupPaddingH * -1) 40px;
+  padding: 0 $groupPaddingH 25px;
   border: 2px solid transparent;
   border-radius: $commonBorderRadius;
 }
@@ -24,7 +23,7 @@
   }
 
   /* vacancy description todo mixin */
-  a div {
+  :global(.popup) {
     box-shadow: $shadowParams $favColor;
   }
 }
@@ -38,8 +37,48 @@
   }
 
   /* vacancy description todo mixin */
-  a div {
+  :global(.popup) {
     box-shadow: $shadowParams $newColor;
+  }
+
+  sup {
+    display: none;
+  }
+}
+
+.exp3 {
+  composes: group;
+  border-color: $exp3Color;
+
+  .title {
+    border-color: $exp3Color;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $exp3Color;
+  }
+
+  :global(.text--exp3) {
+    color: $linkColor;
+  }
+}
+
+.exp6 {
+  composes: group;
+  border-color: $exp6Color;
+
+  .title {
+    border-color: $exp6Color;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $exp6Color;
+  }
+
+  :global(.text--exp6) {
+    color: $linkColor;
   }
 }
 
@@ -52,12 +91,12 @@
   }
 
   /* vacancy description todo mixin */
-  a div {
+  :global(.popup) {
     box-shadow: $shadowParams $junColor;
   }
 
-  h2 {// item.title
-    color: black !important;
+  :global(.text--is_jun) {
+    color: $linkColor;
   }
 }
 
@@ -70,12 +109,11 @@
   }
 
   /* vacancy description todo mixin */
-  a div {
+  :global(.popup) {
     box-shadow: $shadowParams $salaryColor;
   }
 
-  // '$'
-  a > span > span {
+  :global(.isSalary){
     display: none;
   }
 }
@@ -89,7 +127,7 @@
   }
 
   /* vacancy description todo mixin */
-  a div {
+  :global(.popup) {
     box-shadow: $shadowParams $defaultColor;
   }
 }

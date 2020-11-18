@@ -15,8 +15,10 @@ export default function ItemsItem(props) {
         props.handleClickAction('favorites', params)
     }
 
+
+
     return (
-        <div className={props.item.is_jun ? styles.jun : styles.item}>
+        <div className={styles.item}>
             <div className={styles.title}
                  onClick={toggleFavorite}
                  title="В избранное">

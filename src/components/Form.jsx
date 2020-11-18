@@ -64,7 +64,7 @@ export default class Form extends React.Component {
 
     addKeyword(name) {
         const inputName = `${name}Input`
-        const inputValue = this.state[inputName];
+        const inputValue = this.state[inputName].trim();
         const keywords = this.state[name];
         const diffName = ['necessary','unnecessary'].find(difName => difName !== name);
         let differentKeywords = this.state[diffName];
@@ -171,14 +171,14 @@ export default class Form extends React.Component {
             {
                 label: 'Добавить ключевое слово',
                 id: 'necessary',
-                placeholder: 'По персоналу',
-                tooltip: 'Отображаемые акансии будут содержать хотя-бы одно ключевое слово',
+                placeholder: 'js',
+                tooltip: 'Отображаемые вакансии будут содержать хотя-бы одно из ключевых слов',
                 value: this.state.necessaryInput,
             },
             {
-                label: 'Добавить исключающее ключевое слово',
+                label: 'Добавить исключающее слово',
                 id: 'unnecessary',
-                placeholder: 'По продажам',
+                placeholder: 'php',
                 tooltip: 'Названия вакансий с данным словом будут скрыты',
                 value: this.state.unnecessaryInput,
             }
@@ -216,7 +216,7 @@ export default class Form extends React.Component {
 
                         <input className={styles.input}
                                type="text"
-                               placeholder="Менеджер"
+                               placeholder="Frontend"
                                id="name"
                                value={this.state.name}
                                onChange={this.handleChange}/>
@@ -293,7 +293,7 @@ export default class Form extends React.Component {
 
                             <button type="button"
                                     className={styles.btnKeyword}
-                                    disabled={!keyWord.value}
+                                    disabled={!keyWord.value.trim()}
                                     onClick={() => this.addKeyword(keyWord.id)}
                                     data-tip={this.state.keyWordTooltip.text}
                                     data-type={this.state.keyWordTooltip.type}
