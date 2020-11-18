@@ -53,45 +53,4 @@ const DEFAULT_SEARCH_PARAMS = {
     ]
 }
 
-module.exports = {
-
-    searchParams: (() => {
-        let result = {};
-        const urlParams = (new URL(document.location)).searchParams;
-
-        if(!urlParams.toString())
-            return DEFAULT_SEARCH_PARAMS;
-
-        for(let param in DEFAULT_SEARCH_PARAMS) {
-            let dataFromUrl = urlParams.get(param);
-            let tempData;
-            const isKeyword = param === 'necessary' || param === 'unnecessary';
-            const needDefaultValue = param === 'newInDays' || param === 'regions' || param === 'experience' /* || param === 'name'*/
-            const emptyValue = (()=> {
-
-                if(needDefaultValue)
-                    return DEFAULT_SEARCH_PARAMS[param];
-
-                if(isKeyword)
-                    return [];
-
-                return ''
-            })();
-
-            if(dataFromUrl && isKeyword) {
-                tempData = dataFromUrl.split(',');
-            } else if(dataFromUrl && (param === 'regions' || param === 'experience')) {
-                tempData = [...DEFAULT_SEARCH_PARAMS[param]];
-                dataFromUrl = dataFromUrl.split(',');
-
-                tempData.forEach(item => item.checked = dataFromUrl.includes(item.id))
-            } else {
-                tempData = dataFromUrl;
-            }
-
-            result[param] = tempData ? tempData : emptyValue;
-        }
-
-        return result;
-    })()
-}
+export default DEFAULT_SEARCH_PARAMS;
