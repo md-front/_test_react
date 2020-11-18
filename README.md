@@ -1,5 +1,7 @@
 [Deployed on github pages](https://md-front.github.io/_test_react/)
 
+# WIP, описание устарело
+
 ## Описание функционала:
 
 #### В данный момент выводятся вакансии с hh.ru по следующим принципам:

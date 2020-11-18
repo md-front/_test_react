@@ -62,7 +62,6 @@ window.GROUP_NAMES = {
 
 window.JUNIOR = new RegExp(/junior|стажер|младший/i);
 
-
 const store = createStore(rootReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
