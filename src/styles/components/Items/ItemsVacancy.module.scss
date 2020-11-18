@@ -74,7 +74,7 @@
 .new {
   font-size: 11px;
   color: $newColor;
-  transform: translateY(-3px);
+  transform: translate(3px, -3px);
 }
 
 :global(.popup) {

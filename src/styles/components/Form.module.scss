@@ -97,16 +97,20 @@
 .filters {
   display: flex;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 20px;
   flex-wrap: wrap;
   align-items: center;
 
   h4 {
-    margin: 0 20px 0 0;
+    margin: 0 15px 0 0;
+
+    &:not(:first-child) {
+      margin-left: 25px;
+    }
   }
 
   * {
-    margin-top: 5px;
+    margin-top: 5px !important;
   }
 }
 .filterParams {

@@ -14,7 +14,7 @@ export default class Form extends React.Component {
         super(props);
 
         this.state = {
-            showMore: true,
+            showMore: false,
             necessaryInput: '',
             unnecessaryInput: '',
             url: '',

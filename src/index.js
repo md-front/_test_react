@@ -7,6 +7,9 @@ import {createStore} from "redux";
 import {Provider} from "react-redux";
 import App from './App';
 
+/** Debug */
+window.LOAD_ALL_DATA = true;
+
 const searchParams = (() => {
     let result = {};
     const urlParams = (new URL(document.location)).searchParams;
@@ -47,20 +50,17 @@ const searchParams = (() => {
     return result;
 })()
 
-/** Debug */
-window.LOAD_ALL_DATA = true;
-
 window.GROUP_NAMES = {
     is_fav: 'Избранное',
     is_new: 'Новые',
-    exp6: 'Более 6 лет',
-    exp3: '3-6 лет',
+    exp6: 'Опыт > 6 лет',
+    exp3: 'Опыт 3-6 лет',
     is_jun: 'Для начинающих',
     is_salary: 'С указанным окладом',
-    default: 'Без дополнительных параметров',
+    default: 'Опыт 1-3 года',
 }
 
-window.JUNIOR = new RegExp(/junior|стажер|младший/i);
+window.JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
 
 const store = createStore(rootReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

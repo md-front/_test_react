@@ -49,8 +49,6 @@ export default class ItemsVacancy extends React.Component {
             // 'text--is_salary': vacancy.is_salary,
         });
 
-        console.log('vacancyClass:',highlightClass)
-
         return (
             <a href={vacancy.alternate_url}
                className={styles.link}
