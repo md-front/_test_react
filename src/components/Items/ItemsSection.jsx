@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../../styles/components/Items/ItemsSection.module.scss';
 import {sortByReduction, checkItems, parseDateString, isObjectsEqual} from '../../helpers';
 import ItemsInner from './ItemsInner';
+import {connect} from "react-redux";
 
 /* todo ? вынести эти параметры из всех компонентов глобально? */
 const ACTION_TYPES = {
@@ -16,7 +17,7 @@ const DEFAULT_SORT = {
     value: 0
 };
 
-export default class ItemsSection extends React.Component {
+class ItemsSection extends React.Component {
 
     constructor(props) {
         super(props);
@@ -320,8 +321,8 @@ export default class ItemsSection extends React.Component {
 
         allVacancies.forEach(vacancy => {
             /** Проверка на кейворды в имени  */
-            const necessary = this.props.searchParams.necessary;
-            const unnecessary = this.props.searchParams.unnecessary;
+            const necessary = this.props.necessary;
+            const unnecessary = this.props.unnecessary;
 
             const toRegExp = arr => new RegExp(arr.join('|'), 'i');
 
@@ -490,3 +491,10 @@ export default class ItemsSection extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    necessary: state.form.necessary,
+    unnecessary: state.form.unnecessary,
+})
+
+export default connect(mapStateToProps)(ItemsSection)

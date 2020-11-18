@@ -1,10 +1,12 @@
 `WIP` 
 
-* перелопатить дезигн #2
+* REDUX form
+* REDUX favorites / blacklist / filter
+* REDUX local storage
 
-* "*" заменить на тултипы с текспом "обязательно"
+* addKeyword полностью перенести в redux
 
-* REDUX
+* "*" при пустых полях заменить на тултипы с текстом "обязательно для заполнения"
 
 
 * TS ?

@@ -1,0 +1,4 @@
+export const CHANGE_NEW = 'CHANGE_NEW';
+export const ADD_KEYWORD = 'ADD_KEYWORD';
+export const CLEAR_KEYWORDS = 'CLEAR_KEYWORDS';
+export const DELETE_KEYWORD = 'DELETE_KEYWORD';

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/style.css';
 import DEFAULT_SEARCH_PARAMS from './initialParams';
-import {rootReducer} from './redux/rootReducer';
+import rootReducer from './redux/reducers';
 import {createStore} from "redux";
 import {Provider} from "react-redux";
 import App from './App';
@@ -35,7 +35,8 @@ const searchParams = (() => {
 
         if(dataFromUrl && isKeyword) {
             tempData = dataFromUrl.split(',');
-        } else if(dataFromUrl && (param === 'regions' || param === 'experience')) {
+        }
+        if(dataFromUrl && (param === 'regions' || param === 'experience')) {
             tempData = [...DEFAULT_SEARCH_PARAMS[param]];
             dataFromUrl = dataFromUrl.split(',');
 

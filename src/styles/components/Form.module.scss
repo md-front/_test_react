@@ -113,25 +113,6 @@
     margin-top: 5px !important;
   }
 }
-.filterParams {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-.filterParam {
-  display: inline-block;
-  margin-right: 10px;
-  padding: 5px 10px;
-  border-radius: 13px;
-  background-color: $backgroundColor;
-  cursor: pointer;
-  transition: background-color .2s, color .2s;
-
-  &:hover {
-    background-color: $customRed;
-    color: #fff;
-  }
-}
 
 .btn {
   display: flex;
