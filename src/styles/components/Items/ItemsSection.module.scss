@@ -12,44 +12,6 @@
   }
 }
 
-.filter {
-  display: flex;
-  margin-bottom: 50px;
-  align-items: center;
-}
-
-.filterItem {
-  margin-right: 5px;
-  padding: 5px 25px;
-  border-radius: $commonBorderRadius;
-  border: none;
-  background-color: $customPurpleL;
-  font-weight: 500;
-  font-size: 14px;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color .2s;
-
-  &:hover {
-    background-color: $customPurple;
-  }
-}
-
-.filterItemActive {
-  composes: filterItem;
-  background-color: $customPurple;
-
-  &:hover {
-    background-color: $customPurpleH;
-  }
-}
-
-.title {
-  margin-right: 10px;
-  font-size: 18px;
-  font-weight: 500;
-}
-
 .loading {
   display: flex;
   align-items: flex-end;

@@ -1,3 +1,4 @@
+export const FORM_SUBMIT = 'FORM_SUBMIT';
 export const CHANGE_NEW = 'CHANGE_NEW';
 export const ADD_KEYWORD = 'ADD_KEYWORD';
 export const CLEAR_KEYWORDS = 'CLEAR_KEYWORDS';

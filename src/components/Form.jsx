@@ -2,8 +2,8 @@ import React from 'react';
 import Select from 'rc-select';
 import ReactTooltip from 'react-tooltip/dist/index';
 import {connect} from 'react-redux'
-import {changeNew, clearKeywords, deleteKeyword} from '../redux/actions/form'
-import {cloneObj} from '../helpers';
+import {changeNew, clearKeywords, deleteKeyword, formSubmit} from '../redux/actions/form'
+import {changeSelectedRegions} from '../redux/actions/regions'
 import KeywordList from './Form/KeywordList';
 import KeywordFields from './Form/KeywordFields';
 import {ReactComponent as Share} from '../assets/share.svg'
@@ -28,28 +28,6 @@ const keywordFieldsData = [
         tooltip: 'Названия вакансий с данным словом будут скрыты',
     }
 ]
-const newInDaysOptions = [
-    {
-        value: 1,
-        label: '1 день'
-    },
-    {
-        value: 2,
-        label: '2 дня'
-    },
-    {
-        value: 3,
-        label: '3 дня'
-    },
-    {
-        value: 7,
-        label: '1 неделю'
-    },
-    {
-        value: 14,
-        label: '2 недели'
-    },
-]
 
 
 class Form extends React.Component {
@@ -58,9 +36,11 @@ class Form extends React.Component {
         super(props);
 
         this.state = {
+            name: this.props.name,
+            regions: this.props.regions,
+            experience: this.props.experience,
             showMore: true,
             url: '',
-            ...this.props.searchParams
         };
 
         this.share = this.share.bind(this);
@@ -79,44 +59,41 @@ class Form extends React.Component {
         this.setState({showMore: !this.state.showMore});
     }
 
-    handleChange(e) {
-        this.setState({[e.target.id]: e.target.value});
-    }
+    handleClick(paramName, id) {
+        const params = [...this.state[paramName]].map(param => {
+            if(param.id === id)
+                param.checked = !param.checked;
 
-
-
-    handleClick(e, paramName) {
-        const params = cloneObj(this.state[paramName]);
-        const param = params.find(param => param.id === e.target.id);
-        param.checked = !param.checked;
-
-        /* TODO ? */
-        if(param.is_active)
-            param.is_active = false;
+            return param;
+        });
 
         this.setState({[paramName]: params})
+    }
+
+    handleChange(e) {
+        this.setState({[e.target.id]: e.target.value.trim()})
     }
 
     submit(e) {
         e.preventDefault();
 
-        this.props.search({
+        /* todo ? вынести в один эвент redux уровнем выше? */
+        this.props.formSubmit({
             name: this.state.name,
-            regions: this.state.regions,
             experience: this.state.experience,
-            necessary: this.props.necessary,
-            unnecessary: this.props.unnecessary,
-            newInDays: this.props.newInDays,
-        })
+        });
+
+        this.props.changeSelectedRegions(this.state.regions);
     }
 
     share() {
         const name = this.state.name;
+        const regions = transformToUrlFormat(this.state.regions);
+        const experience = transformToUrlFormat(this.state.experience);
+
         const necessary = this.props.necessary.length ? this.props.necessary.join(',') : null;
         const unnecessary = this.props.unnecessary.length ? this.props.unnecessary.join(',') : null;
         const newInDays = this.props.newInDays;
-        const regions = transformToUrlFormat(this.state.regions);
-        const experience = transformToUrlFormat(this.state.experience);
 
         const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&experience=${experience}&newInDays=${newInDays}${necessary ? '&necessary='+necessary : ''}${unnecessary ? '&unnecessary='+unnecessary : ''}`
 
@@ -154,7 +131,7 @@ class Form extends React.Component {
                                        className={styles.checkbox}>
                                     <input type="checkbox"
                                            checked={region.checked}
-                                           onChange={e =>this.handleClick(e, 'regions')}
+                                           onChange={() => this.handleClick('regions', region.id)}
                                            id={region.id}/>
                                     <span/>
                                     <span>{region.name}</span>
@@ -172,7 +149,7 @@ class Form extends React.Component {
                                        className={styles.checkbox}>
                                     <input type="checkbox"
                                            checked={experience.checked}
-                                           onChange={e => this.handleClick(e, 'experience')}
+                                           onChange={() => this.handleClick('experience', experience.id)}
                                            id={experience.id}/>
                                     <span/>
                                     <span>{experience.name}</span>
@@ -182,7 +159,6 @@ class Form extends React.Component {
                     </div>
 
                     <div className={styles.btns}>
-                        {/* TODO this.state.regions.some оптимизировать */}
                         <button className={styles.btn}
                                 disabled={!this.defaultValidation()}
                                 type="submit">Поиск</button>
@@ -207,8 +183,8 @@ class Form extends React.Component {
 
                         <Select id="newInDays"
                                 prefixCls="select"
-                                defaultValue={+this.state.newInDays}
-                                options={newInDaysOptions}
+                                defaultValue={this.props.newInDays.find(option => option.checked).value}
+                                options={this.props.newInDays}
                                 onChange={this.props.changeNew}
                                 menuItemSelectedIcon=""
                                 showSearch={false} />
@@ -257,14 +233,17 @@ class Form extends React.Component {
     }
 }
 
-const mapDispatchToProps = {
-    changeNew, deleteKeyword, clearKeywords
-}
-
 const mapStateToProps = state => ({
+    name: state.form.name,
     necessary: state.form.necessary,
     unnecessary: state.form.unnecessary,
-    newInDays: state.form.newInDays
+    newInDays: state.form.newInDays,
+    experience: state.form.experience,
+    regions: state.regions,
 })
+
+const mapDispatchToProps = {
+    changeNew, deleteKeyword, clearKeywords, formSubmit, changeSelectedRegions
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

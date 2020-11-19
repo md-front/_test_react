@@ -1,6 +1,13 @@
 `WIP` 
 
-* REDUX form
+* Object.entries в prototype
+
+~~* REDUX form~~
+
+*  newInDays from url!!!1
+
+* props.type
+
 * REDUX favorites / blacklist / filter
 * REDUX local storage
 

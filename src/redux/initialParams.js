@@ -1,0 +1,191 @@
+/**
+ * {
+ * sortValue: приоритет вывода группы (больше - выше),
+ * name: имя для заголовка группы и кнопки в фильтре,
+ * is_hidden: скрыта ли группа в фильтре,
+ * items: работодатели
+ * }
+ */
+const groups = {
+    is_fav: {
+        name: 'Избранное',
+        sortValue: 6,
+        is_hidden: false,
+        items: [],
+    },
+    is_new: {
+        name: 'Новые',
+        sortValue: 5,
+        is_hidden: false,
+        items: []
+    },
+    exp6: {
+        name: 'Опыт > 6 лет',
+        sortValue: 4,
+        is_hidden: false,
+        items: []
+    },
+    exp3: {
+        name: 'Опыт 3-6 лет',
+        sortValue: 3,
+        is_hidden: false,
+        items: []
+    },
+    is_jun: {
+        name: 'Для начинающих',
+        sortValue: 2,
+        is_hidden: false,
+        items: []
+    },
+    is_salary: {
+        name: 'С указанным окладом',
+        sortValue: 1,
+        is_hidden: false,
+        items: []
+    },
+    default: {
+        name: 'Опыт 1-3 года',
+        sortValue: 0,
+        is_hidden: false,
+        items: []
+    },
+}
+
+const DEFAULT_SEARCH_PARAMS = {
+    name: 'Frontend',
+    necessary: ['front', 'фронт', 'js', 'javascript', 'react'],
+    unnecessary: ['backend', 'fullstack', 'SQL', 'lead', 'ведущий', 'angular'],
+    newInDays: [
+        {
+            value: 1,
+            label: '1 день',
+            checked: true,
+        },
+        {
+            value: 2,
+            label: '2 дня',
+            checked: false,
+        },
+        {
+            value: 3,
+            label: '3 дня',
+            checked: false,
+        },
+        {
+            value: 7,
+            label: '1 неделю',
+            checked: false,
+        },
+        {
+            value: 14,
+            label: '2 недели',
+            checked: false,
+        }
+    ],
+    experience: [
+        {
+            id: 'noExperience',
+            modifier: 'is_jun',
+            name: 'Нет опыта',
+            checked: true,
+        },
+        {
+            id: 'between1And3',
+            modifier: '_default',
+            name: 'От 1 года до 3 лет',
+            checked: true,
+        },
+        {
+            id: 'between3And6',
+            modifier: 'exp3',
+            name: 'От 3 до 6 лет',
+            checked: false,
+        },
+        {
+            id: 'moreThan6',
+            modifier: 'exp6',
+            name: 'Более 6 лет',
+            checked: false,
+        }
+    ],
+    regions: [
+        {
+            id: 'msk',
+            name: 'Москва',
+            location: 'area=1',
+            is_active: false,
+            checked: false,
+            groups
+        },
+        {
+            id: 'spb',
+            name: 'Санкт-Петербург',
+            location: 'area=2',
+            is_active: false,
+            checked: false,
+            groups
+        },
+        {
+            id: 'ekb',
+            name: 'Екатеринбург',
+            location: 'area=3',
+            is_active: true,
+            checked: true,
+            groups
+        },
+        {
+            id: 'remote',
+            name: 'Удалённая работа',
+            location: 'schedule=remote',
+            is_active: false,
+            checked: true,
+            groups
+        }
+    ],
+}
+
+/* TODO react router */
+const initialState = (() => {
+    let result = {};
+    const urlParams = (new URL(document.location)).searchParams;
+
+    if(!urlParams.toString())
+        return DEFAULT_SEARCH_PARAMS;
+
+    for(let param in DEFAULT_SEARCH_PARAMS) {
+        let dataFromUrl = urlParams.get(param);
+        let tempData;
+        const isKeyword = param === 'necessary' || param === 'unnecessary';
+        const needDefaultValue = param === 'newInDays' || param === 'regions' || param === 'experience' /* || param === 'name'*/
+        const emptyValue = (()=> {
+
+            if(needDefaultValue)
+                return DEFAULT_SEARCH_PARAMS[param];
+
+            if(isKeyword)
+                return [];
+
+            return ''
+        })();
+
+        if(dataFromUrl && isKeyword) {
+            tempData = dataFromUrl.split(',');
+        } else if(dataFromUrl && (param === 'regions' || param === 'experience')) {
+            tempData = [...DEFAULT_SEARCH_PARAMS[param]];
+            dataFromUrl = dataFromUrl.split(',');
+
+            tempData.forEach(item => item.checked = dataFromUrl.includes(item.id))
+        } else {
+            tempData = dataFromUrl;
+        }
+
+        if(param === 'regions')
+            tempData.find(region => region.checked).is_active = true
+
+        result[param] = tempData ? tempData : emptyValue;
+    }
+
+    return result;
+})();
+
+export default initialState;

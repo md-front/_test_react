@@ -48,9 +48,12 @@ class KeywordFields extends React.Component {
         const showTooltip = () => {
             if(!this.state.tooltip.text) return;
 
-            ReactTooltip.show(this[`${name}Tooltip`]);
+            const tooltip = this[`${name}Tooltip`];
+
+            ReactTooltip.show(tooltip);
+
             setTimeout(()=>{
-                ReactTooltip.hide(this[`${name}Tooltip`]);
+                ReactTooltip.hide(tooltip);
                 this.setState({
                     tooltip: {
                         type: '',

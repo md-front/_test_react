@@ -4,8 +4,9 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Items from '../components/Items/Items';
 import Alert from "../components/Alert";
+import {connect} from "react-redux";
 
-export default class Main extends React.Component {
+class Main extends React.Component {
 
     constructor(props) {
         super(props);
@@ -21,22 +22,15 @@ export default class Main extends React.Component {
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
             filtered: this.getDataFromStorage('filtered'),
-            /* TODO переделать на местные, и всё завязки делать тут! */
-            searchParams: this.props.defaultSearchParams
         }
 
         this.alertRef = React.createRef();
 
-        this.search = this.search.bind(this);
         this.clearItems = this.clearItems.bind(this);
         this.closeByEsc = this.closeByEsc.bind(this);
         this.toggleAlert = this.toggleAlert.bind(this);
         this.alertClickOutside = this.alertClickOutside.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
-    }
-
-    search(payload) {
-        this.setState({searchParams: {...payload }})
     }
 
     isBtnActive(type) {
@@ -95,7 +89,7 @@ export default class Main extends React.Component {
     createEmptyStore() {
         const result = {};
 
-        this.props.defaultSearchParams.regions.forEach(region => result[region.id] = {})
+        this.props.regions.forEach(region => result[region.id] = {})
 
         return result;
     }
@@ -135,20 +129,24 @@ export default class Main extends React.Component {
                        closeAlert={this.toggleAlert}/>
                 :
                 <div className="main">
-                    <Header search={this.search}
-                            clearItems={this.clearItems}
-                            searchParams={this.state.searchParams}
+                    <Header clearItems={this.clearItems}
                             isFavActive={this.isBtnActive('favorites')}
                             isDelActive={this.isBtnActive('blacklist')} />
 
                     <Items filtered={this.state.filtered}
                            favorites={this.state.favorites}
                            blacklist={this.state.blacklist}
-                           searchParams={this.state.searchParams}
                            handleClickAction={this.handleClickAction} />
+                    {/* TODO handleClickAction - to favorite */}
 
                     <Footer showAlert={this.toggleAlert}/>
                 </div>
         );
     }
 }
+
+const mapStateToProps = ({regions}) => ({
+    regions,
+})
+
+export default connect(mapStateToProps)(Main)
