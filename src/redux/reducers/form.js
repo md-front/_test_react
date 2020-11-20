@@ -1,9 +1,8 @@
 import initialState from '../initialParams';
 import {
-    CHANGE_NEW,
-    ADD_KEYWORD,
+    CHANGE_NEW_IN_DAYS,
+    CHANGE_KEYWORDS,
     CLEAR_KEYWORDS,
-    DELETE_KEYWORD,
     FORM_SUBMIT,
 } from '../types/form';
 
@@ -24,26 +23,15 @@ const form = (state = formInitState, action) => {
                 name: action.payload.name,
                 experience: action.payload.experience,
             }
-        case CHANGE_NEW:
-            const newInDays = [...state.newInDays].map(option => {
-                option.checked = option.value === action.value;
-
-                return option;
-            })
+        case CHANGE_NEW_IN_DAYS:
             return {
                 ...state,
-                newInDays
+                newInDays: action.newInDays
             }
-        case ADD_KEYWORD:
+        case CHANGE_KEYWORDS:
             return {
                 ...state,
-                [action.keywordType]: [...state[action.keywordType], action.value]
-            }
-        case DELETE_KEYWORD:
-            const keywordType = [...state[action.keywordType]].filter(keyword => keyword !== action.value);
-            return {
-                ...state,
-                [action.keywordType]: keywordType
+                [action.keywordType]: action.keywords
             }
         case CLEAR_KEYWORDS:
             return {

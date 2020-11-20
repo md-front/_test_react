@@ -7,11 +7,13 @@ const ItemsTitle = ({section, changeActiveSection}) => (
     <div className={section.is_active ? styles.active : styles.title}
          onClick={() => !section.is_active ? changeActiveSection(section.id) : ''}>
         <div data-text={section.name}>{section.name}</div>
+        {/* TODO section.visibleVacancies */}
         {(section.is_active || section.groups) &&
-            <span>{section.visibleVacancies > 0 ? section.visibleVacancies : '...'}</span>
+            <span>{section.visibleVacancies ? section.visibleVacancies : '...'}</span>
         }
     </div>
 )
+
 const mapDispatchToProps = {
     changeActiveSection
 }

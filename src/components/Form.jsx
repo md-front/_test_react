@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'rc-select';
 import ReactTooltip from 'react-tooltip/dist/index';
 import {connect} from 'react-redux'
-import {changeNew, clearKeywords, deleteKeyword, formSubmit} from '../redux/actions/form'
+import {changeNewInDays, clearKeywords, formSubmit} from '../redux/actions/form'
 import {changeSelectedRegions} from '../redux/actions/regions'
 import KeywordList from './Form/KeywordList';
 import KeywordFields from './Form/KeywordFields';
@@ -77,13 +77,11 @@ class Form extends React.Component {
     submit(e) {
         e.preventDefault();
 
-        /* todo ? вынести в один эвент redux уровнем выше? */
         this.props.formSubmit({
             name: this.state.name,
             experience: this.state.experience,
+            regions: this.state.regions
         });
-
-        this.props.changeSelectedRegions(this.state.regions);
     }
 
     share() {
@@ -185,7 +183,7 @@ class Form extends React.Component {
                                 prefixCls="select"
                                 defaultValue={this.props.newInDays.find(option => option.checked).value}
                                 options={this.props.newInDays}
-                                onChange={this.props.changeNew}
+                                onChange={this.props.changeNewInDays}
                                 menuItemSelectedIcon=""
                                 showSearch={false} />
                     </label>
@@ -233,17 +231,17 @@ class Form extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    name: state.form.name,
-    necessary: state.form.necessary,
-    unnecessary: state.form.unnecessary,
-    newInDays: state.form.newInDays,
-    experience: state.form.experience,
-    regions: state.regions,
+const mapStateToProps = ({form, regions}) => ({
+    name: form.name,
+    necessary: form.necessary,
+    unnecessary: form.unnecessary,
+    newInDays: form.newInDays,
+    experience: form.experience,
+    regions,
 })
 
 const mapDispatchToProps = {
-    changeNew, deleteKeyword, clearKeywords, formSubmit, changeSelectedRegions
+    changeNewInDays, clearKeywords, formSubmit, changeSelectedRegions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

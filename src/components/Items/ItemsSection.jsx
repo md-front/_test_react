@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../../styles/components/Items/ItemsSection.module.scss';
 import {sortByReduction, checkItems, parseDateString} from '../../helpers';
-import {getSectionData, toggleSectionVisibility} from '../../redux/actions/regions'
+import {updateCurrentSectionData, toggleSectionVisibility} from '../../redux/actions/regions'
 import ItemsGroup from './ItemsGroup';
 import ToggleSectionsVisibility from './ToggleSectionsVisibility';
 import {connect} from "react-redux";
@@ -28,9 +28,17 @@ class ItemsSection extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getSectionData(this.props.section);
+
+        // console.log('mount')
+
+        this.props.updateCurrentSectionData(this.props.section);
     }
     componentDidUpdate(prevAllProps) {
+
+        // console.log('update')
+
+        // console.log(prevAllProps.section.groups)
+        // console.log(this.props.section.groups)
 
         // const ACTIONS = [
         //     {
@@ -219,6 +227,7 @@ class ItemsSection extends React.Component {
         )
     }*/
     renderItems() {
+        /* TODO  "Загрузка" отвалилась?*/
         return !this.state.isLoaded ?
             <div className={styles.loading}>Загрузка <span/></div>
             :
@@ -231,7 +240,7 @@ class ItemsSection extends React.Component {
             <ItemsGroup groupsEntries={this.props.groupsEntries}
                         key={1}/>
             :
-            <h3 key={1}>Подходящих вакансий не найдено :(</h3>
+            <h3 key={1}>Подходящих вакансий не найдено, попробуйте изменить запрос или ключевые слова</h3>
     }
 
     render() {
@@ -262,7 +271,7 @@ const mapStateToProps = ({form, regions}, {section}) => ({
 })
 
 const mapDispatchToProps = {
-    getSectionData, toggleSectionVisibility
+    updateCurrentSectionData, toggleSectionVisibility
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemsSection)
