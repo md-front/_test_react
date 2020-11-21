@@ -37,9 +37,6 @@ class ItemsSection extends React.Component {
 
         // console.log('update')
 
-        // console.log(prevAllProps.section.groups)
-        // console.log(this.props.section.groups)
-
         // const ACTIONS = [
         //     {
         //         name: 'favorites',
@@ -226,6 +223,9 @@ class ItemsSection extends React.Component {
             </div>
         )
     }*/
+    visibleVacancies() {
+        return this.props.groupsEntries.some(([groupName, group]) => !group.is_hidden && group.items && group.items.length);
+    }
     renderItems() {
         /* TODO  "Загрузка" отвалилась?*/
         return !this.state.isLoaded ?
@@ -234,23 +234,26 @@ class ItemsSection extends React.Component {
             this.renderItemsOnLoad()
     }
     renderItemsOnLoad() {
-        const visibleVacancies = this.props.groupsEntries.some(([groupName, group]) => !group.is_hidden && group.items && group.items.length)
-
-        return visibleVacancies ?
+        return this.visibleVacancies() ?
             <ItemsGroup groupsEntries={this.props.groupsEntries}
                         key={1}/>
             :
             <h3 key={1}>Подходящих вакансий не найдено, попробуйте изменить запрос или ключевые слова</h3>
     }
-
+    renderSectionsToggle() {
+        return this.visibleVacancies() ?
+            <ToggleSectionsVisibility sectionId={this.props.section.id}
+                                      groupsEntries={this.props.groupsEntries}
+                                      key={0} />
+            :
+            ''
+    }
     render() {
         return (
             <section className={styles.section}>
                 <div className="container">
                     {this.state.isLoaded && [
-                        <ToggleSectionsVisibility sectionId={this.props.section.id}
-                                                  groupsEntries={this.props.groupsEntries}
-                                                  key={0} />,
+                        this.renderSectionsToggle(),
                         this.renderItems()
                     ]}
                 </div>

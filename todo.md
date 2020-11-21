@@ -1,6 +1,6 @@
 `WIP` 
 
-* Object.entries в prototype
+* Оптимизировать обход вакансий
 
 ~~* REDUX form~~
 

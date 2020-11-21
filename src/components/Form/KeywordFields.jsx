@@ -36,7 +36,7 @@ class KeywordFields extends React.Component {
 
         const removeFromDifferentKeywords = () => {
             if(!differentKeywords.includes(inputValue)) return;
-            differentKeywords = differentKeywords.filter(keyword => keyword !== inputValue);
+            differentKeywords = differentKeywords.filter(keyword => keyword.toLowerCase() !== inputValue.toLowerCase());
 
             this.props.deleteKeyword(diffName, inputValue);
 
@@ -63,7 +63,7 @@ class KeywordFields extends React.Component {
             },2000);
         }
 
-        if(!keywords.includes(inputValue)) {
+        if(!keywords.some(keyword => keyword.toLowerCase() === inputValue.toLowerCase())) {
             this.props.addKeyword(name, inputValue);
 
             removeFromDifferentKeywords();

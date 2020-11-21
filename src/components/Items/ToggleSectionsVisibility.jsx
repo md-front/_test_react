@@ -7,13 +7,11 @@ const ToggleSectionsVisibility = props => (
     <div className={styles.filter}>
         <div className={styles.title}>Отображение групп:</div>
         {props.groupsEntries.map(([groupId,group],index) =>
-            (group.items && group.items.length) ?
+            group.items && group.items.length > 0 &&
                 <button type="button"
                         className={group.is_hidden ? styles.filterItem : styles.filterItemActive}
                         onClick={() => props.toggleSectionVisibility(props.sectionId, groupId)}
                         key={index}>{group.name}</button>
-                :
-                ''
         )}
     </div>
 )

@@ -6,12 +6,13 @@ export const formSubmit = ({name, experience, regions}) => dispatch => {
     dispatch(changeSelectedRegions(regions))
 }
 export const changeNewInDays = value => (dispatch, getState) => {
-    const newInDays = [...getState().newInDays].map(option => {
+    const newInDays = [...getState().form.newInDays].map(option => {
         option.checked = option.value === value;
 
         return option;
     })
-    dispatch({ type: types.CHANGE_NEW_IN_DAYS, newInDays })
+    dispatch({ type: types.CHANGE_NEW_IN_DAYS, newInDays });
+    dispatch(filterVacancies());
 }
 export const addKeyword = (keywordType, value) => (dispatch, getState) => {
     const keywords = [...getState().form[keywordType], value]
@@ -25,4 +26,8 @@ export const deleteKeyword = (keywordType, value) => (dispatch, getState) => {
     dispatch({ type: types.CHANGE_KEYWORDS, keywordType, keywords });
     dispatch(filterVacancies());
 }
-export const clearKeywords = () => ({ type: types.CLEAR_KEYWORDS })
+export const clearKeywords = () => dispatch => {
+
+    dispatch({ type: types.CLEAR_KEYWORDS })
+    dispatch(filterVacancies())
+}

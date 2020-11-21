@@ -91,7 +91,7 @@ class Form extends React.Component {
 
         const necessary = this.props.necessary.length ? this.props.necessary.join(',') : null;
         const unnecessary = this.props.unnecessary.length ? this.props.unnecessary.join(',') : null;
-        const newInDays = this.props.newInDays;
+        const newInDays = this.props.newInDays.find(option => option.checked).value;
 
         const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&experience=${experience}&newInDays=${newInDays}${necessary ? '&necessary='+necessary : ''}${unnecessary ? '&unnecessary='+unnecessary : ''}`
 
@@ -178,6 +178,8 @@ class Form extends React.Component {
 
                     <label className={styles.item}>
                         <span className={styles.label}>Учитывать "новые" за</span>
+
+                        {console.log('this.props.newInDays',this.props.newInDays)}
 
                         <Select id="newInDays"
                                 prefixCls="select"

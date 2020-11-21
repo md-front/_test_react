@@ -7,15 +7,18 @@ const ItemsTitle = ({section, changeActiveSection}) => (
     <div className={section.is_active ? styles.active : styles.title}
          onClick={() => !section.is_active ? changeActiveSection(section.id) : ''}>
         <div data-text={section.name}>{section.name}</div>
-        {/* TODO section.visibleVacancies */}
         {(section.is_active || section.groups) &&
             <span>{section.visibleVacancies ? section.visibleVacancies : '...'}</span>
         }
     </div>
 )
 
+const mapStateToProps = ({}, {section}) => ({
+    section,
+})
+
 const mapDispatchToProps = {
     changeActiveSection
 }
 
-export default connect(null, mapDispatchToProps)(ItemsTitle)
+export default connect(mapStateToProps, mapDispatchToProps)(ItemsTitle)

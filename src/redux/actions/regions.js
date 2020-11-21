@@ -49,18 +49,10 @@ export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getSta
 }
 
 export const filterVacancies = (newVacancies) => (dispatch, getState) => {
-    console.log('filterVacancies')
     const {form, regions} = getState();
     const currentSection = regions.find(region => region.is_active);
 
-    /* TODO пн!
-    * при первой загрузке пропускать кейворды
-    * сносить только дубли
-    * и все записывать в allVacancies
-    * в дальшейшем оттуда же валидировать
-    *  */
-    if(newVacancies)
-        currentSection.allVacancies = newVacancies;
+    const vacancies = newVacancies ? newVacancies : currentSection.allVacancies;
 
     const FAVORITE_SORT_VALUE = 6;
     const DEFAULT_SORT = {
@@ -69,19 +61,16 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
     };
 
     const toRegExp = arr => new RegExp(arr.join('|'), 'i');
-    const validNecessary = vacancy => !form.necessary.length || vacancy.name.match(toRegExp(form.necessary));
-    const validUnnecessary = vacancy => !form.unnecessary.length || !vacancy.name.match(form.unnecessary);
+    const validNecessary = titles => !form.necessary.length || titles.match(toRegExp(form.necessary));
+    const validUnnecessary = titles => !form.unnecessary.length || !titles.match(toRegExp(form.unnecessary));
 
     const newInDays = form.newInDays.find(option => option.checked);
-    const lastValidDate = new Date(new Date() - (+newInDays * 24 * 60 * 60 * 1000));
+    const lastValidDate = new Date(new Date() - (+newInDays.value * 24 * 60 * 60 * 1000));
 
     const items = {};
     const filteredVacancies = [];
 
-    currentSection.allVacancies.forEach(vacancy => {
-
-        /** Валидация на кейворды */
-        if(!(validNecessary(vacancy) && validUnnecessary(vacancy))) return;
+    vacancies.forEach(vacancy => {
 
         /** Проверка дублирования вакансий у одного работодателя */
         const employerId = vacancy.employer.id;
@@ -93,7 +82,17 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
                 items: [],
                 haveVisibleItem: false,
             }
-        else if(items[employerId].some(employerVacancy => employerVacancy.name === vacancy.name)) return;
+        else if(items[employerId].items.some(employerVacancy => employerVacancy.name === vacancy.name)) return;
+        
+        if(newVacancies)
+            if(currentSection.allVacancies)
+                currentSection.allVacancies.push(vacancy);
+            else
+                currentSection.allVacancies = [vacancy];
+
+        /** Валидация на кейворды */
+        const titles = `${vacancy.name} ${vacancy.employer.name}` ;
+        if(!(validNecessary(titles) && validUnnecessary(titles))) return;
 
         const item = items[employerId];
         vacancy.sort = DEFAULT_SORT;
@@ -157,6 +156,9 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
             groups[group].items = []
 
         items.forEach(item => {
+
+            if(!item.items.length) return;
+
             let container = groups[item.sort.name].items;
             if(!container) container = [];
 
@@ -221,7 +223,7 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
 }
 
 const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch) => {
-    const regions = [...newRegionsData].map(section => {
+    const regions = cloneObj(newRegionsData).map(section => {
 
         if(section.id === changedSectionId)
             section['visibleVacancies'] = Object.values(section.groups).reduce((visibleInGroup, group) => {

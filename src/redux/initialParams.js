@@ -168,7 +168,13 @@ const initialState = (() => {
             return ''
         })();
 
-        if(dataFromUrl && isKeyword) {
+        if(param === 'newInDays') {
+            tempData = [...DEFAULT_SEARCH_PARAMS[param]].map(option => {
+                option.checked = option.value === +dataFromUrl;
+
+                return option;
+            });
+        } else if(dataFromUrl && isKeyword) {
             tempData = dataFromUrl.split(',');
         } else if(dataFromUrl && (param === 'regions' || param === 'experience')) {
             tempData = [...DEFAULT_SEARCH_PARAMS[param]];
@@ -179,8 +185,17 @@ const initialState = (() => {
             tempData = dataFromUrl;
         }
 
-        if(param === 'regions')
-            tempData.find(region => region.checked).is_active = true
+        if(param === 'regions') {
+            let activeRegion;
+            tempData.forEach(region => {
+                if(!activeRegion && region.checked) {
+                    activeRegion = region;
+                    activeRegion.is_active = true;
+                } else {
+                    region.is_active = false;
+                }
+            })
+        }
 
         result[param] = tempData ? tempData : emptyValue;
     }
