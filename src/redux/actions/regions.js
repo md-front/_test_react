@@ -36,6 +36,7 @@ export const changeSelectedRegions = regions => dispatch => {
 }
 
 export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
+    // const hiddenSections = []; filtered?
     const regions = [...getState().regions].map(section => {
         if(section.id === sectionId) {
             const group = section.groups[groupId];
@@ -45,21 +46,21 @@ export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getSta
         return section;
     });
 
-    dispatch({ type: types.UPDATE_DATA, regions })
+    dispatch({ type: types.UPDATE_DATA, regions });
 }
 
-export const filterVacancies = (newVacancies) => (dispatch, getState) => {
-    const {form, regions} = getState();
+export const filterVacancies = (presetVacancies, setAllItems = false, keywordValidation = true) => (dispatch, getState) => {
+    const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
+
+    const {form, regions, app} = getState();
     const currentSection = regions.find(region => region.is_active);
 
-    const vacancies = newVacancies ? newVacancies : currentSection.allVacancies;
+    const vacancies = presetVacancies ? presetVacancies : currentSection.allVacancies;
 
-    const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
-    const FAVORITE_SORT_VALUE = 6;
-    const DEFAULT_SORT = {
-        name: 'default',
-        value: 0
-    };
+    const sortParams = type => ({
+        name: type,
+        sortValue: currentSection.groups[type].sortValue,
+    })
 
 
     const toRegExp = arr => new RegExp(arr.join('|'), 'i');
@@ -76,35 +77,40 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
 
         /** Проверка дублирования вакансий у одного работодателя */
         const employerId = vacancy.employer.id;
+        let itemSort;
+
+        if(app.favorites.includes(employerId))
+            itemSort = sortParams('is_fav')
+        else
+            itemSort = sortParams('default')
+
         if(!items.hasOwnProperty(employerId))
             items[employerId] = {
                 id: employerId,
                 name: vacancy.employer.name,
-                sort: DEFAULT_SORT,
+                sort: itemSort,
                 items: [],
                 haveVisibleItem: false,
             }
         else if(items[employerId].items.some(employerVacancy => employerVacancy.name === vacancy.name)) return;
-        
-        if(newVacancies)
+
+
+        if(setAllItems)
             if(currentSection.allVacancies)
                 currentSection.allVacancies.push(vacancy);
             else
                 currentSection.allVacancies = [vacancy];
 
-        /** Валидация на кейворды */
-        const titles = `${vacancy.name} ${vacancy.employer.name}` ;
-        if(!(validNecessary(titles) && validUnnecessary(titles))) return;
+        if(keywordValidation) {
+            const titles = `${vacancy.name} ${vacancy.employer.name}`;
+            if(!(validNecessary(titles) && validUnnecessary(titles))) return;
+        }
 
         const item = items[employerId];
-        vacancy.sort = DEFAULT_SORT;
+        vacancy.sort = sortParams('default');
 
         /** Проверка на наличие в блеклисте */
-        // if(this.props.blacklist[this.props.section.id].hasOwnProperty(vacancy.id))
-        if(false)
-            vacancy.is_del = true;
-        else
-            item.haveVisibleItem = true;
+        if(app.blacklist.includes(vacancy.id)) return;
 
         /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS */
         if(parseDateString(vacancy.created_at) > lastValidDate)
@@ -129,13 +135,13 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
         function setItemParams(sortValue, paramName) {
             const sort = {
                 name: paramName,
-                value: sortValue,
+                sortValue,
             }
 
-            if(item.sort.value < sortValue)
+            if(item.sort.sortValue < sortValue)
                 item.sort = sort;
 
-            if(vacancy.sort.value < sortValue)
+            if(vacancy.sort.sortValue < sortValue)
                 vacancy.sort = sort;
 
             vacancy[paramName] = true;
@@ -172,11 +178,13 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
 }
 
 export const updateCurrentSectionData = section => async (dispatch, getState) => {
-    const {form, regions} = getState();
+    const {form} = getState();
 
     const newVacancies = await getVacancies();
 
-    dispatch(filterVacancies(newVacancies));
+    dispatch(filterVacancies(newVacancies, true));
+
+
 
     async function getVacancies() {
         const experience = form.experience.filter(exp => exp.checked);
@@ -238,7 +246,6 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch) 
 
         return section;
     })
-
 
     dispatch({ type: types.UPDATE_DATA, regions })
 }

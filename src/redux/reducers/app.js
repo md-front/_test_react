@@ -2,6 +2,8 @@ import {appInitState} from '../initialParams';
 import {
     SHOW_ALERT,
     HIDE_ALERT,
+    ADD_TO_BLACKLIST,
+    TOGGLE_FAVORITE,
 } from '../types/app';
 
 const app = (state = appInitState, action) => {
@@ -15,6 +17,16 @@ const app = (state = appInitState, action) => {
             return {
                 ...state,
                 showAlert: true
+            }
+        case ADD_TO_BLACKLIST:
+            return {
+                ...state,
+                blacklist: [...state.blacklist, action.vacancyId]
+            }
+        case TOGGLE_FAVORITE:
+            return {
+                ...state,
+                favorites: [...action.favorites]
             }
         default:
             return state

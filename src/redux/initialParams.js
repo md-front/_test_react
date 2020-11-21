@@ -145,7 +145,9 @@ const DEFAULT_SEARCH_PARAMS = {
 }
 
 export const appInitState = {
-    showAlert: false
+    showAlert: false,
+    favorites: [],
+    blacklist: [],
 }
 
 /* TODO react router */

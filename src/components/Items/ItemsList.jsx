@@ -5,7 +5,7 @@ import ItemsItem from './ItemsItem';
 const ItemsList = ({items, handleClickAction}) => (
     <div className={styles.items}>
         {items.map((item, index) =>
-            item.haveVisibleItem &&
+            // item.items.some(vacancy => !vacancy.is_del) &&
             <ItemsItem item={item}
                        key={index}
                        handleClickAction={handleClickAction} />

@@ -11,28 +11,16 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
 
-        /**
-         *
-         * favorites: {'ekb': [{Работодатель: регион}]}
-         * blacklist: {'ekb': [{Вакансия: работодатель}]}
-         * filtered: {'ekb': [{id_группы}]}
-         */
-        this.state = {
-            favorites: this.getDataFromStorage('favorites'),
-            blacklist: this.getDataFromStorage('blacklist'),
-            filtered: this.getDataFromStorage('filtered'),
-        }
-
         this.clearItems = this.clearItems.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
     }
 
     isBtnActive(type) {
 
-        for(let location in this.state[type]) {
-            if(Object.keys(this.state[type][location]).length)
-                return true;
-        }
+        // for(let location in this.state[type]) {
+        //     if(Object.keys(this.state[type][location]).length)
+        //         return true;
+        // }
 
         return false;
     }
@@ -98,11 +86,7 @@ class Main extends React.Component {
                             isFavActive={this.isBtnActive('favorites')}
                             isDelActive={this.isBtnActive('blacklist')} />
 
-                    <Items filtered={this.state.filtered}
-                           favorites={this.state.favorites}
-                           blacklist={this.state.blacklist}
-                           handleClickAction={this.handleClickAction} />
-                    {/* TODO handleClickAction - to favorite */}
+                    <Items  />
 
                     <Footer/>
                 </div>

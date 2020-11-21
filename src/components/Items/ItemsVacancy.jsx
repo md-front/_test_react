@@ -2,8 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import {ReactComponent as Del} from '../../assets/del.svg'
 import styles from '../../styles/components/Items/ItemsVacancy.module.scss';
+import {connect} from "react-redux";
+import {addToBlacklist} from "../../redux/actions/app";
 
-export default class ItemsVacancy extends React.Component {
+class ItemsVacancy extends React.Component {
 
     constructor(props) {
         super(props);
@@ -12,7 +14,6 @@ export default class ItemsVacancy extends React.Component {
             isHover: false,
         }
 
-        this.toggleBlacklist = this.toggleBlacklist.bind(this);
         this.handleMouseHover = this.handleMouseHover.bind(this);
     }
 
@@ -20,18 +21,6 @@ export default class ItemsVacancy extends React.Component {
         const isHover = !this.state.isHover;
 
         this.setState({isHover})
-    }
-
-    toggleBlacklist(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const params = {
-            id: this.props.vacancy.id,
-            parentId: this.props.vacancy.employer.id
-        };
-
-        this.props.handleClickAction('blacklist', params);
     }
 
     render() {
@@ -45,8 +34,6 @@ export default class ItemsVacancy extends React.Component {
             'text--exp6': vacancy.exp6,
             'text--exp3': vacancy.exp3,
             'text--is_jun': vacancy.is_jun,
-            // 'text--is_new': vacancy.is_new,
-            // 'text--is_salary': vacancy.is_salary,
         });
 
         return (
@@ -57,31 +44,21 @@ export default class ItemsVacancy extends React.Component {
                target="_blank"
                rel="noopener noreferrer">
                 <span className={highlightClass} >
-                    {salary &&
-                        <span className={'isSalary'}>$&nbsp;</span>
-                    }
+                    {salary && <span className={'isSalary'}>$&nbsp;</span>}
                     {vacancy.name}
                 </span>
-                {vacancy.is_new &&
-                <sup className={styles.new}>
-                    &nbsp;NEW
-                </sup>
-                }
+                {vacancy.is_new && <sup className={styles.new}>&nbsp;NEW</sup>}
 
                 {this.state.isHover && (salary || validDescription) &&
                 <div className={'popup'}>
-                    {salary &&
-                    <span className={styles.salary}>{salary.from}{salary.from && salary.to ? ' - ' : ''}{salary.to} {salary.currency === 'RUR' ? 'Р' : '$'}</span>
-                    }
-                    {validDescription &&
-                    <span className={styles.description} dangerouslySetInnerHTML={{__html: this.props.vacancy.snippet.requirement }} />
-                    }
+                    {salary && <span className={styles.salary}>{salary.from}{salary.from && salary.to ? ' - ' : ''}{salary.to} {salary.currency === 'RUR' ? 'Р' : '$'}</span> }
+                    {validDescription && <span className={styles.description} dangerouslySetInnerHTML={{__html: this.props.vacancy.snippet.requirement }} /> }
                 </div>
                 }
 
                 <button type="button"
                         className={styles.del}
-                        onClick={this.toggleBlacklist}>
+                        onClick={e => this.props.addToBlacklist(e, vacancy.id)}>
                     <Del/>
                 </button>
 
@@ -89,3 +66,9 @@ export default class ItemsVacancy extends React.Component {
         );
     }
 }
+
+const mapDispatchToProps = {
+    addToBlacklist
+}
+
+export default connect(null, mapDispatchToProps)(ItemsVacancy)

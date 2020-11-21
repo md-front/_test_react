@@ -2,9 +2,10 @@
 
 * Оптимизировать обход вакансий
 
-~~* REDUX form~~
+* "item" => "company"
 
-*  newInDays from url!!!1
+~~* REDUX form~~
+~~*  newInDays from url!!!1~~
 
 * props.type
 

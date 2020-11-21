@@ -19,10 +19,7 @@ const Items = props => (
         {props.regions.map((section, index) =>
             section.is_active &&
             <ItemsSection section={section}
-                          key={index}
-                          filtered={props.filtered[section.id]}
-                          favorites={props.favorites}
-                          blacklist={props.blacklist} />
+                          key={index} />
         )}
     </main>
 )
