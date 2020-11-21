@@ -144,6 +144,10 @@ const DEFAULT_SEARCH_PARAMS = {
     ],
 }
 
+export const appInitState = {
+    showAlert: false
+}
+
 /* TODO react router */
 const initialState = (() => {
     let result = {};
@@ -203,4 +207,13 @@ const initialState = (() => {
     return result;
 })();
 
-export default initialState;
+export const formInitState = {
+    name: initialState.name,
+    necessary: initialState.necessary,
+    unnecessary: initialState.unnecessary,
+    newInDays: initialState.newInDays,
+    experience: initialState.experience
+};
+export const regionsInitState = [
+    ...initialState.regions
+];

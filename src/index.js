@@ -8,9 +8,7 @@ import {Provider} from "react-redux";
 import App from './App';
 
 /** Debug */
-window.LOAD_ALL_DATA = false;
-
-window.JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
+window.LOAD_ALL_DATA = true;
 
 const store = createStore(rootReducer, compose(
     applyMiddleware(

@@ -179,8 +179,6 @@ class Form extends React.Component {
                     <label className={styles.item}>
                         <span className={styles.label}>Учитывать "новые" за</span>
 
-                        {console.log('this.props.newInDays',this.props.newInDays)}
-
                         <Select id="newInDays"
                                 prefixCls="select"
                                 defaultValue={this.props.newInDays.find(option => option.checked).value}

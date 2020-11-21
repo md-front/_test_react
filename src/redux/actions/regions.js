@@ -54,11 +54,13 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
 
     const vacancies = newVacancies ? newVacancies : currentSection.allVacancies;
 
+    const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
     const FAVORITE_SORT_VALUE = 6;
     const DEFAULT_SORT = {
         name: 'default',
         value: 0
     };
+
 
     const toRegExp = arr => new RegExp(arr.join('|'), 'i');
     const validNecessary = titles => !form.necessary.length || titles.match(toRegExp(form.necessary));
@@ -117,7 +119,7 @@ export const filterVacancies = (newVacancies) => (dispatch, getState) => {
             setItemParams(3, 'exp3');
 
         /** Вакансия без опыта */
-        if (vacancy.is_jun || vacancy.name.match(window.JUNIOR))
+        if (vacancy.is_jun || vacancy.name.match(JUNIOR))
             setItemParams(2, 'is_jun');
 
         /** В вакансии указана зп */

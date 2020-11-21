@@ -18,18 +18,12 @@ class Main extends React.Component {
          * filtered: {'ekb': [{id_группы}]}
          */
         this.state = {
-            showAlert: false,
             favorites: this.getDataFromStorage('favorites'),
             blacklist: this.getDataFromStorage('blacklist'),
             filtered: this.getDataFromStorage('filtered'),
         }
 
-        this.alertRef = React.createRef();
-
         this.clearItems = this.clearItems.bind(this);
-        this.closeByEsc = this.closeByEsc.bind(this);
-        this.toggleAlert = this.toggleAlert.bind(this);
-        this.alertClickOutside = this.alertClickOutside.bind(this);
         this.handleClickAction = this.handleClickAction.bind(this);
     }
 
@@ -41,34 +35,6 @@ class Main extends React.Component {
         }
 
         return false;
-    }
-
-    /** Alert actions */
-    toggleAlert(e) {
-        e.stopPropagation()
-        const show = this.state.showAlert;
-
-        !show ? this.createAlertHandlers() : this.removeAlertHandlers();
-
-        this.setState({showAlert: !show})
-    }
-    createAlertHandlers() {
-        document.addEventListener('click', this.alertClickOutside)
-        document.addEventListener('keydown', this.closeByEsc)
-    }
-    removeAlertHandlers() {
-        document.removeEventListener('click', this.alertClickOutside);
-        document.removeEventListener('keydown', this.closeByEsc)
-    }
-    alertClickOutside(e) {
-        const alert = this.alertRef.current;
-
-        if (alert && !alert.contains(e.target))
-            this.toggleAlert(e);
-    }
-    closeByEsc(e) {
-        if(e.key === 'Escape')
-            this.toggleAlert(e);
     }
 
     /** Store actions */
@@ -124,9 +90,8 @@ class Main extends React.Component {
 
     render() {
         return (
-            this.state.showAlert ?
-                <Alert alertRef={this.alertRef}
-                       closeAlert={this.toggleAlert}/>
+            this.props.showAlert ?
+                <Alert />
                 :
                 <div className="main">
                     <Header clearItems={this.clearItems}
@@ -139,14 +104,15 @@ class Main extends React.Component {
                            handleClickAction={this.handleClickAction} />
                     {/* TODO handleClickAction - to favorite */}
 
-                    <Footer showAlert={this.toggleAlert}/>
+                    <Footer/>
                 </div>
         );
     }
 }
 
-const mapStateToProps = ({regions}) => ({
+const mapStateToProps = ({regions, app}) => ({
     regions,
+    showAlert: app.showAlert
 })
 
 export default connect(mapStateToProps)(Main)

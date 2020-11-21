@@ -224,7 +224,7 @@ class ItemsSection extends React.Component {
         )
     }*/
     visibleVacancies() {
-        return this.props.groupsEntries.some(([groupName, group]) => !group.is_hidden && group.items && group.items.length);
+        return this.props.groupsEntries.some(([groupName, group]) => /*!group.is_hidden &&*/ group.items && group.items.length);
     }
     renderItems() {
         /* TODO  "Загрузка" отвалилась?*/

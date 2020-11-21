@@ -1,17 +1,22 @@
 import React from 'react';
 import styles from '../styles/components/Footer.module.scss';
+import {connect} from "react-redux";
+import {showAlert} from "../redux/actions/app";
 
-export default function Footer(props) {
-
-    return (
-        <footer className={styles.footer}>
-            <div className="container">
-                <div className={styles.inner}>
-                    <button type="button"
-                            className={styles.link}
-                            onClick={props.showAlert}>Что тут вообще происходит?</button>
-                </div>
+const Footer = ({showAlert}) => (
+    <footer className={styles.footer}>
+        <div className="container">
+            <div className={styles.inner}>
+                <button type="button"
+                        className={styles.link}
+                        onClick={showAlert}>Что тут вообще происходит?</button>
             </div>
-        </footer>
-    );
+        </div>
+    </footer>
+)
+
+const mapDispatchToProps = {
+    showAlert
 }
+
+export default connect(null, mapDispatchToProps)(Footer)

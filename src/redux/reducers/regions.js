@@ -1,11 +1,9 @@
-import initialState from '../initialParams';
+import {regionsInitState} from '../initialParams';
 import {
     UPDATE_DATA,
 } from '../types/regions';
 
-const appInitState = [...initialState.regions];
-
-const app = (state = appInitState, action) => {
+const app = (state = regionsInitState, action) => {
     switch (action.type) {
         case UPDATE_DATA:
             return [

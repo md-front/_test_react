@@ -1,19 +1,10 @@
-import initialState from '../initialParams';
+import {formInitState} from '../initialParams';
 import {
     CHANGE_NEW_IN_DAYS,
     CHANGE_KEYWORDS,
     CLEAR_KEYWORDS,
     FORM_SUBMIT,
 } from '../types/form';
-
-
-const formInitState = {
-    name: initialState.name,
-    necessary: initialState.necessary,
-    unnecessary: initialState.unnecessary,
-    newInDays: initialState.newInDays,
-    experience: initialState.experience
-};
 
 const form = (state = formInitState, action) => {
     switch (action.type) {
