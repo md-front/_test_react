@@ -239,10 +239,13 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
     }
 }
 
-const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch) => {
-    const regions = cloneObj(newRegionsData).map(section => {
+const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch, getState) => {
+    let regionsData = newRegionsData ? newRegionsData : getState().regions
+    let sectionId = changedSectionId ? changedSectionId : regionsData.find(section => section.is_active)
 
-        if(section.id === changedSectionId)
+    const regions = cloneObj(regionsData).map(section => {
+
+        if(section.id === sectionId)
             section['visibleVacancies'] = Object.values(section.groups).reduce((visibleInGroup, group) => {
 
                 if(!group.is_hidden)

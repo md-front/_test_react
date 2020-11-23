@@ -6,6 +6,7 @@ import {
     TOGGLE_FAVORITE,
     SHOW_LOADER,
     HIDE_LOADER,
+    CLEAR_LIST,
 } from '../types/app';
 
 const app = (state = appInitState, action) => {
@@ -39,6 +40,11 @@ const app = (state = appInitState, action) => {
             return {
                 ...state,
                 showLoader: false
+            }
+        case CLEAR_LIST:
+            return {
+                ...state,
+                [action.listType]: []
             }
         default:
             return state

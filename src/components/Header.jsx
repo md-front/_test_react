@@ -2,48 +2,57 @@ import React from 'react';
 import Form from './Form';
 import styles from '../styles/components/Header.module.scss';
 import Main from "../pages/Main";
+import {connect} from "react-redux";
+import {clearList} from "../redux/actions/app";
 
 const btns = [
     {
+        type: 'favorites',
         className: 'fav',
         disableClassName: 'fav-disabled',
-        disableName: 'isFavActive',
         text: 'Очистить избранное',
-        actionType: 'favorites',
     },
     {
+        type: 'blacklist',
         className: 'del',
         disableClassName: 'del-disabled',
-        disableName: 'isDelActive',
         text: 'Отобразить скрытые вакансии',
-        actionType: 'blacklist',
     },
 ]
 
-export default function Header(props) {
+const Header = props => (
+    <header>
+        <div className="container">
 
-    return (
-        <header>
-            <div className="container">
+            <div className={styles.actions}>
+                <h1 className={styles.title}>Поиск вакансий</h1>
 
-                <div className={styles.actions}>
-                    <h1 className={styles.title}>Поиск вакансий</h1>
-
-                    <div className={styles.btns}>
-                        {btns.map((btn, index) =>
-                            <button type="button"
-                                    key={index}
-                                    className={props[btn.disableName] ? styles[btn.className] : styles[btn.disableClassName]}
-                                    onClick={() => props.clearItems(btn.actionType)}>
-                                {btn.text}
-                            </button>
-                        )}
-                    </div>
+                <div className={styles.btns}>
+                    {btns.map((btn, index) =>
+                        <button type="button"
+                                key={index}
+                                className={props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]}
+                                onClick={() => props.clearList(btn.type)}>
+                            {btn.text}
+                        </button>
+                    )}
                 </div>
-
-                <Form />
-
             </div>
-        </header>
-    );
+
+            <Form />
+
+        </div>
+    </header>
+)
+
+const mapStateToProps = ({app}) => ({
+    blacklist: app.blacklist,
+    favorites: app.favorites
+})
+
+
+const mapDispatchToProps = {
+    clearList
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

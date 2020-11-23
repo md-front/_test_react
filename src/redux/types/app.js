@@ -4,3 +4,4 @@ export const ADD_TO_BLACKLIST = 'ADD_TO_BLACKLIST';
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
 export const SHOW_LOADER = 'SHOW_LOADER';
 export const HIDE_LOADER = 'HIDE_LOADER';
+export const CLEAR_LIST = 'CLEAR_LIST';

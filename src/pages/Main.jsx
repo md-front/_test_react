@@ -5,97 +5,51 @@ import Footer from '../components/Footer';
 import Items from '../components/Items/Items';
 import Alert from "../components/Alert";
 import {connect} from "react-redux";
+import {showAlert} from "../redux/actions/app";
 
-class Main extends React.Component {
+// /** Store actions */
+// getDataFromStorage(type) {
+//     const storage = getLS(type);
+//     const emptyStorage = this.createEmptyStore();
+//
+//     if(!storage)
+//         return emptyStorage;
+//
+//     for(let region in emptyStorage) {
+//         if(!storage.hasOwnProperty(region))
+//             storage[region] = {}
+//     }
+//
+//     return storage;
+// }
+// createEmptyStore() {
+//     const result = {};
+//
+//     this.props.regions.forEach(region => result[region.id] = {})
+//
+//     return result;
+// }
+//
+//
+// /** Btn actions */
+// setStorage(type, payload) {
+//     this.setState({[type]: payload});
+//
+//     setLS(type, payload);
+// }
 
-    constructor(props) {
-        super(props);
+const Main = ({showAlert}) => (
+    showAlert ?
+        <Alert />
+        :
+        <div className="main">
+            <Header />
+            <Items />
+            <Footer/>
+        </div>
+)
 
-        this.clearItems = this.clearItems.bind(this);
-        this.handleClickAction = this.handleClickAction.bind(this);
-    }
-
-    isBtnActive(type) {
-
-        // for(let location in this.state[type]) {
-        //     if(Object.keys(this.state[type][location]).length)
-        //         return true;
-        // }
-
-        return false;
-    }
-
-    /** Store actions */
-    getDataFromStorage(type) {
-        const storage = getLS(type);
-        const emptyStorage = this.createEmptyStore();
-
-        if(!storage)
-            return emptyStorage;
-
-        for(let region in emptyStorage) {
-            if(!storage.hasOwnProperty(region))
-                storage[region] = {}
-        }
-
-        return storage;
-    }
-    createEmptyStore() {
-        const result = {};
-
-        this.props.regions.forEach(region => result[region.id] = {})
-
-        return result;
-    }
-
-
-    /** Btn actions */
-    handleClickAction(type, sectionId, params) {
-        const items = {...this.state[type][sectionId]};
-
-        if(items.hasOwnProperty(params.id))
-            delete items[params.id];
-        else
-            items[params.id] = params.parentId || 0;
-
-        const result = {...this.state[type]};
-
-        result[sectionId] = items;
-
-        this.setStorage(type, result);
-    }
-    clearItems(type) {
-        const result = this.createEmptyStore();
-
-        this.setStorage(type, result);
-    }
-    setStorage(type, payload) {
-        this.setState({[type]: payload});
-
-        setLS(type, payload);
-    }
-
-
-    render() {
-        return (
-            this.props.showAlert ?
-                <Alert />
-                :
-                <div className="main">
-                    <Header clearItems={this.clearItems}
-                            isFavActive={this.isBtnActive('favorites')}
-                            isDelActive={this.isBtnActive('blacklist')} />
-
-                    <Items  />
-
-                    <Footer/>
-                </div>
-        );
-    }
-}
-
-const mapStateToProps = ({regions, app}) => ({
-    regions,
+const mapStateToProps = ({app}) => ({
     showAlert: app.showAlert
 })
 
