@@ -1,25 +1,27 @@
 {
   "files": {
-    "main.css": "/_test_react/static/css/main.45162b84.chunk.css",
-    "main.js": "/_test_react/static/js/main.fd887d24.chunk.js",
-    "main.js.map": "/_test_react/static/js/main.fd887d24.chunk.js.map",
+    "main.css": "/_test_react/static/css/main.db9e7523.chunk.css",
+    "main.js": "/_test_react/static/js/main.b8594fa5.chunk.js",
+    "main.js.map": "/_test_react/static/js/main.b8594fa5.chunk.js.map",
     "runtime-main.js": "/_test_react/static/js/runtime-main.641a5f56.js",
     "runtime-main.js.map": "/_test_react/static/js/runtime-main.641a5f56.js.map",
-    "static/js/2.58942b82.chunk.js": "/_test_react/static/js/2.58942b82.chunk.js",
-    "static/js/2.58942b82.chunk.js.map": "/_test_react/static/js/2.58942b82.chunk.js.map",
+    "static/js/2.9d41b95b.chunk.js": "/_test_react/static/js/2.9d41b95b.chunk.js",
+    "static/js/2.9d41b95b.chunk.js.map": "/_test_react/static/js/2.9d41b95b.chunk.js.map",
     "index.html": "/_test_react/index.html",
-    "static/css/main.45162b84.chunk.css.map": "/_test_react/static/css/main.45162b84.chunk.css.map",
-    "static/js/2.58942b82.chunk.js.LICENSE.txt": "/_test_react/static/js/2.58942b82.chunk.js.LICENSE.txt",
+    "static/css/main.db9e7523.chunk.css.map": "/_test_react/static/css/main.db9e7523.chunk.css.map",
+    "static/js/2.9d41b95b.chunk.js.LICENSE.txt": "/_test_react/static/js/2.9d41b95b.chunk.js.LICENSE.txt",
+    "static/js/main.b8594fa5.chunk.js.LICENSE.txt": "/_test_react/static/js/main.b8594fa5.chunk.js.LICENSE.txt",
     "static/media/select.scss": "/_test_react/static/media/arrow.c1394ccc.svg",
-    "static/media/del.2ecca762.svg": "/_test_react/static/media/del.2ecca762.svg",
+    "static/media/del.8586a1e7.svg": "/_test_react/static/media/del.8586a1e7.svg",
     "static/media/info.eb67ccd3.svg": "/_test_react/static/media/info.eb67ccd3.svg",
+    "static/media/loader.ee5a3e45.svg": "/_test_react/static/media/loader.ee5a3e45.svg",
     "static/media/search-more.9402f7f0.svg": "/_test_react/static/media/search-more.9402f7f0.svg",
     "static/media/share.6441f924.svg": "/_test_react/static/media/share.6441f924.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.641a5f56.js",
-    "static/js/2.58942b82.chunk.js",
-    "static/css/main.45162b84.chunk.css",
-    "static/js/main.fd887d24.chunk.js"
+    "static/js/2.9d41b95b.chunk.js",
+    "static/css/main.db9e7523.chunk.css",
+    "static/js/main.b8594fa5.chunk.js"
   ]
 }
