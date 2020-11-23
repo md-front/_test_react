@@ -40,14 +40,12 @@ export const changeSelectedRegions = regions => dispatch => {
 
 export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
     // const hiddenSections = []; filtered?
-    const regions = [...getState().regions].map(section => {
-        if(section.id === sectionId) {
-            const group = section.groups[groupId];
-            group.is_hidden = !group.is_hidden;
-        }
+    const {regions} = getState();
 
-        return section;
-    });
+    const currentSection = regions.find(section => section.id === sectionId);
+
+    const group = currentSection.groups[groupId];
+    group.is_hidden = !group.is_hidden;
 
     dispatch(visibleVacanciesUpdate(currentSection.id, regions));
 }
