@@ -58,7 +58,7 @@ class ItemsVacancy extends React.Component {
 
                 <button type="button"
                         className={styles.del}
-                        onClick={e => this.props.addToBlacklist(e, vacancy.id)}>
+                        onClick={e => this.props.addToBlacklist(e, vacancy)}>
                     <Del/>
                 </button>
 

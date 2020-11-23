@@ -12,7 +12,6 @@ class ItemsSection extends React.Component {
         super(props);
 
         this.state = {
-            isLoaded: !!props.groupsEntries,
         }
     }
 
@@ -24,13 +23,6 @@ class ItemsSection extends React.Component {
         return this.props.groupsEntries.some(([groupName, group]) => /*!group.is_hidden &&*/ group.items && group.items.length);
     }
     renderItems() {
-        /* TODO  "Загрузка" отвалилась?*/
-        return !this.state.isLoaded ?
-            <div className={styles.loading}>Загрузка <span/></div>
-            :
-            this.renderItemsOnLoad()
-    }
-    renderItemsOnLoad() {
         return this.visibleVacancies() ?
             <ItemsGroup groupsEntries={this.props.groupsEntries}
                         key={1}/>
@@ -47,10 +39,14 @@ class ItemsSection extends React.Component {
         return (
             <section className={styles.section}>
                 <div className="container">
-                    {this.state.isLoaded && [
-                        this.renderSectionsToggle(),
-                        this.renderItems()
-                    ]}
+                    {!this.props.section.allVacancies ?
+                        <h3>Загрузка...</h3>
+                        :
+                        [
+                            this.renderSectionsToggle(),
+                            this.renderItems()
+                        ]
+                    }
                 </div>
             </section>
         );
@@ -58,7 +54,7 @@ class ItemsSection extends React.Component {
 }
 
 
-const mapStateToProps = ({form, regions}, {section}) => ({
+const mapStateToProps = ({form, regions, app}, {section}) => ({
     section,
     groupsEntries: Object.entries(section.groups),
     name: form.name,

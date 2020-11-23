@@ -4,6 +4,8 @@ import {
     HIDE_ALERT,
     ADD_TO_BLACKLIST,
     TOGGLE_FAVORITE,
+    SHOW_LOADER,
+    HIDE_LOADER,
 } from '../types/app';
 
 const app = (state = appInitState, action) => {
@@ -27,6 +29,16 @@ const app = (state = appInitState, action) => {
             return {
                 ...state,
                 favorites: [...action.favorites]
+            }
+        case SHOW_LOADER:
+            return {
+                ...state,
+                showLoader: true
+            }
+        case HIDE_LOADER:
+            return {
+                ...state,
+                showLoader: false
             }
         default:
             return state

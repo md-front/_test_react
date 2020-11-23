@@ -1,4 +1,5 @@
 import * as types from '../types/regions'
+import {hideLoader, showLoader} from '../actions/app'
 import {cloneObj, parseDateString} from "../../helpers";
 
 export const changeActiveSection = id => (dispatch, getState) => {
@@ -18,6 +19,8 @@ export const changeSelectedRegions = regions => dispatch => {
 
     if(isActiveRegionChanged) {
         let newActive;
+
+        dispatch(showLoader())
 
         regions.forEach(region => {
             if(!newActive && region.checked)
@@ -46,22 +49,29 @@ export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getSta
         return section;
     });
 
-    dispatch({ type: types.UPDATE_DATA, regions });
+    dispatch(visibleVacanciesUpdate(currentSection.id, regions));
 }
 
-export const filterVacancies = (presetVacancies, setAllItems = false, keywordValidation = true) => (dispatch, getState) => {
+export const filterVacancies = (presetVacancies, setAllItems = false, keywordValidation = true) => async (dispatch, getState) => {
     const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
+
+    dispatch(showLoader())
 
     const {form, regions, app} = getState();
     const currentSection = regions.find(region => region.is_active);
 
     const vacancies = presetVacancies ? presetVacancies : currentSection.allVacancies;
 
-    const sortParams = type => ({
-        name: type,
-        sortValue: currentSection.groups[type].sortValue,
-    })
-
+    const sortParams = {
+        default: {
+            name: 'default',
+            sortValue: currentSection.groups['default'].sortValue,
+        },
+        is_fav: {
+            name: 'is_fav',
+            sortValue: currentSection.groups['is_fav'].sortValue,
+        },
+    }
 
     const toRegExp = arr => new RegExp(arr.join('|'), 'i');
     const validNecessary = titles => !form.necessary.length || titles.match(toRegExp(form.necessary));
@@ -75,14 +85,13 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
 
     vacancies.forEach(vacancy => {
 
-        /** Проверка дублирования вакансий у одного работодателя */
         const employerId = vacancy.employer.id;
         let itemSort;
 
-        if(app.favorites.includes(employerId))
-            itemSort = sortParams('is_fav')
+        if(app.favorites && app.favorites.includes(employerId))
+            itemSort = sortParams['is_fav'];
         else
-            itemSort = sortParams('default')
+            itemSort = sortParams['default'];
 
         if(!items.hasOwnProperty(employerId))
             items[employerId] = {
@@ -107,7 +116,7 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
         }
 
         const item = items[employerId];
-        vacancy.sort = sortParams('default');
+        vacancy.sort = sortParams['default'];
 
         /** Проверка на наличие в блеклисте */
         if(app.blacklist.includes(vacancy.id)) return;
@@ -198,7 +207,7 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
 
             if(window.LOAD_ALL_DATA)
                 while(--pagesLeft > 0) {
-                    const {vacancies} = getVacanciesStep(pagesLeft,exp.id);
+                    const {vacancies} = await getVacanciesStep(pagesLeft,exp.id);
 
                     if(!vacancies) break;
 
@@ -247,5 +256,6 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch) 
         return section;
     })
 
-    dispatch({ type: types.UPDATE_DATA, regions })
+    dispatch({ type: types.UPDATE_DATA, regions });
+    dispatch(hideLoader())
 }

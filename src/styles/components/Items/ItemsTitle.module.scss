@@ -41,13 +41,21 @@
 
   /** num */
   span {
-    display: inline-block;
+    display: inline-flex;
     min-width: 40px;
+    align-items: center;
+    justify-content: center;
     padding-left: 8px;
     text-align: center;
     color: #DADADA;
     font-weight: 500;
     transition: color .2s;
+
+    /* loader */
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 

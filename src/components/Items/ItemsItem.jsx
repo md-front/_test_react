@@ -19,6 +19,7 @@ const ItemsItem = ({item, toggleFavorite}) => {
             </div>
 
             {item.items.map((vacancy, index) =>
+                !vacancy.is_del &&
                 <ItemsVacancy vacancy={vacancy}
                               key={index} />
             )}

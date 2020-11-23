@@ -38,7 +38,7 @@ const groups = {
         items: []
     },
     is_salary: {
-        name: 'С указанным окладом',
+        name: '1-3 c указанным окладом',
         sortValue: 1,
         is_hidden: false,
         items: []
@@ -148,6 +148,7 @@ export const appInitState = {
     showAlert: false,
     favorites: [],
     blacklist: [],
+    showLoader: true,
 }
 
 /* TODO react router */

@@ -1,15 +1,24 @@
 `WIP` 
 
-* Оптимизировать обход вакансий
+* clear btns
+* Смена региона (!)
 
+* Регионы вернуть в стейт?
+* Оптимизировать обход вакансий
 * "item" => "company"
+
+* проверить чтение урла
+
+* loader
+
 
 ~~* REDUX form~~
 ~~*  newInDays from url!!!1~~
 
 * props.type
 
-* REDUX favorites / blacklist / filter
+~~* REDUX favorites / blacklist / filter~~
+
 * REDUX local storage
 
 * addKeyword полностью перенести в redux

@@ -8,17 +8,22 @@ export const showAlert = (e) => dispatch => {
 
 export const hideAlert = () => ({ type: types.HIDE_ALERT });
 
-export const addToBlacklist = (e, vacancyId) => (dispatch, getState) => {
+export const showLoader = () => ({ type: types.SHOW_LOADER });
+export const hideLoader = () => ({ type: types.HIDE_LOADER });
+
+export const addToBlacklist = (e, vacancy) => (dispatch, getState) => {
     e.preventDefault();
     const {regions} = getState();
     const currentSection = regions.find(section => section.is_active);
 
-    dispatch({ type: types.ADD_TO_BLACKLIST, vacancyId });
-    dispatch(filterVacancies(currentSection.vacancies, false, false))
+    /* TODO пн, диспатчить */
+    vacancy.is_del = true;
+
+    dispatch({ type: types.ADD_TO_BLACKLIST, vacancyId: vacancy.id });
+    // dispatch(filterVacancies(currentSection.vacancies, false, false))
 };
 
 export const toggleFavorite = (companyId) => (dispatch, getState) => {
-    console.log('companyId',companyId)
     const {regions, app} = getState();
     const currentSection = regions.find(section => section.is_active);
 
