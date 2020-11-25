@@ -206,14 +206,13 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
 
             expResult.push(...vacancies);
 
-            if(window.LOAD_ALL_DATA)
-                while(--pagesLeft > 0) {
-                    const {vacancies} = await getVacanciesStep(pagesLeft,exp.id);
+            while(--pagesLeft > 0) {
+                const {vacancies} = await getVacanciesStep(pagesLeft,exp.id);
 
-                    if(!vacancies) break;
+                if(!vacancies) break;
 
-                    expResult.push(...vacancies);
-                }
+                expResult.push(...vacancies);
+            }
 
             expResult = expResult.map(vacancy => {
                 vacancy[exp.modifier] = true;
@@ -228,7 +227,7 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
     async function getVacanciesStep(pageNum, exp) {
 
         try {
-            let response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=${window.LOAD_ALL_DATA ? 100 : 3}&page=${pageNum}&experience=${exp}`);
+            let response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
 
             const json = await response.json();
 

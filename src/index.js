@@ -11,12 +11,12 @@ import App from './App';
 /** Debug */
 window.LOAD_ALL_DATA = true;
 
-const store = createStore(rootReducer, compose(
-    applyMiddleware(
-        thunk
-    ),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-));
+const middlewares = [applyMiddleware(thunk)];
+
+if(process.env.NODE_ENV === 'development')
+    middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
+
+const store = createStore(rootReducer, compose(...middlewares));
 
 store.subscribe(() => {
     const app = store.getState().app;

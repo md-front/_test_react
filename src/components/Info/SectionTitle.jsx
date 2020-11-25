@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import styles from '../../styles/components/Info/SectionTitle.module.scss';
 import {ReactComponent as Loader} from '../../assets/loader.svg'
 import {connect} from "react-redux";
-import {changeNewInDays, clearKeywords, formSubmit} from "../../redux/actions/form";
-import {changeActiveSection, changeSelectedRegions} from "../../redux/actions/regions";
+import {changeActiveSection} from "../../redux/actions/regions";
 
 const SectionTitle = ({section, isActiveSection, changeActiveSection, showLoader}) => (
     <div className={isActiveSection ? styles.active : styles.title}
@@ -22,9 +21,8 @@ const SectionTitle = ({section, isActiveSection, changeActiveSection, showLoader
     </div>
 )
 
-const mapStateToProps = ({app}, {section, activeTitleId, changeActiveTitle}) => ({
+const mapStateToProps = ({app}, {section, activeTitleId}) => ({
     section,
-    // changeActiveTitle,
     isActiveSection: section.id === activeTitleId,
     showLoader: app.showLoader
 })

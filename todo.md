@@ -1,6 +1,6 @@
 `WIP` 
 
-* components visual map
+* scrollbar padding
 
 * Актуализировать readme
 * Актуализировать todo
@@ -11,6 +11,7 @@
  
 `TODO:`
 
+* components visual map
 * Кодировать / декодировать url
 * TS 
 * Подгружать аналогичные вакансии при добавлении в избранное

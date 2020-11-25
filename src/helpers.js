@@ -1,7 +1,14 @@
 /** Storage actions */
 export const setLS = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
 export const getLS = key => JSON.parse(localStorage.getItem(key));
-export const getDataFromStorage = type => getLS(type) || [];
+export const getDataFromStorage = type => {
+    let result = getLS(type)
+
+    if(!result || typeof(result[0]) !== 'string')
+        result = [];
+
+    return result;
+};
 
 /**  Objects actions */
 export const isObjectsEqual = (arr1, arr2) => JSON.stringify(arr1) === JSON.stringify(arr2);

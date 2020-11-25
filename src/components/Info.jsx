@@ -18,15 +18,15 @@ export default function Info() {
                     {sections.map((section, index) =>
                         section.checked &&
                         <SectionTitle section={section}
-                                    activeTitleId={activeTitleId}
-                                    key={index} />
+                                      activeTitleId={activeTitleId}
+                                      key={index} />
                     )}
                 </div>
             </div>
             {sections.map((section, index) =>
                 section.is_active &&
                 <Section section={section}
-                              key={index} />
+                         key={index} />
             )}
         </main>
     )

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/components/Info/Groups.module.scss';
-import Companies from './Companies';
+import Group from './Group';
 
 const Groups = props => (
     props.groupsEntries.map(([groupName,group],index) =>
@@ -9,7 +9,7 @@ const Groups = props => (
             <div className={styles[groupName]}
                  key={index}>
                 <h3 className={styles.title}>{group.name}</h3>
-                <Companies companies={group.companies}/>
+                <Group companies={group.companies}/>
             </div>
             :
             ''
