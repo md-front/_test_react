@@ -1,62 +1,74 @@
 import * as types from '../types/regions'
-import {hideLoader, showLoader} from '../actions/app'
-import {cloneObj, parseDateString} from "../../helpers";
+import {clearUsdCurrency, hideLoader, loadUsdCurrency, showLoader} from './app'
+import {parseDateString} from "../../helpers";
 
 export const changeActiveSection = id => (dispatch, getState) => {
-    const {stateRegions} = getState();
-    const regions = [...stateRegions].map(region => {
-        region.is_active = region.id === id;
+    const {regions} = getState();
 
-        return region
-    })
+    for(let section of regions) {
+        section.is_active = section.id === id;
+
+        if(section.is_active && !section.allVacancies)
+            dispatch(showLoader());
+    }
 
     dispatch({ type: types.UPDATE_DATA, regions });
 }
 
-export const changeSelectedRegions = regions => dispatch => {
-    const currentActive = regions.find(region => region.is_active);
-    const isActiveRegionChanged = !currentActive.checked;
+export const changeSelectedRegions = (regions, isUpdateCurrentSectionData) => dispatch => {
+    const currentActiveSection = regions.find(region => region.is_active);
+    const isActiveRegionChanged = !currentActiveSection.checked;
 
+    /** Регион новый */
     if(isActiveRegionChanged) {
         let newActive;
 
-        dispatch(showLoader())
-
-        regions.forEach(region => {
+        for(let region of regions) {
             if(!newActive && region.checked)
-                newActive = region;
+                newActive = region
             else
                 region.is_active = false
-        });
+        }
 
         newActive.is_active = true;
+
+        dispatch({ type: types.UPDATE_DATA, regions });
+        dispatch(showLoader())
+
+        dispatch(updateCurrentSectionData(newActive))
+    /** Регион старый, изменился опыт или имя */
+    } else if(!isActiveRegionChanged && isUpdateCurrentSectionData) {
+        dispatch(showLoader())
+        dispatch(updateCurrentSectionData(currentActiveSection))
+    /** Регион старый */
+    } else {
+        dispatch({ type: types.UPDATE_DATA, regions });
     }
-
-    dispatch({ type: types.UPDATE_DATA, regions })
-
-    if(!isActiveRegionChanged)
-        dispatch(updateCurrentSectionData(currentActive))
 }
 
 export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
     // const hiddenSections = []; filtered?
     const {regions} = getState();
+    dispatch(showLoader());
 
     const currentSection = regions.find(section => section.id === sectionId);
 
     const group = currentSection.groups[groupId];
     group.is_hidden = !group.is_hidden;
 
-    dispatch(visibleVacanciesUpdate(currentSection.id, regions));
+    dispatch(visibleVacanciesUpdate(currentSection.id, regions, groupId))
 }
 
-export const filterVacancies = (presetVacancies, setAllItems = false, keywordValidation = true) => async (dispatch, getState) => {
+export const filterVacancies = (presetVacancies, setAllVacancies = false, keywordValidation = true) => async (dispatch, getState) => {
     const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
 
     dispatch(showLoader())
 
     const {form, regions, app} = getState();
-    const currentSection = regions.find(region => region.is_active);
+    const currentSection = regions.find(section => section.is_active);
+
+    if(setAllVacancies)
+        currentSection.allVacancies = [];
 
     const vacancies = presetVacancies ? presetVacancies : currentSection.allVacancies;
 
@@ -78,42 +90,32 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
     const newInDays = form.newInDays.find(option => option.checked);
     const lastValidDate = new Date(new Date() - (+newInDays.value * 24 * 60 * 60 * 1000));
 
-    const items = {};
+    const companies = {};
     const filteredVacancies = [];
 
     vacancies.forEach(vacancy => {
-
         const employerId = vacancy.employer.id;
-        let itemSort;
+        const isFav = app.favorites && app.favorites.includes(employerId);
+        let companySort = sortParams[isFav ? 'is_fav' : 'default'];
 
-        if(app.favorites && app.favorites.includes(employerId))
-            itemSort = sortParams['is_fav'];
-        else
-            itemSort = sortParams['default'];
-
-        if(!items.hasOwnProperty(employerId))
-            items[employerId] = {
+        if(!companies.hasOwnProperty(employerId))
+            companies[employerId] = {
                 id: employerId,
                 name: vacancy.employer.name,
-                sort: itemSort,
-                items: [],
-                haveVisibleItem: false,
+                sort: companySort,
+                vacancies: [],
             }
-        else if(items[employerId].items.some(employerVacancy => employerVacancy.name === vacancy.name)) return;
+        else if(companies[employerId].vacancies.some(companyVacancy => companyVacancy.name === vacancy.name)) return;
 
-
-        if(setAllItems)
-            if(currentSection.allVacancies)
-                currentSection.allVacancies.push(vacancy);
-            else
-                currentSection.allVacancies = [vacancy];
+        if(setAllVacancies)
+            currentSection.allVacancies.push(vacancy);
 
         if(keywordValidation) {
             const titles = `${vacancy.name} ${vacancy.employer.name}`;
             if(!(validNecessary(titles) && validUnnecessary(titles))) return;
         }
 
-        const item = items[employerId];
+        const company = companies[employerId];
         vacancy.sort = sortParams['default'];
 
         /** Проверка на наличие в блеклисте */
@@ -121,32 +123,36 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
 
         /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS */
         if(parseDateString(vacancy.created_at) > lastValidDate)
-            setItemParams(5, 'is_new');
+            setSortParams(5, 'is_new');
 
         /** Опыт > 6 лет */
         if(vacancy.exp6)
-            setItemParams(4, 'exp6');
+            setSortParams(4, 'exp6');
 
         /** Опыт 3 - 6 лет */
         if(vacancy.exp3)
-            setItemParams(3, 'exp3');
+            setSortParams(3, 'exp3');
 
         /** Вакансия без опыта */
         if (vacancy.is_jun || vacancy.name.match(JUNIOR))
-            setItemParams(2, 'is_jun');
+            setSortParams(2, 'is_jun');
 
         /** В вакансии указана зп */
-        if (vacancy.salary)
-            setItemParams(1, 'is_salary');
+        if (vacancy.salary) {
+            setSortParams(1, 'is_salary');
 
-        function setItemParams(sortValue, paramName) {
+            if(!app.usdCurrency && vacancy.salary.currency === 'USD')
+                dispatch(loadUsdCurrency())
+        }
+
+        function setSortParams(sortValue, paramName) {
             const sort = {
                 name: paramName,
                 sortValue,
             }
 
-            if(item.sort.sortValue < sortValue)
-                item.sort = sort;
+            if(company.sort.sortValue < sortValue)
+                company.sort = sort;
 
             if(vacancy.sort.sortValue < sortValue)
                 vacancy.sort = sort;
@@ -154,30 +160,26 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
             vacancy[paramName] = true;
         }
 
-        item.items.push(vacancy);
+        company.vacancies.push(vacancy);
         filteredVacancies.push(vacancy);
     });
 
-    currentSection.groups = groupItems(Object.values(items));
+    currentSection.groups = groupCompanies(Object.values(companies));
     currentSection.vacancies = filteredVacancies;
 
     dispatch(visibleVacanciesUpdate(currentSection.id, regions));
 
 
-    function groupItems(items) {
+    function groupCompanies(companies) {
         const groups = {...currentSection.groups};
 
         for(let group in groups)
-            groups[group].items = []
+            groups[group].companies = []
 
-        items.forEach(item => {
+        companies.forEach(company => {
+            if(!company.vacancies.length) return;
 
-            if(!item.items.length) return;
-
-            let container = groups[item.sort.name].items;
-            if(!container) container = [];
-
-            container.push(item)
+            groups[company.sort.name].companies.push(company)
         });
 
         return groups
@@ -185,13 +187,14 @@ export const filterVacancies = (presetVacancies, setAllItems = false, keywordVal
 }
 
 export const updateCurrentSectionData = section => async (dispatch, getState) => {
-    const {form} = getState();
+    const {form, app} = getState();
+
+    if(app.usdCurrency)
+        dispatch(clearUsdCurrency());
 
     const newVacancies = await getVacancies();
 
     dispatch(filterVacancies(newVacancies, true));
-
-
 
     async function getVacancies() {
         const experience = form.experience.filter(exp => exp.checked);
@@ -239,23 +242,30 @@ export const updateCurrentSectionData = section => async (dispatch, getState) =>
     }
 }
 
-const visibleVacanciesUpdate = (changedSectionId, newRegionsData) => (dispatch, getState) => {
-    let regionsData = newRegionsData ? newRegionsData : getState().regions
-    let sectionId = changedSectionId ? changedSectionId : regionsData.find(section => section.is_active)
+const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null) => dispatch => {
+    const regions = [...newRegionsData];
+    const currentSection = regions.find(section => section.id === changedSectionId);
 
-    const regions = cloneObj(regionsData).map(section => {
+    const reduceVacancy = companies => companies.reduce((visibleInCompanies, company) => visibleInCompanies += company.vacancies.filter(vacancy => !vacancy.is_del).length, 0);
 
-        if(section.id === sectionId)
-            section['visibleVacancies'] = Object.values(section.groups).reduce((visibleInGroup, group) => {
+    let result;
 
-                if(!group.is_hidden)
-                    visibleInGroup += group.items.reduce((visibleInItem, item) => visibleInItem += item.items.filter(vacancy => !vacancy.is_del).length, 0)
+    if(groupId) {
+        const group = currentSection.groups[groupId];
+        const modifier = group.is_hidden ? -1 : 1;
 
-                return visibleInGroup;
-            }, 0);
+        result = currentSection.visibleVacancies + (reduceVacancy(group.companies) * modifier)
+    } else {
+        result = Object.values(currentSection.groups).reduce((visibleInGroup, group) => {
 
-        return section;
-    })
+            if(!group.is_hidden)
+                visibleInGroup += reduceVacancy(group.companies)
+
+            return visibleInGroup;
+        }, 0)
+    }
+
+    currentSection['visibleVacancies'] = result;
 
     dispatch({ type: types.UPDATE_DATA, regions });
     dispatch(hideLoader())

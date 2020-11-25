@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {deleteKeyword} from '../../redux/actions/form'
 import styles from '../../styles/components/Form/KeywordList.module.scss';
@@ -14,6 +15,12 @@ const KeywordList = ({keywordType, keywordsList, deleteKeyword}) => [
 
 const mapDispatchToProps = {
     deleteKeyword
+}
+
+KeywordList.propTypes = {
+    keywordType: PropTypes.object.isRequired,
+    keywordsList: PropTypes.array.isRequired,
+    deleteKeyword: PropTypes.func.isRequired
 }
 
 export default connect(null, mapDispatchToProps)(KeywordList)

@@ -8,9 +8,10 @@ import KeywordList from './Form/KeywordList';
 import KeywordFields from './Form/KeywordFields';
 import {ReactComponent as Share} from '../assets/share.svg'
 import {ReactComponent as More} from '../assets/search-more.svg'
-// import {ReactComponent as Info} from '../assets/info.svg'
+import {ReactComponent as Info} from '../assets/info.svg'
 import styles from '../styles/components/Form.module.scss';
 import '../styles/vendor/select.scss';
+import {cloneObj} from "../helpers";
 
 const keywordFieldsData = [
     {
@@ -18,7 +19,7 @@ const keywordFieldsData = [
         id: 'necessary',
         itemsTitle: 'Ключевые слова',
         placeholder: 'js',
-        tooltip: 'Отображаемые вакансии будут содержать хотя-бы одно из ключевых слов',
+        tooltip: 'Название вакансии или работодателя будут содержать хотя-бы одно из ключевых слов',
     },
     {
         label: 'Добавить исключающее слово',
@@ -28,6 +29,8 @@ const keywordFieldsData = [
         tooltip: 'Названия вакансий с данным словом будут скрыты',
     }
 ]
+
+const requiredFieldTooltip = 'Обязательно для заполнения'
 
 
 class Form extends React.Component {
@@ -48,7 +51,7 @@ class Form extends React.Component {
         this.submit = this.submit.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.defaultValidation= this.defaultValidation.bind(this);
+        this.defaultValidation = this.defaultValidation.bind(this);
     }
 
     defaultValidation() {
@@ -61,7 +64,7 @@ class Form extends React.Component {
 
     handleClick(paramName, id) {
         const params = [...this.state[paramName]].map(param => {
-            if(param.id === id)
+            if (param.id === id)
                 param.checked = !param.checked;
 
             return param;
@@ -93,12 +96,12 @@ class Form extends React.Component {
         const unnecessary = this.props.unnecessary.length ? this.props.unnecessary.join(',') : null;
         const newInDays = this.props.newInDays.find(option => option.checked).value;
 
-        const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&experience=${experience}&newInDays=${newInDays}${necessary ? '&necessary='+necessary : ''}${unnecessary ? '&unnecessary='+unnecessary : ''}`
+        const url = `${window.location.origin}${window.location.pathname}?name=${name}&regions=${regions}&experience=${experience}&newInDays=${newInDays}${necessary ? '&necessary=' + necessary : ''}${unnecessary ? '&unnecessary=' + unnecessary : ''}`
 
         window.navigator.clipboard.writeText(url);
 
         function transformToUrlFormat(arr) {
-            return arr.reduce((sum, item) => item.checked ? sum += `${item.id},` : sum,'').slice(0, -1)
+            return arr.reduce((sum, item) => item.checked ? sum += `${item.id},` : sum, '').slice(0, -1)
         }
     }
 
@@ -109,8 +112,17 @@ class Form extends React.Component {
                   onSubmit={this.submit}>
 
                 <div className={styles.inner}>
+
                     <label className={styles.item}>
-                        <span className={styles.label}>Вакансия <sup>*</sup></span>
+                        <span className={styles.label}>
+                            Вакансия
+                            <Info data-tip={requiredFieldTooltip}
+                                  className={this.state.name ? styles.warningDisabled : styles.warning}
+                                  data-type="error"
+                                  data-effect="solid"/>
+
+                            <ReactTooltip/>
+                        </span>
 
                         <input className={styles.input}
                                type="text"
@@ -121,7 +133,16 @@ class Form extends React.Component {
                     </label>
 
                     <div className={styles.item}>
-                        <div className={styles.label}>Регионы поиска <sup>*</sup></div>
+                        <div className={styles.label}>
+                            Регионы поиска
+
+                            <Info data-tip={requiredFieldTooltip}
+                                  className={this.state.regions.some(checkbox => checkbox.checked) ? styles.warningDisabled : styles.warning}
+                                  data-type="error"
+                                  data-effect="solid"/>
+
+                            <ReactTooltip type="error"/>
+                        </div>
 
                         <div className={styles.checkboxWrap}>
                             {this.state.regions.map((region, index) =>
@@ -139,7 +160,16 @@ class Form extends React.Component {
                     </div>
 
                     <div className={styles.item}>
-                        <span className={styles.label}>Опыт <sup>*</sup></span>
+                        <span className={styles.label}>
+                            Опыт
+
+                            <Info data-tip={requiredFieldTooltip}
+                                  className={this.state.experience.some(checkbox => checkbox.checked) ? styles.warningDisabled : styles.warning}
+                                  data-type="error"
+                                  data-effect="solid"/>
+
+                            <ReactTooltip/>
+                        </span>
 
                         <div className={styles.checkboxWrap}>
                             {this.state.experience.map((experience, index) =>
@@ -159,7 +189,8 @@ class Form extends React.Component {
                     <div className={styles.btns}>
                         <button className={styles.btn}
                                 disabled={!this.defaultValidation()}
-                                type="submit">Поиск</button>
+                                type="submit">Поиск
+                        </button>
 
                         <button type="button"
                                 className={styles.toggle}
@@ -173,7 +204,7 @@ class Form extends React.Component {
 
                     {keywordFieldsData.map((keyword, index) =>
                         <KeywordFields keyword={keyword}
-                                       key={index} />
+                                       key={index}/>
                     )}
 
                     <label className={styles.item}>
@@ -185,7 +216,7 @@ class Form extends React.Component {
                                 options={this.props.newInDays}
                                 onChange={this.props.changeNewInDays}
                                 menuItemSelectedIcon=""
-                                showSearch={false} />
+                                showSearch={false}/>
                     </label>
 
 
@@ -199,19 +230,19 @@ class Form extends React.Component {
                                 data-delay-hide='2000'
                                 data-iscapture={true}
                                 data-event='click'>
-                            <Share />
+                            <Share/>
                             <span>Скопировать ссылку</span>
                         </button>
-                        <ReactTooltip globalEventOff='click' />
+                        <ReactTooltip globalEventOff='click'/>
                     </div>
                 </div>
 
                 <div className={styles.filters}>
-                    {keywordFieldsData.map((keywordType ,index) =>
+                    {keywordFieldsData.map((keywordType, index) =>
                         this.props[keywordType.id].length ?
                             <KeywordList keywordType={keywordType}
                                          keywordsList={this.props[keywordType.id]}
-                                         key={index} />
+                                         key={index}/>
                             :
                             ''
                     )}
@@ -236,8 +267,8 @@ const mapStateToProps = ({form, regions}) => ({
     necessary: form.necessary,
     unnecessary: form.unnecessary,
     newInDays: form.newInDays,
-    experience: form.experience,
-    regions,
+    experience: cloneObj(form.experience),
+    regions: [...regions],
 })
 
 const mapDispatchToProps = {

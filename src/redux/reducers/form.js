@@ -5,14 +5,15 @@ import {
     CLEAR_KEYWORDS,
     FORM_SUBMIT,
 } from '../types/form';
+import {cloneObj} from "../../helpers";
 
 const form = (state = formInitState, action) => {
     switch (action.type) {
         case FORM_SUBMIT:
             return {
                 ...state,
-                name: action.payload.name,
-                experience: action.payload.experience,
+                name: action.name,
+                experience: cloneObj(action.experience),
             }
         case CHANGE_NEW_IN_DAYS:
             return {

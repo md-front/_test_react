@@ -8,6 +8,15 @@ export const showAlert = (e) => dispatch => {
 
 export const hideAlert = () => ({ type: types.HIDE_ALERT });
 
+export const loadUsdCurrency = () => async dispatch => {
+    const response = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
+    const data = await response.json();
+    const value = data.Valute.USD.Value
+
+    dispatch({ type: types.SET_USD_CURRENCY, value });
+};
+export const clearUsdCurrency = () => ({ type: types.CLEAR_USD_CURRENCY });
+
 export const showLoader = () => ({ type: types.SHOW_LOADER });
 export const hideLoader = () => ({ type: types.HIDE_LOADER });
 

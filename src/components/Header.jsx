@@ -1,7 +1,6 @@
 import React from 'react';
 import Form from './Form';
 import styles from '../styles/components/Header.module.scss';
-import Main from "../pages/Main";
 import {connect} from "react-redux";
 import {clearList} from "../redux/actions/app";
 

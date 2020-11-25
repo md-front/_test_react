@@ -6,10 +6,6 @@
   flex-grow: 1;
   padding: 20px 0 0;
   background-color: $backgroundColor;
-
-  & > h3 {
-    color: $customPurple;
-  }
 }
 
 .loading {
@@ -18,4 +14,10 @@
   font-weight: 500;
   font-size: 24px;
   color: $customPurple;
+}
+
+.fewExpAlert {
+  margin-left: 10px;
+  font-weight: 500;
+  font-size: 14px;
 }

@@ -12,9 +12,9 @@
 .title {
   display: flex;
   min-height: 40px;
+  margin: 0 0 15px;
   justify-content: space-between;
   align-items: center;
-  margin: 0 0 15px;
   cursor: pointer;
 
   &:hover h2 {
@@ -22,8 +22,10 @@
   }
 
   h2 {
+    max-width: calc(100% - 60px);
     margin: 0;
     font-size: 18px;
+    word-break: break-word;
     transition: color .2s;
   }
   img {

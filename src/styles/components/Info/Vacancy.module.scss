@@ -92,6 +92,14 @@
 .salary {
   display: block;
   font-weight: 700;
+
+  span {
+    display: block;
+  }
+}
+
+.presetCurrency {
+  color: $customPurple;
 }
 
 .description {

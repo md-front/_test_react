@@ -38,6 +38,22 @@
   }
 }
 
+.warning { /* &[svg] */
+  opacity: 1;
+  transition: opacity .2s;
+
+  *:not(g) {
+    fill: $customRed !important;
+  }
+}
+
+.warningDisabled {
+  composes: warning;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
 .inner {
   display: grid;
   width: 100%;

@@ -1,9 +1,10 @@
+import {getDataFromStorage} from "../helpers";
 /**
  * {
  * sortValue: приоритет вывода группы (больше - выше),
  * name: имя для заголовка группы и кнопки в фильтре,
  * is_hidden: скрыта ли группа в фильтре,
- * items: работодатели
+ * companies: работодатели
  * }
  */
 const groups = {
@@ -11,50 +12,50 @@ const groups = {
         name: 'Избранное',
         sortValue: 6,
         is_hidden: false,
-        items: [],
+        companies: [],
     },
     is_new: {
         name: 'Новые',
         sortValue: 5,
         is_hidden: false,
-        items: []
+        companies: []
     },
     exp6: {
         name: 'Опыт > 6 лет',
         sortValue: 4,
         is_hidden: false,
-        items: []
+        companies: []
     },
     exp3: {
         name: 'Опыт 3-6 лет',
         sortValue: 3,
         is_hidden: false,
-        items: []
+        companies: []
     },
     is_jun: {
         name: 'Для начинающих',
         sortValue: 2,
         is_hidden: false,
-        items: []
+        companies: []
     },
     is_salary: {
         name: '1-3 c указанным окладом',
         sortValue: 1,
         is_hidden: false,
-        items: []
+        companies: []
     },
     default: {
         name: 'Опыт 1-3 года',
         sortValue: 0,
         is_hidden: false,
-        items: []
+        companies: []
     },
 }
 
 const DEFAULT_SEARCH_PARAMS = {
     name: 'Frontend',
     necessary: ['front', 'фронт', 'js', 'javascript', 'react'],
-    unnecessary: ['backend', 'fullstack', 'SQL', 'lead', 'ведущий', 'angular'],
+    unnecessary: ['backend', 'fullstack', 'SQL', 'lead', 'ведущий', 'angular', 'Сима-ленд'],
     newInDays: [
         {
             value: 1,
@@ -144,13 +145,6 @@ const DEFAULT_SEARCH_PARAMS = {
     ],
 }
 
-export const appInitState = {
-    showAlert: false,
-    favorites: [],
-    blacklist: [],
-    showLoader: true,
-}
-
 /* TODO react router */
 const initialState = (() => {
     let result = {};
@@ -187,7 +181,7 @@ const initialState = (() => {
             tempData = [...DEFAULT_SEARCH_PARAMS[param]];
             dataFromUrl = dataFromUrl.split(',');
 
-            tempData.forEach(item => item.checked = dataFromUrl.includes(item.id))
+            tempData.forEach(option => option.checked = dataFromUrl.includes(option.id))
         } else {
             tempData = dataFromUrl;
         }
@@ -220,3 +214,11 @@ export const formInitState = {
 export const regionsInitState = [
     ...initialState.regions
 ];
+
+export const appInitState = {
+    showAlert: false,
+    favorites: getDataFromStorage('favorites'),
+    blacklist: getDataFromStorage('blacklist'),
+    showLoader: true,
+    usdCurrency: false,
+}

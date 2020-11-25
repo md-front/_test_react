@@ -5,3 +5,5 @@ export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
 export const SHOW_LOADER = 'SHOW_LOADER';
 export const HIDE_LOADER = 'HIDE_LOADER';
 export const CLEAR_LIST = 'CLEAR_LIST';
+export const SET_USD_CURRENCY = 'SET_USD_CURRENCY';
+export const CLEAR_USD_CURRENCY = 'CLEAR_USD_CURRENCY';

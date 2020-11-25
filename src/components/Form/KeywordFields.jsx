@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip/dist/index';
 import {connect} from "react-redux";
 import {ReactComponent as Info} from '../../assets/info.svg'
@@ -122,5 +123,9 @@ const mapStateToProps = state => ({
     necessary: state.form.necessary,
     unnecessary: state.form.unnecessary,
 })
+
+KeywordFields.propTypes = {
+    keyword: PropTypes.object.isRequired
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(KeywordFields)
