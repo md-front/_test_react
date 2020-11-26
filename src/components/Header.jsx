@@ -24,7 +24,7 @@ const Header = props => (
         <div className="container">
 
             <div className={styles.actions}>
-                <a href="/"
+                <a href={window.location.origin + window.location.pathname}
                    className={styles.rootLink}
                    title="Применить стандартный поиск">
                     <h1 className={styles.title}>Поиск вакансий</h1>
