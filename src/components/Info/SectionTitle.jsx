@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import {changeActiveSection} from "../../redux/actions/regions";
 
 const SectionTitle = ({section, isActiveSection, changeActiveSection, showLoader}) => {
-    console.log(section.name, isActiveSection && showLoader)
 
     return (
         <div className={isActiveSection ? styles.active : styles.title}

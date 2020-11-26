@@ -33,7 +33,7 @@ export const addToBlacklist = (e, vacancy) => (dispatch, getState) => {
     const {regions} = getState();
     const currentSection = regions.find(section => section.is_active);
 
-    vacancy.is_del = true;
+    // vacancy.is_del = true;
 
     dispatch({ type: types.ADD_TO_BLACKLIST, vacancyId: vacancy.id });
     dispatch(filterVacancies(currentSection.vacancies, false, false))

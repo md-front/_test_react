@@ -197,8 +197,6 @@ export const updateCurrentSectionData = (section, updateRegions = true) => async
         return;
     }
 
-    console.log(`request`)
-
     section.prevRequest = request
 
     if(app.usdCurrency)
