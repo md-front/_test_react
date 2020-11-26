@@ -137,11 +137,20 @@ const DEFAULT_SEARCH_PARAMS = {
             prevRequest: null,
             groups
         },
+        /*{
+            id: 'mgn',
+            name: 'Магнитогорск',
+            location: 'area=1399',
+            is_active: false,
+            checked: false,
+            prevRequest: null,
+            groups
+        },*/
         {
             id: 'remote',
             name: 'Удалённая работа',
             location: 'schedule=remote',
-            is_active: false,
+            is_active: true,
             checked: true,
             prevRequest: null,
             groups

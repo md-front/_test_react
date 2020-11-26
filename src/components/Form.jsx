@@ -55,7 +55,7 @@ class Form extends React.Component {
     }
 
     defaultValidation() {
-        return this.state.name && this.state.regions.some(region => region.checked) && this.state.experience.some(region => region.checked)
+        return this.state.name.trim() && this.state.regions.some(region => region.checked) && this.state.experience.some(region => region.checked)
     }
 
     toggle() {
@@ -74,7 +74,7 @@ class Form extends React.Component {
     }
 
     handleChange(e) {
-        this.setState({[e.target.id]: e.target.value.trim()})
+        this.setState({[e.target.id]: e.target.value})
     }
 
     submit(e) {
@@ -88,7 +88,7 @@ class Form extends React.Component {
     }
 
     share() {
-        const name = this.state.name;
+        const name = this.state.name.trim().split(' ').join('+');
         const regions = transformToUrlFormat(this.state.regions);
         const experience = transformToUrlFormat(this.state.experience);
 

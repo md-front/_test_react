@@ -1,28 +1,24 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/components/Info/SectionTitle.module.scss';
 import {ReactComponent as Loader} from '../../assets/loader.svg'
 import {connect} from "react-redux";
 import {changeActiveSection} from "../../redux/actions/regions";
 
-const SectionTitle = ({section, isActiveSection, changeActiveSection, showLoader}) => {
-
-    return (
-        <div className={isActiveSection ? styles.active : styles.title}
-             onClick={() => !isActiveSection ? changeActiveSection(section.id) : ''}>
-            <div data-text={section.name}>{section.name}</div>
-            {section.checked &&
-            <span>
-                {isActiveSection && showLoader ?
-                    <Loader />
-                    :
-                    section.visibleVacancies ? section.visibleVacancies : '...'
-                }
-            </span>
+const SectionTitle = ({section, isActiveSection, changeActiveSection, showLoader}) => (
+    <div className={isActiveSection ? styles.active : styles.title}
+         style={(!isActiveSection && showLoader) ? {pointerEvents: 'none'} : {}}
+         onClick={() => (!isActiveSection && !showLoader) ? changeActiveSection(section.id) : ''}>
+        <div data-text={section.name}>{section.name}</div>
+        <span>
+            {isActiveSection && showLoader ?
+                <Loader />
+                :
+                section.visibleVacancies ? section.visibleVacancies : '...'
             }
-        </div>
-    )
-}
+        </span>
+    </div>
+)
 
 const mapStateToProps = ({app}, {section, activeTitleId}) => ({
     section,

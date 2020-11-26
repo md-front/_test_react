@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/components/Info/Section.module.scss';
 import {declOfNum} from '../../helpers';
-import {updateCurrentSectionData, toggleSectionVisibility} from '../../redux/actions/regions'
+import {loadData, toggleSectionVisibility} from '../../redux/actions/regions'
 import Groups from './Groups';
 import ToggleGroupsVisibility from './ToggleGroupsVisibility';
 import {connect} from "react-redux";
@@ -12,12 +12,13 @@ class Section extends React.Component {
     constructor(props) {
         super(props);
 
+        /* TODO переделать на простую функцию */
         this.state = {
         }
     }
 
     componentDidMount() {
-        this.props.updateCurrentSectionData(this.props.section);
+        this.props.loadData(this.props.section);
     }
 
     render() {
@@ -76,7 +77,7 @@ const mapStateToProps = ({form}, {section}) => ({
 })
 
 const mapDispatchToProps = {
-    updateCurrentSectionData, toggleSectionVisibility
+    loadData, toggleSectionVisibility
 }
 
 Section.propTypes = {

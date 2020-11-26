@@ -3,9 +3,11 @@ import {useSelector} from 'react-redux'
 import styles from '../styles/components/Info.module.scss';
 import Section from './Info/Section';
 import SectionTitle from "./Info/SectionTitle";
+import {cloneObj} from "../helpers";
 
 export default function Info() {
-    const sections = useSelector(state => state.regions);
+    const sections = useSelector(state => cloneObj(state.regions));
+    // const sections = useSelector(state => state.regions);
     const activeSection = (() => sections.find(section => section.is_active))();
     const [activeTitleId, setActiveTitle] = useState(activeSection.id);
 

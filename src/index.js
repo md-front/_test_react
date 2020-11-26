@@ -1,19 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import rootReducer from './redux/reducers';
-import {compose, createStore, applyMiddleware} from "redux";
+import {createStore, applyMiddleware} from "redux";
 import thunk from 'redux-thunk'
 import {Provider} from "react-redux";
+import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
+// import {createLogger} from 'redux-logger';
 import {setLS} from './helpers';
 import App from './App';
 import './styles/style.css';
 
-const middlewares = [applyMiddleware(thunk)];
+const composeEnhancers = composeWithDevTools({
+    trace: true,
+    traceLimit: 25
+});
 
-if(process.env.NODE_ENV === 'development')
-    middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
+const middlewares = [thunk];
 
-const store = createStore(rootReducer, compose(...middlewares));
+// if(process.env.NODE_ENV === 'development')
+//     middlewares.push(createLogger({
+//         collapsed: true,
+//         diff: true
+//     }))
+
+const store = createStore(
+    rootReducer,
+    composeEnhancers(
+        applyMiddleware(...middlewares)
+    )
+);
 
 store.subscribe(() => {
     const app = store.getState().app;

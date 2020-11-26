@@ -38,7 +38,7 @@ export const changeSelectedRegions = regions => dispatch => {
     }
     
     dispatch(showLoader())
-    dispatch(updateCurrentSectionData(section, false))
+    dispatch(loadData(section))
 }
 
 export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
@@ -184,20 +184,31 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
     }
 }
 
-export const updateCurrentSectionData = (section, updateRegions = true) => async (dispatch, getState) => {
-    const {form, app, regions} = getState();
+let loadingData = false;
+
+export const loadData = section => async (dispatch, getState) => {
+    const {form, app} = getState();
 
     const request = JSON.stringify([form.name, section.location, form.experience]);
 
-    if(section.prevRequest && section.prevRequest === request) {
-        if(updateRegions)
-            dispatch({ type: types.UPDATE_DATA, regions });
+    // if(section.prevRequest && section.prevRequest === request) {
+    //     if(updateRegions)
+    //         dispatch({ type: types.UPDATE_DATA, regions });
+    //
+    //     dispatch(hideLoader());
+    //     return;
+    // }
 
+    if(loadingData) return;
+
+    if(!section.prevRequest && section.prevRequest === request) {
         dispatch(hideLoader());
         return;
     }
 
-    section.prevRequest = request
+    loadingData = true;
+
+    section.prevRequest = request;
 
     if(app.usdCurrency)
         dispatch(clearUsdCurrency());
@@ -205,6 +216,8 @@ export const updateCurrentSectionData = (section, updateRegions = true) => async
     const newVacancies = await getVacancies();
 
     dispatch(filterVacancies(newVacancies, true));
+
+    loadingData = false;
 
     async function getVacancies() {
         const experience = form.experience.filter(exp => exp.checked);
