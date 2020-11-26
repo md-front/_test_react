@@ -1,15 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/style.css';
 import rootReducer from './redux/reducers';
-import {setLS} from './helpers';
 import {compose, createStore, applyMiddleware} from "redux";
 import thunk from 'redux-thunk'
 import {Provider} from "react-redux";
+import {setLS} from './helpers';
 import App from './App';
-
-/** Debug */
-window.LOAD_ALL_DATA = true;
+import './styles/style.css';
 
 const middlewares = [applyMiddleware(thunk)];
 
@@ -25,10 +22,8 @@ store.subscribe(() => {
     setLS('blacklist', app.blacklist);
 })
 
-const app = (
+ReactDOM.render(
     <Provider store={store}>
         <App />
     </Provider>
-)
-
-ReactDOM.render(app, document.getElementById('root'));
+    , document.getElementById('root'));

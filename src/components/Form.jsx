@@ -40,7 +40,7 @@ class Form extends React.Component {
 
         this.state = {
             name: this.props.name,
-            regions: this.props.regions,
+            regions: cloneObj(this.props.regions),
             experience: this.props.experience,
             showMore: true,
             url: '',
@@ -83,7 +83,7 @@ class Form extends React.Component {
         this.props.formSubmit({
             name: this.state.name,
             experience: this.state.experience,
-            regions: this.state.regions
+            formRegions: this.state.regions
         });
     }
 
@@ -268,7 +268,7 @@ const mapStateToProps = ({form, regions}) => ({
     unnecessary: form.unnecessary,
     newInDays: form.newInDays,
     experience: cloneObj(form.experience),
-    regions: [...regions],
+    regions,
 })
 
 const mapDispatchToProps = {

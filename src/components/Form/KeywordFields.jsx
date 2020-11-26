@@ -21,14 +21,30 @@ class KeywordFields extends React.Component {
         
         this.addKeyword = this.addKeyword.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.listenSubmit = this.listenSubmit.bind(this);
+        this.keydownHandler = this.keydownHandler.bind(this);
+        this.removeListenSubmit = this.removeListenSubmit.bind(this);
     }
 
     handleChange(e) {
         this.setState({input: e.target.value});
     }
 
-    /* todo ? Полностью перенести в redux? */
-    addKeyword(name) {
+    listenSubmit() {
+        document.addEventListener('keydown', this.keydownHandler)
+    }
+
+    removeListenSubmit() {
+        document.removeEventListener('keydown', this.keydownHandler)
+    }
+
+    keydownHandler(e) {
+        if(e.key === 'Enter')
+            this.addKeyword();
+    }
+
+    addKeyword() {
+        const name = this.props.keyword.id;
         const inputValue = this.state.input.trim();
         const keywords = this.props[name];
         const diffName = ['necessary','unnecessary'].find(difName => difName !== name);
@@ -97,12 +113,14 @@ class KeywordFields extends React.Component {
                        id={keyword.id+'Input'}
                        placeholder={keyword.placeholder}
                        value={this.state.input}
+                       onFocus={this.listenSubmit}
+                       onBlur={this.removeListenSubmit}
                        onChange={this.handleChange}/>
 
                 <button type="button"
                         className={styles.btnKeyword}
                         disabled={!this.state.input.trim()}
-                        onClick={() => this.addKeyword(keyword.id)}
+                        onClick={this.addKeyword}
                         data-tip={this.state.tooltip.text}
                         data-type={this.state.tooltip.type}
                         data-effect="solid"

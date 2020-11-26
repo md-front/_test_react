@@ -5,6 +5,16 @@
   margin: 20px 0 30px;
 }
 
+.rootLink {
+  text-decoration: none;
+  color: $textColor;
+  transition: color .2s;
+
+  &:hover {
+    color: $customPurple;
+  }
+}
+
 .title {
   font-weight: 500;
   font-size: 32px;

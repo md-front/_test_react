@@ -6,7 +6,6 @@
   padding-right: 40px;
   margin-bottom: 15px;
   font-size: 15px;
-  //color: black;
   text-decoration: none;
   position: relative;
   transition: color .2s;
@@ -23,7 +22,6 @@
   }
 
   &:hover {
-    //color: cornflowerblue !important;
 
     :global(.text) {
       color: cornflowerblue;
@@ -120,7 +118,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //color: $textColor;
   color: $linkColor;
 
   &--is_jun {

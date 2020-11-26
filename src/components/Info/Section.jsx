@@ -20,7 +20,6 @@ class Section extends React.Component {
         this.props.updateCurrentSectionData(this.props.section);
     }
 
-
     render() {
         return (
             <section className={styles.section}>

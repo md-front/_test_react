@@ -24,7 +24,11 @@ const Header = props => (
         <div className="container">
 
             <div className={styles.actions}>
-                <h1 className={styles.title}>Поиск вакансий</h1>
+                <a href="/"
+                   className={styles.rootLink}
+                   title="Применить стандартный поиск">
+                    <h1 className={styles.title}>Поиск вакансий</h1>
+                </a>
 
                 <div className={styles.btns}>
                     {btns.map((btn, index) =>

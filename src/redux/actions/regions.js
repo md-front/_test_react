@@ -1,6 +1,6 @@
 import * as types from '../types/regions'
 import {clearUsdCurrency, hideLoader, loadUsdCurrency, showLoader} from './app'
-import {parseDateString} from "../../helpers";
+import {cloneObj, parseDateString} from "../../helpers";
 
 export const changeActiveSection = id => (dispatch, getState) => {
     const {regions} = getState();
@@ -15,9 +15,10 @@ export const changeActiveSection = id => (dispatch, getState) => {
     dispatch({ type: types.UPDATE_DATA, regions });
 }
 
-export const changeSelectedRegions = (regions, isUpdateCurrentSectionData) => dispatch => {
-    const currentActiveSection = regions.find(region => region.is_active);
-    const isActiveRegionChanged = !currentActiveSection.checked;
+export const changeSelectedRegions = regions => dispatch => {
+    const activeSection = regions.find(region => region.is_active);
+    const isActiveRegionChanged = !activeSection.checked;
+    let section = activeSection;
 
     /** Регион новый */
     if(isActiveRegionChanged) {
@@ -31,23 +32,17 @@ export const changeSelectedRegions = (regions, isUpdateCurrentSectionData) => di
         }
 
         newActive.is_active = true;
+        section = newActive;
 
-        dispatch({ type: types.UPDATE_DATA, regions });
-        dispatch(showLoader())
-
-        dispatch(updateCurrentSectionData(newActive))
-    /** Регион старый, изменился опыт или имя */
-    } else if(!isActiveRegionChanged && isUpdateCurrentSectionData) {
-        dispatch(showLoader())
-        dispatch(updateCurrentSectionData(currentActiveSection))
-    /** Регион старый */
-    } else {
         dispatch({ type: types.UPDATE_DATA, regions });
     }
+    
+    dispatch(showLoader())
+    dispatch(updateCurrentSectionData(section, false))
 }
 
 export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
-    // const hiddenSections = []; filtered?
+    /* const hiddenSections = []; todo filtered?*/
     const {regions} = getState();
     dispatch(showLoader());
 
@@ -92,6 +87,7 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
 
     const companies = {};
     const filteredVacancies = [];
+    let usdLoad = false;
 
     vacancies.forEach(vacancy => {
         const employerId = vacancy.employer.id;
@@ -141,8 +137,10 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
         if (vacancy.salary) {
             setSortParams(1, 'is_salary');
 
-            if(!app.usdCurrency && vacancy.salary.currency === 'USD')
+            if(!usdLoad && !app.usdCurrency && vacancy.salary.currency === 'USD') {
+                usdLoad = true;
                 dispatch(loadUsdCurrency())
+            }
         }
 
         function setSortParams(sortValue, paramName) {
@@ -171,7 +169,7 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
 
 
     function groupCompanies(companies) {
-        const groups = {...currentSection.groups};
+        const groups = cloneObj(currentSection.groups);
 
         for(let group in groups)
             groups[group].companies = []
@@ -186,8 +184,22 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
     }
 }
 
-export const updateCurrentSectionData = section => async (dispatch, getState) => {
-    const {form, app} = getState();
+export const updateCurrentSectionData = (section, updateRegions = true) => async (dispatch, getState) => {
+    const {form, app, regions} = getState();
+
+    const request = JSON.stringify([form.name, section.location, form.experience]);
+
+    if(section.prevRequest && section.prevRequest === request) {
+        if(updateRegions)
+            dispatch({ type: types.UPDATE_DATA, regions });
+
+        dispatch(hideLoader());
+        return;
+    }
+
+    console.log(`request`)
+
+    section.prevRequest = request
 
     if(app.usdCurrency)
         dispatch(clearUsdCurrency());

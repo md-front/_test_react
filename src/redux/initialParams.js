@@ -54,18 +54,18 @@ const groups = {
 
 const DEFAULT_SEARCH_PARAMS = {
     name: 'Frontend',
-    necessary: ['front', 'фронт', 'js', 'javascript', 'react'],
-    unnecessary: ['backend', 'fullstack', 'SQL', 'lead', 'ведущий', 'angular', 'Сима-ленд'],
+    necessary: ['front', 'фронт', 'js', 'javascript', 'react', 'vue'],
+    unnecessary: ['backend', 'SQL', 'Сима-ленд'],
     newInDays: [
         {
             value: 1,
             label: '1 день',
-            checked: true,
+            checked: false,
         },
         {
             value: 2,
             label: '2 дня',
-            checked: false,
+            checked: true,
         },
         {
             value: 3,
@@ -88,7 +88,7 @@ const DEFAULT_SEARCH_PARAMS = {
             id: 'noExperience',
             modifier: 'is_jun',
             name: 'Нет опыта',
-            checked: true,
+            checked: false,
         },
         {
             id: 'between1And3',
@@ -116,6 +116,7 @@ const DEFAULT_SEARCH_PARAMS = {
             location: 'area=1',
             is_active: false,
             checked: false,
+            prevRequest: null,
             groups
         },
         {
@@ -124,6 +125,7 @@ const DEFAULT_SEARCH_PARAMS = {
             location: 'area=2',
             is_active: false,
             checked: false,
+            prevRequest: null,
             groups
         },
         {
@@ -132,6 +134,7 @@ const DEFAULT_SEARCH_PARAMS = {
             location: 'area=3',
             is_active: true,
             checked: true,
+            prevRequest: null,
             groups
         },
         {
@@ -140,12 +143,13 @@ const DEFAULT_SEARCH_PARAMS = {
             location: 'schedule=remote',
             is_active: false,
             checked: true,
+            prevRequest: null,
             groups
         }
     ],
 }
 
-/* TODO react router */
+/* todo react router */
 const initialState = (() => {
     let result = {};
     const urlParams = (new URL(document.location)).searchParams;
@@ -157,7 +161,7 @@ const initialState = (() => {
         let dataFromUrl = urlParams.get(param);
         let tempData;
         const isKeyword = param === 'necessary' || param === 'unnecessary';
-        const needDefaultValue = param === 'newInDays' || param === 'regions' || param === 'experience' /* || param === 'name'*/
+        const needDefaultValue = param === 'newInDays' || param === 'regions' || param === 'experience'
         const emptyValue = (()=> {
 
             if(needDefaultValue)

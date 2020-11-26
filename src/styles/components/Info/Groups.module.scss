@@ -7,6 +7,18 @@ $groupPaddingH: 25px;
   $groupPaddingH: 15px;
 }
 
+.title { /** &[h3] */
+  display: inline-block;
+  margin: 0;
+  padding: 4px 15px;
+  border: 2px solid $defaultColor;
+  border-radius: $commonBorderRadius;
+  background: $backgroundColor;
+  font-size: 16px;
+  font-weight: 500;
+  transform: translateY(-50%);
+}
+
 .group {
   margin: 0 ($groupPaddingH * -1) 40px;
   padding: 0 $groupPaddingH 25px;
@@ -130,16 +142,4 @@ $groupPaddingH: 25px;
   :global(.popup) {
     box-shadow: $shadowParams $defaultColor;
   }
-}
-
-.title {// &[h3]
-  display: inline-block;
-  margin: 0;
-  padding: 4px 15px;
-  border: 2px solid $defaultColor;
-  border-radius: $commonBorderRadius;
-  background: $backgroundColor;
-  font-size: 16px;
-  font-weight: 500;
-  transform: translateY(-50%);
 }

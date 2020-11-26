@@ -33,7 +33,7 @@
       left: 0;
       top: 50%;
       font-weight: 400;
-      color: #a7a7a7;
+      color: $inactiveText;
       transform: translateY(-50%);
       transition: color .2s;
     }
@@ -47,11 +47,12 @@
     justify-content: center;
     padding-left: 8px;
     text-align: center;
-    color: #DADADA;
+    color: $inactiveText;
     font-weight: 500;
-    transition: color .2s;
+    opacity: .5;
+    transition: color .2s, opacity .2s;
 
-    /* loader */
+    /** loader */
     svg {
       width: 20px;
       height: 20px;
@@ -92,6 +93,7 @@
 
   /** num */
   span {
-    color: #AEB8F5;
+    color: $exp6Color;
+    opacity: 1;
   }
 }

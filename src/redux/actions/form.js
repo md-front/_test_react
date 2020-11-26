@@ -1,13 +1,14 @@
 import * as types from '../types/form'
 import {changeSelectedRegions, filterVacancies} from  './regions'
-import {isObjectsEqual} from "../../helpers";
 
-export const formSubmit = ({name, experience, regions}) => (dispatch, getState) => {
-    const {form} = getState();
-    let isUpdateCurrentSectionData = name !== form.name || !isObjectsEqual(experience, form.experience);
+export const formSubmit = ({name, experience, formRegions}) => (dispatch, getState) => {
+    const {regions} = getState();
+
+    for(let region of regions)
+        region.checked = formRegions.find(formRegion => formRegion.id === region.id).checked
 
     dispatch({ type: types.FORM_SUBMIT, name, experience })
-    dispatch(changeSelectedRegions(regions, isUpdateCurrentSectionData))
+    dispatch(changeSelectedRegions(regions))
 }
 export const changeNewInDays = value => (dispatch, getState) => {
     const newInDays = [...getState().form.newInDays].map(option => {
