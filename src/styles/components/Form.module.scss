@@ -333,11 +333,14 @@
   }
 }
 .btnKeyword {
+  display: flex;
   position: absolute;
   bottom: 0;
   right: 0;
   height: 54px;
   width: 54px;
+  justify-content: center;
+  align-items: center;
   border-radius: $commonBorderRadius;
   border: none;
   background-color: $customPurple;

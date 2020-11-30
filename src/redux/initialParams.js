@@ -141,7 +141,7 @@ const DEFAULT_SEARCH_PARAMS = {
             id: 'remote',
             name: 'Удалённая работа',
             location: 'schedule=remote',
-            is_active: true,
+            is_active: false,
             checked: true,
             prevRequest: null,
             groups
