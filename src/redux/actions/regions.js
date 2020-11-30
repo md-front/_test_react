@@ -42,7 +42,6 @@ export const changeSelectedRegions = regions => dispatch => {
 }
 
 export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState) => {
-    /* const hiddenSections = []; todo filtered?*/
     const {regions} = getState();
     dispatch(showLoader());
 
@@ -156,6 +155,9 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
             if(vacancy.sort.sortValue < sortValue)
                 vacancy.sort = sort;
 
+            if(paramName === 'is_new')
+                company[paramName] = true;
+
             vacancy[paramName] = true;
         }
 
@@ -182,8 +184,12 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
 
         companies.forEach(company => {
             if(!company.vacancies.length) return;
+            const companies = groups[company.sort.name].companies;
 
-            groups[company.sort.name].companies.push(company)
+            if(company.is_new)
+                companies.unshift(company)
+            else
+                companies.push(company)
         });
 
         return groups

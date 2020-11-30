@@ -12,7 +12,7 @@ class Section extends React.Component {
     constructor(props) {
         super(props);
 
-        /* TODO переделать на простую функцию */
+        /* TODO переделать на простой компонент */
         this.state = {
         }
     }
