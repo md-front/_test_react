@@ -3,6 +3,10 @@
 .actions {
   display: flex;
   margin: 20px 0 30px;
+
+  @media ($mobileL) {
+    display: block;
+  }
 }
 
 .rootLink {
@@ -21,7 +25,13 @@
 }
 
 .btns {
+  display: flex;
   margin-left: auto;
+
+  @media ($mobileL) {
+    justify-content: space-between;
+    margin-top: 15px;
+  }
 }
 
 .btn {/** &[button] */
@@ -36,6 +46,14 @@
   background-color: transparent;
   transition: .2s;
   cursor: pointer;
+
+  @media ($mobileL) {
+    margin: 0;
+  }
+  @media ($mobileP) {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
 
   img {
     width: 25px;

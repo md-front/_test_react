@@ -16,7 +16,7 @@ const Company = ({company, toggleFavorite}) => {
                  title="В избранное">
                 <h2>{company.name}</h2>
 
-                {logoUrl && <img src={logoUrl['90']} alt="logo"/>}
+               {logoUrl && <img src={logoUrl['90']} alt="logo"/>}
             </div>
 
             {company.vacancies.map((vacancy, index) =>

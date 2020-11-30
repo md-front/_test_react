@@ -113,7 +113,7 @@ class Form extends React.Component {
 
                 <div className={styles.inner}>
 
-                    <label className={styles.item}>
+                    <label className={styles.itemName}>
                         <span className={styles.label}>
                             Вакансия
                             <Info data-tip={requiredFieldTooltip}

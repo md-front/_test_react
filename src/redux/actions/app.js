@@ -54,3 +54,15 @@ export const toggleFavorite = (companyId) => (dispatch, getState) => {
     dispatch({ type: types.TOGGLE_FAVORITE, favorites });
     dispatch(filterVacancies(currentSection.vacancies, false, false))
 };
+
+export const updateGroupsVisibility = (sectionId, groupId, isHidden) => (dispatch, getState) => {
+    const {hiddenGroups} = getState().app;
+    let group = hiddenGroups[sectionId];
+
+    if(isHidden)
+        group.push(groupId)
+    else
+        hiddenGroups[sectionId] = group.filter(hiddenGroupId => hiddenGroupId === groupId)
+
+    dispatch({ type: types.UPDATE_GROUPS_VISIBILITY, hiddenGroups });
+}

@@ -1,5 +1,5 @@
 import * as types from '../types/regions'
-import {clearUsdCurrency, hideLoader, loadUsdCurrency, showLoader} from './app'
+import {clearUsdCurrency, hideLoader, loadUsdCurrency, showLoader, updateGroupsVisibility} from './app'
 import {cloneObj, parseDateString} from "../../helpers";
 
 export const changeActiveSection = id => (dispatch, getState) => {
@@ -41,7 +41,7 @@ export const changeSelectedRegions = regions => dispatch => {
     dispatch(loadData(section))
 }
 
-export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getState) => {
+export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState) => {
     /* const hiddenSections = []; todo filtered?*/
     const {regions} = getState();
     dispatch(showLoader());
@@ -51,6 +51,7 @@ export const toggleSectionVisibility = (sectionId, groupId) => (dispatch, getSta
     const group = currentSection.groups[groupId];
     group.is_hidden = !group.is_hidden;
 
+    dispatch(updateGroupsVisibility(currentSection.id, groupId, group.is_hidden))
     dispatch(visibleVacanciesUpdate(currentSection.id, regions, groupId))
 }
 
@@ -171,8 +172,13 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
     function groupCompanies(companies) {
         const groups = cloneObj(currentSection.groups);
 
-        for(let group in groups)
-            groups[group].companies = []
+        for(let groupName in groups) {
+            const group = groups[groupName];
+
+            group.is_hidden = app.hiddenGroups[currentSection.id].includes(groupName);
+
+            group.companies = []
+        }
 
         companies.forEach(company => {
             if(!company.vacancies.length) return;

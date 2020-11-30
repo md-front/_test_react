@@ -55,7 +55,7 @@ const groups = {
 const DEFAULT_SEARCH_PARAMS = {
     name: 'Frontend',
     necessary: ['front', 'фронт', 'js', 'javascript', 'react', 'vue'],
-    unnecessary: ['backend', 'SQL', 'Сима-ленд'],
+    unnecessary: ['backend', 'SQL'],
     newInDays: [
         {
             value: 1,
@@ -137,15 +137,6 @@ const DEFAULT_SEARCH_PARAMS = {
             prevRequest: null,
             groups
         },
-        /*{
-            id: 'mgn',
-            name: 'Магнитогорск',
-            location: 'area=1399',
-            is_active: false,
-            checked: false,
-            prevRequest: null,
-            groups
-        },*/
         {
             id: 'remote',
             name: 'Удалённая работа',
@@ -232,6 +223,7 @@ export const appInitState = {
     showAlert: false,
     favorites: getDataFromStorage('favorites'),
     blacklist: getDataFromStorage('blacklist'),
+    hiddenGroups: getDataFromStorage('hiddenGroups', initialState.regions),
     showLoader: true,
     usdCurrency: false,
 }

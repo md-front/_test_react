@@ -4,6 +4,11 @@
   display: flex;
   margin-bottom: 50px;
   align-items: center;
+
+  @media ($tabletP) {
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
 }
 
 .filterItem {
@@ -17,6 +22,10 @@
   color: #fff;
   cursor: pointer;
   transition: background-color .2s;
+
+  @media ($tabletP) {
+    margin-bottom: 5px;
+  }
 
   &:hover {
     background-color: $customPurple;
@@ -36,4 +45,9 @@
   margin-right: 10px;
   font-size: 18px;
   font-weight: 500;
+
+  @media ($tabletP) {
+    width: 100%;
+    margin: 0 0 10px;
+  }
 }

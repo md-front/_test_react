@@ -1,11 +1,20 @@
 /** Storage actions */
 export const setLS = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
 export const getLS = key => JSON.parse(localStorage.getItem(key));
-export const getDataFromStorage = type => {
+export const getDataFromStorage = (type, regions) => {
     let result = getLS(type)
 
-    if(!result || typeof(result[0]) !== 'string')
-        result = [];
+    if(!result && regions) {
+        const hiddenGroups = {};
+
+        for(let section of regions)
+            hiddenGroups[section.id] = []
+
+        result = hiddenGroups;
+    }
+
+    if(!result/* || typeof(result[0]) !== 'string'*/)
+        return [];
 
     return result;
 };

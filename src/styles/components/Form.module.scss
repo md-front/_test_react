@@ -1,3 +1,4 @@
+@import '../media';
 @import '../variables.scss';
 
 .form {
@@ -5,6 +6,10 @@
   margin-bottom: 60px;
   flex-wrap: wrap;
   align-items: center;
+
+  @media ($tabletP) {
+    margin-bottom: 30px;
+  }
 }
 
 .label {
@@ -58,6 +63,18 @@
   width: 100%;
   grid-template-columns: repeat(3, calc((100% - 225px - 140px) / 3)) 225px;
   justify-content: space-between;
+
+  @media ($laptop) {
+    grid-template-columns: repeat(3, calc((100% - 225px - 80px) / 3)) 225px;
+  }
+  @media ($tabletL) {
+    grid-template-columns: 47% 47%;
+    grid-gap: 15px 15px;
+  }
+  @media ($mobileL) {
+    grid-template-columns: 100%;
+    grid-gap: 15px 15px;
+  }
 }
 .hidden {
   @extend .inner;
@@ -77,12 +94,29 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.itemName {
+  composes: item;
+
+  @media ($tabletL) {
+    grid-column: 1 / 3;
+  }
+  @media ($mobileL) {
+    grid-column: 1 / 2;
+  }
+}
 
 .btns {
   display: flex;
   grid-column: 4;
   justify-content: flex-end;
   align-self: flex-end;
+
+  @media ($tabletL) {
+    grid-column: 2;
+  }
+  @media ($mobileL) {
+    grid-column: 1;
+  }
 }
 
 .input {
@@ -118,8 +152,18 @@
   h4 {
     margin: 0 15px 0 0;
 
+    @media ($tabletP) {
+      width: 100%;
+      margin: 0 0 10px;
+    }
+
     &:not(:first-child) {
       margin-left: 25px;
+
+      @media ($tabletP) {
+        width: 100%;
+        margin: 20px 0 10px !important;
+      }
     }
   }
 
@@ -140,10 +184,14 @@
   font-weight: 500;
   color: #fff;
   white-space: nowrap;
-  transition: background-color .4s, color .4s, opacity .2s;
+  transition: background-color .4s, color .4s, opacity .2s, transform .2s;
 
   &[disabled] {
     opacity: .6;
+  }
+
+  &:active {
+    transform: scale(.97);
   }
 
   svg {
@@ -196,10 +244,14 @@
   background-color: $backgroundColorL;
   border: 2px solid $borderColor;
   border-radius: $commonBorderRadius;
-  transition: background-color .4s;
+  transition: background-color .4s, transform .2s;
 
   &[disabled] {
     opacity: .6;
+  }
+
+  &:active {
+    transform: scale(.97);
   }
 
   &:hover {

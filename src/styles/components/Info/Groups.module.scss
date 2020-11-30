@@ -1,12 +1,6 @@
 @import '../../variables';
 @import '../../media';
 
-$groupPaddingH: 25px;
-
-@media ($laptop) {
-  $groupPaddingH: 15px;
-}
-
 .title { /** &[h3] */
   display: inline-block;
   margin: 0;
@@ -20,10 +14,15 @@ $groupPaddingH: 25px;
 }
 
 .group {
-  margin: 0 ($groupPaddingH * -1) 40px;
-  padding: 0 $groupPaddingH 25px;
+  margin: 0 ($containerPHDesktop * -1) + 10 40px;
+  padding: 0 $containerPHDesktop - 10 25px;
   border: 2px solid transparent;
   border-radius: $commonBorderRadius;
+
+  @media ($tabletP) {
+    margin: 0 ($containerPHTablet * -1) + 10 30px;
+    padding: 0 $containerPHTablet - 10 15px;
+  }
 }
 
 .is_fav {

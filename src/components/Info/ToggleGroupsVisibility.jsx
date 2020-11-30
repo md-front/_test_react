@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {toggleSectionVisibility} from '../../redux/actions/regions'
+import {toggleGroupVisibility} from '../../redux/actions/regions'
 import styles from '../../styles/components/Info/ToggleGroupsVisibility.module.scss';
 
 const ToggleGroupsVisibility = props => (
@@ -11,14 +11,14 @@ const ToggleGroupsVisibility = props => (
             (group.companies && group.companies.length > 0) &&
                 <button type="button"
                         className={group.is_hidden ? styles.filterItem : styles.filterItemActive}
-                        onClick={() => props.toggleSectionVisibility(props.sectionId, groupId)}
+                        onClick={() => props.toggleGroupVisibility(props.sectionId, groupId)}
                         key={index}>{group.name}</button>
         )}
     </div>
 )
 
 const mapDispatchToProps = {
-    toggleSectionVisibility
+    toggleGroupVisibility
 }
 
 ToggleGroupsVisibility.propTypes = {

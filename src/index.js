@@ -8,7 +8,7 @@ import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 // import {createLogger} from 'redux-logger';
 import {setLS} from './helpers';
 import App from './App';
-import './styles/style.css';
+import './styles/style.scss';
 
 const composeEnhancers = composeWithDevTools({
     trace: true,
@@ -35,6 +35,7 @@ store.subscribe(() => {
 
     setLS('favorites', app.favorites);
     setLS('blacklist', app.blacklist);
+    setLS('hiddenGroups', app.hiddenGroups);
 })
 
 ReactDOM.render(

@@ -9,6 +9,7 @@ import {
     CLEAR_LIST,
     SET_USD_CURRENCY,
     CLEAR_USD_CURRENCY,
+    UPDATE_GROUPS_VISIBILITY,
 } from '../types/app';
 
 const app = (state = appInitState, action) => {
@@ -57,6 +58,11 @@ const app = (state = appInitState, action) => {
             return {
                 ...state,
                 usdCurrency: null
+            }
+        case UPDATE_GROUPS_VISIBILITY:
+            return {
+                ...state,
+                hiddenGroups: action.hiddenGroups
             }
         default:
             return state

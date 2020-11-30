@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/components/Info/Section.module.scss';
 import {declOfNum} from '../../helpers';
-import {loadData, toggleSectionVisibility} from '../../redux/actions/regions'
+import {loadData, toggleGroupVisibility} from '../../redux/actions/regions'
 import Groups from './Groups';
 import ToggleGroupsVisibility from './ToggleGroupsVisibility';
 import {connect} from "react-redux";
@@ -77,7 +77,7 @@ const mapStateToProps = ({form}, {section}) => ({
 })
 
 const mapDispatchToProps = {
-    loadData, toggleSectionVisibility
+    loadData, toggleGroupVisibility
 }
 
 Section.propTypes = {

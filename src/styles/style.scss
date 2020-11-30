@@ -1,3 +1,6 @@
+@import './media';
+@import './variables.scss';
+
 * {
   font-family: 'Roboto';
   box-sizing: border-box;
@@ -15,7 +18,9 @@ h1 {
 .main {
   display: flex;
   min-height: 100vh;
+  min-width: 375px;
   flex-direction: column;
+  overflow: hidden;
 }
 main {
   display: flex;
@@ -36,5 +41,9 @@ button {
   /*max-width: 1280px;*/
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 $containerPHDesktop;
+
+  @media ($tabletP) {
+    padding: 0 $containerPHTablet;
+  }
 }

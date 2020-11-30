@@ -1,3 +1,6 @@
+@import './media';
+
+/** Colors */
 $textColor: black;
 $inactiveText: #a7a7a7;
 $linkColor: #8b8585;
@@ -23,6 +26,11 @@ $backgroundColor: #F4F7FC;
 $backgroundColorL: #FDFDFD;
 $borderColor: #EEEFF5;
 
+/** Variables */
 $shadowParams: 0 0 10px;
 
 $commonBorderRadius: 13px;
+
+/* todo media */
+$containerPHDesktop: 30px;
+$containerPHTablet: 15px;
