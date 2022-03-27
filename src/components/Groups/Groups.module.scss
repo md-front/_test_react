@@ -1,0 +1,144 @@
+@import '../../styles/variables';
+@import '../../styles/media';
+
+.title { /** &[h3] */
+  display: inline-block;
+  margin: 0;
+  padding: 4px 15px;
+  border: 2px solid $defaultColor;
+  border-radius: $commonBorderRadius;
+  background: $backgroundColor;
+  font-size: 16px;
+  font-weight: 500;
+  transform: translateY(-50%);
+}
+
+.group {
+  margin: 0 ($containerPHDesktop * -1) + 10 40px;
+  padding: 0 $containerPHDesktop - 10 25px;
+  border: 2px solid transparent;
+  border-radius: $commonBorderRadius;
+
+  @media ($tabletP) {
+    margin: 0 ($containerPHTablet * -1) + 10 30px;
+    padding: 0 $containerPHTablet - 10 15px;
+  }
+}
+
+.is_fav {
+  composes: group;
+  border-color: $favColor;
+
+  .title {
+    border-color: $favColor;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $favColor;
+  }
+}
+
+.is_new {
+  composes: group;
+  border-color: $newColor;
+
+  .title {
+    border-color: $newColor;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $newColor;
+  }
+
+  sup {
+    display: none;
+  }
+}
+
+.exp3 {
+  composes: group;
+  border-color: $exp3Color;
+
+  .title {
+    border-color: $exp3Color;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $exp3Color;
+  }
+
+  :global(.text--exp3) {
+    color: $linkColor;
+  }
+}
+
+.exp6 {
+  composes: group;
+  border-color: $exp6Color;
+
+  .title {
+    border-color: $exp6Color;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $exp6Color;
+  }
+
+  :global(.text--exp6) {
+    color: $linkColor;
+  }
+}
+
+.is_jun {
+  composes: group;
+  border-color: $junColor;
+
+  .title {
+    border-color: $junColor;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $junColor;
+  }
+
+  :global(.text--is_jun) {
+    color: $linkColor;
+  }
+}
+
+.is_salary {
+  composes: group;
+  border-color: $salaryColor;
+
+  .title {
+    border-color: $salaryColor;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $salaryColor;
+  }
+
+  :global(.isSalary){
+    display: none;
+  }
+}
+
+.default {
+  composes: group;
+  border-color: $defaultColor;
+
+  .title {
+    border-color: $defaultColor;
+  }
+
+  /* vacancy description todo mixin */
+  :global(.popup) {
+    box-shadow: $shadowParams $defaultColor;
+  }
+}

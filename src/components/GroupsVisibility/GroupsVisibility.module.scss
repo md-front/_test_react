@@ -1,0 +1,53 @@
+@import "../../styles/variables";
+
+.filter {
+  display: flex;
+  margin-bottom: 50px;
+  align-items: center;
+
+  @media ($tabletP) {
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+}
+
+.filterItem {
+  margin-right: 5px;
+  padding: 5px 25px;
+  border-radius: $commonBorderRadius;
+  border: none;
+  background-color: $customPurpleL;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color .2s;
+
+  @media ($tabletP) {
+    margin-bottom: 5px;
+  }
+
+  &:hover {
+    background-color: $customPurple;
+  }
+}
+
+.filterItemActive {
+  composes: filterItem;
+  background-color: $customPurple;
+
+  &:hover {
+    background-color: $customPurpleH;
+  }
+}
+
+.title {
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: 500;
+
+  @media ($tabletP) {
+    width: 100%;
+    margin: 0 0 10px;
+  }
+}

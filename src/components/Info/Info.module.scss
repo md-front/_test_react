@@ -1,0 +1,13 @@
+@import "../../styles/media";
+@import "../../styles/variables";
+
+.nav {
+  display: flex;
+  white-space: nowrap;
+
+  @media ($tabletP) {
+    margin: 0 $containerPHTablet * -1;
+    padding: 0 $containerPHTablet;
+    overflow: auto;
+  }
+}

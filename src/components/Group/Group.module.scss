@@ -1,0 +1,20 @@
+@import '../../styles/media';
+@import '../../styles/variables';
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(4, calc(25% - 15px));
+  grid-row-gap: 15px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @media ($laptop) {
+    grid-template-columns: repeat(3, calc(33.33% - 15px));
+  }
+  @media ($tabletP) {
+    grid-template-columns: repeat(2, calc(50% - 15px));
+  }
+  @media ($mobileL) {
+    grid-template-columns: 100%;
+  }
+}

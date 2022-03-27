@@ -1,0 +1,96 @@
+@import 'src/styles/variables.scss';
+
+.actions {
+  display: flex;
+  margin: 20px 0 30px;
+
+  @media ($mobileL) {
+    display: block;
+  }
+}
+
+.rootLink {
+  text-decoration: none;
+  color: $textColor;
+  transition: color .2s;
+
+  &:hover {
+    color: $customPurple;
+  }
+}
+
+.title {
+  font-weight: 500;
+  font-size: 32px;
+}
+
+.btns {
+  display: flex;
+  margin-left: auto;
+
+  @media ($mobileL) {
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+}
+
+.btn {/** &[button] */
+  display: inline-flex;
+  margin-left: 15px;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 2px solid;
+  border-radius: $commonBorderRadius;
+  background-color: transparent;
+  transition: .2s;
+  cursor: pointer;
+
+  @media ($mobileL) {
+    margin: 0;
+  }
+  @media ($mobileP) {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+  }
+}
+
+.disabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+.fav {
+  composes: btn;
+  border-color: $favColor;
+
+  &:hover {
+    background-color: $favColor;
+  }
+
+  &-disabled {
+    composes: fav;
+    composes: disabled;
+  }
+}
+
+.del {
+  composes: btn;
+  border-color: $defaultColor;
+
+  &:hover {
+    background-color: $defaultColor;
+  }
+
+  &-disabled {
+    composes: del;
+    composes: disabled;
+  }
+}

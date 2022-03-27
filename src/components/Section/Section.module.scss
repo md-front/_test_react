@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+.section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px 0 0;
+  background-color: $backgroundColor;
+}
+
+.fewExpAlert {
+  margin-left: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
