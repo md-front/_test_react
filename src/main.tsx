@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import rootReducer from './redux/reducers';
-import {createStore, applyMiddleware} from "redux";
-import thunk from 'redux-thunk'
-import {Provider} from "react-redux";
-import {composeWithDevTools} from 'redux-devtools-extension/developmentOnly';
 // import {createLogger} from 'redux-logger';
-import {setLS} from './helpers';
+import { setLS } from './helpers';
 import App from './App';
 import './styles/style.scss';
 
 const composeEnhancers = composeWithDevTools({
-    trace: true,
-    traceLimit: 25
+  trace: true,
+  traceLimit: 25,
 });
 
 const middlewares = [thunk];
@@ -24,22 +24,23 @@ const middlewares = [thunk];
 //     }))
 
 const store = createStore(
-    rootReducer,
-    composeEnhancers(
-        applyMiddleware(...middlewares)
-    )
+  rootReducer,
+  composeEnhancers(
+    applyMiddleware(...middlewares),
+  ),
 );
 
 store.subscribe(() => {
-    const app = store.getState().app;
+  const { app } = store.getState();
 
-    setLS('favorites', app.favorites);
-    setLS('blacklist', app.blacklist);
-    setLS('hiddenGroups', app.hiddenGroups);
-})
+  setLS('favorites', app.favorites);
+  setLS('blacklist', app.blacklist);
+  setLS('hiddenGroups', app.hiddenGroups);
+});
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-    , document.getElementById('root'));
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
+);
