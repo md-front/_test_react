@@ -8,7 +8,7 @@ import {cloneObj} from "../../helpers";
 export default function Info() {
     const sections = useSelector(state => cloneObj(state.regions));
     // const sections = useSelector(state => state.regions);
-    const activeSection = (() => sections.find(section => section.is_active))();
+    const activeSection = (() => sections.find(section => section.isActive))();
     const [activeTitleId, setActiveTitle] = useState(activeSection.id);
 
     useEffect(() => setActiveTitle(activeSection.id), [activeSection]);
@@ -26,7 +26,7 @@ export default function Info() {
                 </div>
             </div>
             {sections.map((section, index) =>
-                section.is_active &&
+                section.isActive &&
                 <Section section={section}
                          key={index} />
             )}

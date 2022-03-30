@@ -25,7 +25,7 @@
   }
 }
 
-.is_fav {
+.isFav {
   composes: group;
   border-color: $favColor;
 
@@ -39,7 +39,7 @@
   }
 }
 
-.is_new {
+.isNew {
   composes: group;
   border-color: $newColor;
 
@@ -93,7 +93,7 @@
   }
 }
 
-.is_jun {
+.isJun {
   composes: group;
   border-color: $junColor;
 
@@ -106,12 +106,12 @@
     box-shadow: $shadowParams $junColor;
   }
 
-  :global(.text--is_jun) {
+  :global(.text--isJun) {
     color: $linkColor;
   }
 }
 
-.is_salary {
+.isSalary {
   composes: group;
   border-color: $salaryColor;
 
