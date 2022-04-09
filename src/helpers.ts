@@ -5,7 +5,9 @@ import {
 
 /** Storage actions */
 export const setLS: SetLocalStorage = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
-export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key) || '{}');
+// export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key) || '{}');
+// @ts-ignore
+export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key));
 export const getDataFromStorage: GetDataFromStorage = (type: string, regions) => {
   let result = getLS(type);
 

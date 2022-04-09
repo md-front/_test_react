@@ -1,20 +1,6 @@
-export interface Group {
-  name: string,
-  sortValue: number,
-  isHidden: boolean,
-  companies: Array<any>
-}
-export interface Groups {
-  isFav: Group,
-  isNew: Group,
-  exp6: Group,
-  exp3: Group,
-  isJun: Group,
-  isSalary: Group,
-  default: Group,
-}
-
 // type HiddenGroup = Array<keyof Groups>;
+import { IGroups } from '../components/Groups/Groups.types';
+
 type HiddenGroup = Array<any>;
 
 export type HiddenGroups = {
@@ -33,7 +19,7 @@ interface Region {
   // TODO
   // prevRequest: null,
   prevRequest: any,
-  groups: Groups,
+  groups: IGroups,
 }
 
 interface NewInDays {
@@ -73,6 +59,10 @@ export interface AppInitState {
   hiddenGroups: HiddenGroups | any,
   showLoader: boolean,
   usdCurrency: boolean,
+}
+
+export interface AppState {
+  app: Partial<AppInitState>
 }
 
 export type FormInitState = Partial<DefaultSearchParams>

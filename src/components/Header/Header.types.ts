@@ -12,6 +12,6 @@ export interface Btn {
 }
 
 // TODO
-export interface HeaderState {
+export interface AppProps {
     app: HeaderProps
 }

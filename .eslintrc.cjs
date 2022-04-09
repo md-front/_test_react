@@ -23,14 +23,17 @@ module.exports = {
   ],
   rules: {
     /** 0 = off, 1 = warn, 2 = error */
-    'import/extensions': 'warn',
+    'no-shadow': 'off',
+    'import/extensions': 'off',
+    'no-unsafe-optional-chaining': 'off',
+    'import/prefer-default-export': 'off',
     'no-use-before-define': 'warn',
     'react/destructuring-assignment': 'warn',
     'react/jsx-filename-extension': ['warn', {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }],
     'max-len': ['error', {
-      code: 120,
+      code: 125,
     }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',

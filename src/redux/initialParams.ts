@@ -1,7 +1,8 @@
 import { getDataFromStorage } from '../helpers';
 import {
-  AppInitState, DefaultSearchParams, Groups, Regions,
+  AppInitState, DefaultSearchParams, Regions,
 } from '../types/initialParams';
+import { IGroups } from '../components/Groups/Groups.types';
 /**
  * {
  * sortValue: приоритет вывода группы (больше - выше),
@@ -10,7 +11,7 @@ import {
  * companies: работодатели
  * }
  */
-const groups: Groups = {
+const groups: IGroups = {
   isFav: {
     name: 'Избранное',
     sortValue: 6,
@@ -57,8 +58,10 @@ const groups: Groups = {
 
 const DEFAULT_SEARCH_PARAMS: DefaultSearchParams = {
   name: 'Frontend',
-  necessary: ['front', 'фронт', 'js', 'javascript', 'react', 'vue'],
-  unnecessary: ['backend', 'SQL'],
+  // necessary: ['front', 'фронт', 'js', 'javascript', 'react', 'vue'],
+  // unnecessary: ['backend', 'SQL'],
+  necessary: [],
+  unnecessary: [],
   newInDays: [
     {
       value: 1,

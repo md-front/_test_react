@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Form from '../Form/Form';
 import styles from './Header.module.scss';
 import { clearList } from '../../redux/actions/app';
-import { HeaderState, HeaderProps } from './Header.types';
+import { AppProps, HeaderProps } from './Header.types';
 import { BUTTONS_DATA } from './Header.constants';
 
 function Header(props: HeaderProps) {
@@ -26,8 +26,8 @@ function Header(props: HeaderProps) {
                 type="button"
                 key={btn.type}
                 className={
-                    props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]
-                }
+                props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]
+              }
                 onClick={() => props.clearList(btn.type)}
               >
                 {btn.text}
@@ -48,7 +48,7 @@ const mapStateToProps = ({
     blacklist,
     favorites,
   },
-}: HeaderState) => ({
+}: AppProps) => ({
   blacklist,
   favorites,
 });

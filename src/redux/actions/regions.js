@@ -1,17 +1,29 @@
 import * as types from '../types/regions';
+// TODO
+// eslint-disable-next-line import/no-cycle
 import {
-  clearUsdCurrency, hideLoader, loadUsdCurrency, showLoader, updateGroupsVisibility,
+  clearUsdCurrency,
+  hideLoader,
+  loadUsdCurrency,
+  showLoader,
+  updateGroupsVisibility,
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
+import { JUNIOR } from '../../constants/common.ts';
+import { Vacancy } from '../../components/Vacancy/Vacancy.types';
 
 export const changeActiveSection = (id) => (dispatch, getState) => {
   const { regions } = getState();
 
-  for (const section of regions) {
+  regions.forEach((section) => {
+    // TODO
+    // eslint-disable-next-line no-param-reassign
     section.isActive = section.id === id;
 
-    if (section.isActive && !section.allVacancies) { dispatch(showLoader()); }
-  }
+    if (section.isActive && !section.allVacancies) {
+      dispatch(showLoader());
+    }
+  });
 
   dispatch({ type: types.UPDATE_DATA, regions });
 };
@@ -25,9 +37,15 @@ export const changeSelectedRegions = (regions) => (dispatch) => {
   if (isActiveRegionChanged) {
     let newActive;
 
-    for (const region of regions) {
-      if (!newActive && region.checked) { newActive = region; } else { region.isActive = false; }
-    }
+    regions.forEach((region) => {
+      if (!newActive && region.checked) {
+        newActive = region;
+      } else {
+        // TODO
+        // eslint-disable-next-line no-param-reassign
+        region.isActive = false;
+      }
+    });
 
     newActive.isActive = true;
     section = newActive;
@@ -52,17 +70,21 @@ export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState
   dispatch(visibleVacanciesUpdate(currentSection.id, regions, groupId));
 };
 
-export const filterVacancies = (presetVacancies, setAllVacancies = false, keywordValidation = true) => async (dispatch, getState) => {
-  const JUNIOR = new RegExp(/junior|стажер|младший|помощник/i);
-
+export const filterVacancies = (
+  presetVacancies,
+  setAllVacancies = false,
+  keywordValidation = true,
+) => async (dispatch, getState) => {
   dispatch(showLoader());
 
   const { form, regions, app } = getState();
   const currentSection = regions.find((section) => section.isActive);
 
-  if (setAllVacancies) { currentSection.allVacancies = []; }
+  if (setAllVacancies) {
+    currentSection.allVacancies = [];
+  }
 
-  const vacancies = presetVacancies || currentSection.allVacancies;
+  const vacancies: Array<Vacancy> = presetVacancies || currentSection.allVacancies;
 
   const sortParams = {
     default: {
@@ -88,7 +110,7 @@ export const filterVacancies = (presetVacancies, setAllVacancies = false, keywor
 
   vacancies.forEach((vacancy) => {
     const employerId = vacancy.employer.id;
-    const isFav = app.favorites && app.favorites.includes(employerId);
+    const isFav = app.favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
 
     if (!companies.hasOwnProperty(employerId)) {
@@ -215,7 +237,9 @@ export const loadData = (section) => async (dispatch, getState) => {
 
   section.prevRequest = request;
 
-  if (app.usdCurrency) { dispatch(clearUsdCurrency()); }
+  if (app.usdCurrency) {
+    dispatch(clearUsdCurrency());
+  }
 
   const newVacancies = await getVacancies();
 
@@ -253,7 +277,8 @@ export const loadData = (section) => async (dispatch, getState) => {
   }
   async function getVacanciesStep(pageNum, exp) {
     try {
-      const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
+      // const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
+      const response = await fetch('http://localhost:5000/api/data');
 
       const json = await response.json();
 
@@ -271,7 +296,7 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null
   const regions = [...newRegionsData];
   const currentSection = regions.find((section) => section.id === changedSectionId);
 
-  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => visibleInCompanies += company.vacancies.filter((vacancy) => !vacancy.is_del).length, 0);
+  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => visibleInCompanies += company.vacancies.filter((vacancy) => !vacancy.isDel).length, 0);
 
   let result;
 
