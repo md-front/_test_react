@@ -10,7 +10,6 @@ import {
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
 import { JUNIOR } from '../../constants/common.ts';
-import { Vacancy } from '../../components/Vacancy/Vacancy.types';
 
 export const changeActiveSection = (id) => (dispatch, getState) => {
   const { regions } = getState();
@@ -84,7 +83,8 @@ export const filterVacancies = (
     currentSection.allVacancies = [];
   }
 
-  const vacancies: Array<Vacancy> = presetVacancies || currentSection.allVacancies;
+  // const vacancies: Array<Vacancy> = presetVacancies || currentSection.allVacancies;
+  const vacancies = presetVacancies || currentSection.allVacancies;
 
   const sortParams = {
     default: {
@@ -113,6 +113,8 @@ export const filterVacancies = (
     const isFav = app.favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
 
+    // TODO
+    // eslint-disable-next-line no-prototype-builtins
     if (!companies.hasOwnProperty(employerId)) {
       companies[employerId] = {
         id: employerId,
@@ -130,12 +132,14 @@ export const filterVacancies = (
     }
 
     const company = companies[employerId];
+    // TODO
+    // eslint-disable-next-line no-param-reassign
     vacancy.sort = sortParams.default;
 
     /** Проверка на наличие в блеклисте */
     if (app.blacklist.includes(vacancy.id)) return;
 
-    /** Недавняя вакансия в пределах диапазона NEW_IN_DAYS */
+    /** Недавняя вакансия в пределах диапазона NEW_IN DAYS */
     if (parseDateString(vacancy.created_at) > lastValidDate) {
       setSortParams(5, 'isNew');
     }
@@ -171,12 +175,22 @@ export const filterVacancies = (
         sortValue,
       };
 
-      if (company.sort.sortValue < sortValue) { company.sort = sort; }
+      if (company.sort.sortValue < sortValue) {
+        company.sort = sort;
+      }
 
-      if (vacancy.sort.sortValue < sortValue) { vacancy.sort = sort; }
+      if (vacancy.sort.sortValue < sortValue) {
+        // TODO
+        // eslint-disable-next-line no-param-reassign
+        vacancy.sort = sort;
+      }
 
-      if (paramName === 'isNew') { company[paramName] = true; }
+      if (paramName === 'isNew') {
+        company[paramName] = true;
+      }
 
+      // TODO
+      // eslint-disable-next-line no-param-reassign
       vacancy[paramName] = true;
     }
 
@@ -192,6 +206,8 @@ export const filterVacancies = (
   function groupCompanies(companies) {
     const groups = cloneObj(currentSection.groups);
 
+    // TODO
+    // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (const groupName in groups) {
       const group = groups[groupName];
 
@@ -235,6 +251,8 @@ export const loadData = (section) => async (dispatch, getState) => {
 
   loadingData = true;
 
+  // TODO
+  // eslint-disable-next-line no-param-reassign
   section.prevRequest = request;
 
   if (app.usdCurrency) {
@@ -251,13 +269,19 @@ export const loadData = (section) => async (dispatch, getState) => {
     const experience = form.experience.filter((exp) => exp.checked);
     const result = [];
 
+    // TODO
+    // eslint-disable-next-line no-restricted-syntax
     for (const exp of experience) {
       let expResult = [];
+      // eslint-disable-next-line prefer-const,no-await-in-loop
       let { vacancies, pagesLeft } = await getVacanciesStep(0, exp.id);
 
       expResult.push(...vacancies);
 
+      // TODO
+      // eslint-disable-next-line no-plusplus
       while (--pagesLeft > 0) {
+        // eslint-disable-next-line no-await-in-loop
         const { vacancies } = await getVacanciesStep(pagesLeft, exp.id);
 
         if (!vacancies) break;
@@ -266,6 +290,8 @@ export const loadData = (section) => async (dispatch, getState) => {
       }
 
       expResult = expResult.map((vacancy) => {
+        // TODO
+        // eslint-disable-next-line no-param-reassign
         vacancy[exp.modifier] = true;
         return vacancy;
       });
@@ -276,9 +302,11 @@ export const loadData = (section) => async (dispatch, getState) => {
     return result;
   }
   async function getVacanciesStep(pageNum, exp) {
+  // async function getVacanciesStep() {
     try {
-      // const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
-      const response = await fetch('http://localhost:5000/api/data');
+      // eslint-disable-next-line max-len
+      const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
+      // const response = await fetch('http://localhost:5000/api/data');
 
       const json = await response.json();
 
@@ -289,6 +317,8 @@ export const loadData = (section) => async (dispatch, getState) => {
     } catch (e) {
       console.error(e);
     }
+
+    return null;
   }
 };
 
@@ -296,7 +326,9 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null
   const regions = [...newRegionsData];
   const currentSection = regions.find((section) => section.id === changedSectionId);
 
-  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => visibleInCompanies += company.vacancies.filter((vacancy) => !vacancy.isDel).length, 0);
+  // TODO
+  // eslint-disable-next-line max-len
+  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => visibleInCompanies + company.vacancies.filter((vacancy) => !vacancy.isDel).length, 0);
 
   let result;
 
@@ -307,7 +339,11 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null
     result = currentSection.visibleVacancies + (reduceVacancy(group.companies) * modifier);
   } else {
     result = Object.values(currentSection.groups).reduce((visibleInGroup, group) => {
-      if (!group.isHidden) { visibleInGroup += reduceVacancy(group.companies); }
+      if (!group.isHidden) {
+        // TODO
+        // eslint-disable-next-line no-param-reassign
+        visibleInGroup += reduceVacancy(group.companies);
+      }
 
       return visibleInGroup;
     }, 0);
