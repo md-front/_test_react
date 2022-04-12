@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Form from '../Form/Form';
+import { Form } from '../Form';
 import styles from './Header.module.scss';
 import { clearList } from '../../redux/actions/app';
 import { AppProps, HeaderProps } from './Header.types';
@@ -26,8 +26,8 @@ function Header(props: HeaderProps) {
                 type="button"
                 key={btn.type}
                 className={
-                props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]
-              }
+                  props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]
+                }
                 onClick={() => props.clearList(btn.type)}
               >
                 {btn.text}
@@ -36,6 +36,7 @@ function Header(props: HeaderProps) {
           </div>
         </div>
 
+        {/* @ts-ignore TODO */}
         <Form />
 
       </div>

@@ -7,12 +7,12 @@ function Group({ companies, name }: GroupProps) {
   return (
     <div className={styles.items} key={name}>
       {companies.map((company) => company.vacancies.some((vacancy) => !vacancy.isDel)
-      && (
-        <Company
-          company={company}
-          key={company.id}
-        />
-      ))}
+        && (
+          <Company
+            company={company}
+            key={company.id}
+          />
+        ))}
     </div>
   );
 }

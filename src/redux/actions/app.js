@@ -56,7 +56,11 @@ export const updateGroupsVisibility = (sectionId, groupId, isHidden) => (dispatc
   const { hiddenGroups } = getState().app;
   const group = hiddenGroups[sectionId];
 
-  if (isHidden) { group.push(groupId); } else { hiddenGroups[sectionId] = group.filter((hiddenGroupId) => hiddenGroupId === groupId); }
+  if (isHidden) {
+    group.push(groupId);
+  } else {
+    hiddenGroups[sectionId] = group.filter((hiddenGroupId) => hiddenGroupId === groupId);
+  }
 
   dispatch({ type: types.UPDATE_GROUPS_VISIBILITY, hiddenGroups });
 };

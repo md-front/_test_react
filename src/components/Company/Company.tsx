@@ -1,3 +1,6 @@
+// TODO
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Company.module.scss';
@@ -23,19 +26,19 @@ function Company({ company, toggleFavorite }: CompanyProps) {
       </div>
 
       {company.vacancies.map((vacancy) => !vacancy.isDel
-                && (
-                <Vacancy
-                  vacancy={vacancy}
-                  key={vacancy.id}
-                />
-                ))}
+        && (
+          <Vacancy
+            vacancy={vacancy}
+            key={vacancy.id}
+          />
+        ))}
 
     </div>
   );
 }
 
 // eslint-disable-next-line no-empty-pattern
-const mapStateToProps = ({}: any, { company }: CompanyWrap) => ({
+const mapStateToProps = ({ }: any, { company }: CompanyWrap) => ({
   company,
 });
 

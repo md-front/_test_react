@@ -31,7 +31,7 @@ export const getDataFromStorage: GetDataFromStorage = (type: string, regions) =>
 
 /**  Objects actions */
 export const isObjectsEqual: IsObjectsEqual = (arr1, arr2) => JSON.stringify(arr1) === JSON.stringify(arr2);
-export const cloneObj: CloneObj = (obj) => JSON.parse(JSON.stringify(obj));
+export const cloneObj: CloneObj = (arg) => JSON.parse(JSON.stringify(arg));
 
 /** Склонение от числового значения, формат: (1, ['минута', 'минуты', 'минут'])  */
 export const declOfNum: DeclOfNum = (number, words) => {

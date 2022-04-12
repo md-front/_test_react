@@ -29,9 +29,9 @@ function Vacancy({ vacancy, usdCurrency }: any) {
     let salaryUsd: React.ReactNode;
 
     function step(type: string) {
-      const { from, to } = (({ _from, _to, currency }) => {
+      const { from = 0, to = 0 } = (({ _from, _to, currency }) => {
         if (type === currency) {
-          return { _from, _to };
+          return { from: _from, to: _to };
         }
         if (type === 'USD') {
           return { from: _from / usdValue, to: _to / usdValue };
@@ -80,13 +80,13 @@ function Vacancy({ vacancy, usdCurrency }: any) {
       {isHover && (salary || validDescription)
         && (
           <div className="popup">
-            {salary && <span className={styles.salary}>{renderSalary()}</span> }
+            {salary && <span className={styles.salary}>{renderSalary()}</span>}
             {validDescription && (
-            <span
-              className={styles.description}
-              dangerouslySetInnerHTML={{ __html: vacancy.snippet.requirement }}
-            />
-            ) }
+              <span
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: vacancy.snippet.requirement }}
+              />
+            )}
           </div>
         )}
 

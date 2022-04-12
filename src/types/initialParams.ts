@@ -1,5 +1,6 @@
 // type HiddenGroup = Array<keyof Groups>;
 import { IGroups } from '../components/Groups/Groups.types';
+import { Vacancy } from '../components/Vacancy/Vacancy.types';
 
 type HiddenGroup = Array<any>;
 
@@ -10,7 +11,7 @@ export type HiddenGroups = {
   remote: HiddenGroup
 };
 
-interface Region {
+export interface Region {
   id: keyof HiddenGroups,
   name: string,
   location: string,
@@ -20,6 +21,7 @@ interface Region {
   // prevRequest: null,
   prevRequest: any,
   groups: IGroups,
+  allVacancies?: Array<Vacancy>
 }
 
 interface NewInDays {
@@ -37,18 +39,22 @@ interface Experience {
 
 export type Regions = Array<Region>;
 
-export interface DefaultSearchParams {
+export type KeywordTypes = 'necessary' | 'unnecessary'
+
+export interface Form {
   name: string,
   necessary: Array<string>,
   unnecessary: Array<string>,
   newInDays: Array<NewInDays>,
   experience: Array<Experience>,
+}
+
+export interface DefaultSearchParams extends Form {
   // TODO
   regions: Regions | any
 }
 
 export type Favorites = Array<string>;
-
 export type Blacklist = Array<string>;
 
 export interface AppInitState {

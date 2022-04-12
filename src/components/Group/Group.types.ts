@@ -1,6 +1,6 @@
 import { Company } from '../Company/Company.types';
 
-// TODO I
+// TODO
 type Companies = Array<Company>;
 
 export interface GroupProps {
