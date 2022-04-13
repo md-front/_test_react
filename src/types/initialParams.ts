@@ -41,10 +41,15 @@ export type Regions = Array<Region>;
 
 export type KeywordTypes = 'necessary' | 'unnecessary'
 
-export interface Form {
+export type Necessary = Array<string>
+export type Unnecessary = Array<string>
+
+export interface Keywords {
+  necessary: Necessary,
+  unnecessary: Unnecessary,
+}
+export interface Form extends Keywords {
   name: string,
-  necessary: Array<string>,
-  unnecessary: Array<string>,
   newInDays: Array<NewInDays>,
   experience: Array<Experience>,
 }

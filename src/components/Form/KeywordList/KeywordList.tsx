@@ -18,7 +18,7 @@ function KeywordList({ keywordType, keywordsList, deleteKeyword }: KeywordListPr
           <span
             className={styles.filterParam}
             onClick={() => deleteKeyword(keywordType.id, keyWord)}
-            key={keywordType.id}
+            key={keyWord}
           >
             {keyWord}
           </span>

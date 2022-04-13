@@ -23,6 +23,7 @@ module.exports = {
   ],
   rules: {
     /** 0 = off, 1 = warn, 2 = error */
+    'no-return-assign': 0,
     'import/no-cycle': 'off',
     'no-param-reassign': 'off',
     'no-underscore-dangle': ['off'],
