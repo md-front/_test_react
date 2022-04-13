@@ -24,6 +24,8 @@ export interface Region {
   allVacancies?: Array<Vacancy>
 }
 
+export type Regions = Array<Region>;
+
 interface NewInDays {
   value: number,
   label: string,
@@ -36,8 +38,6 @@ interface Experience {
   name: string,
   checked: boolean,
 }
-
-export type Regions = Array<Region>;
 
 export type KeywordTypes = 'necessary' | 'unnecessary'
 

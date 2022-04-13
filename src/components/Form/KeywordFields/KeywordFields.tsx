@@ -6,7 +6,7 @@ import { addKeyword as AddKeyword, deleteKeyword as DeleteKeyword } from '../../
 import styles from '../Form.module.scss';
 import { KeywordFieldProps, KeywordField } from './KeywordFields.types';
 import { KEYWORDS } from '../Form.constants';
-import { Keywords } from '../../../types/initialParams';
+import { Keywords } from '../../../types/initialParams.types';
 
 function KeywordFields(props: KeywordFieldProps) {
   const {

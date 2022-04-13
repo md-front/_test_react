@@ -1,5 +1,5 @@
 import { GroupsEntries, IGroups } from '../Groups/Groups.types';
-import { HiddenGroups } from '../../types/initialParams';
+import { HiddenGroups } from '../../types/initialParams.types';
 
 type SectionId = keyof HiddenGroups;
 type GroupId = keyof IGroups;

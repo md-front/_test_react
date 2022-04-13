@@ -1,7 +1,7 @@
 import {
   CloneObj, DeclOfNum,
   GetDataFromStorage, GetLocalStorage, IsObjectsEqual, ParseDateString, SetLocalStorage,
-} from './types/common';
+} from './types/common.types';
 
 /** Storage actions */
 export const setLS: SetLocalStorage = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));

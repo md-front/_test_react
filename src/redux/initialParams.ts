@@ -1,7 +1,7 @@
 import { getDataFromStorage } from '../helpers';
 import {
   AppInitState, DefaultSearchParams, Regions,
-} from '../types/initialParams';
+} from '../types/initialParams.types';
 import { IGroups } from '../components/Groups/Groups.types';
 /**
  * {

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ReactComponent as Del } from '../../assets/del.svg';
 import styles from './Vacancy.module.scss';
 import { addToBlacklist } from '../../redux/actions/app';
-import { AppState } from '../../types/initialParams';
+import { AppState } from '../../types/initialParams.types';
 import { VacancyWrap } from './Vacancy.types';
 
 function Vacancy({ vacancy, usdCurrency }: any) {

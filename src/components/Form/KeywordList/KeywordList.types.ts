@@ -1,4 +1,4 @@
-import { KeywordTypes } from '../../../types/initialParams';
+import { KeywordTypes } from '../../../types/initialParams.types';
 import { KeywordField } from '../KeywordFields/KeywordFields.types';
 
 export interface KeywordListProps {

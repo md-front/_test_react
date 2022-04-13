@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Header } from '../../components/Header';
 import { MainProps, AppProps } from './Main.types';
 import { Footer } from '../../components/Footer';
-import Info from '../../components/Info/Info';
+import { Info } from '../../components/Info';
 import { Alert } from '../../components/Alert';
 
 function Main({ showAlert }: MainProps) {

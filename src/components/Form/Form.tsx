@@ -11,7 +11,7 @@ import { cloneObj } from '../../helpers';
 import { changeNewInDays, clearKeywords, formSubmit } from '../../redux/actions/form';
 import { changeSelectedRegions } from '../../redux/actions/regions';
 import '../../styles/vendor/select.scss';
-import { Region } from '../../types/initialParams';
+import { Region } from '../../types/initialParams.types';
 import { REQUIRED_FIELD_TOOLTIP, KEYWORD_FIELDS_DATA } from './Form.constants';
 import styles from './Form.module.scss';
 import {

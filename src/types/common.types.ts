@@ -1,5 +1,5 @@
 import { IGroups } from '../components/Groups/Groups.types';
-import { Regions } from './initialParams';
+import { Regions } from './initialParams.types';
 
 export type SetLocalStorage = (key: string, payload: string) => void;
 

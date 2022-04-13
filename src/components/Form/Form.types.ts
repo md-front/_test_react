@@ -1,5 +1,5 @@
-import { Experience } from '../../types/common';
-import { Form, Regions } from '../../types/initialParams';
+import { Experience } from '../../types/common.types';
+import { Form, Regions } from '../../types/initialParams.types';
 
 interface FormSubmit {
     name: string,

@@ -1,4 +1,4 @@
-import { KeywordTypes, Necessary, Unnecessary } from '../../../types/initialParams';
+import { KeywordTypes, Necessary, Unnecessary } from '../../../types/initialParams.types';
 
 export interface KeywordTooltip {
   type: string,

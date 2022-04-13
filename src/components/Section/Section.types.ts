@@ -1,8 +1,11 @@
-import { Experience } from '../../types/common';
+import { Experience } from '../../types/common.types';
+
+// TODO any
+export type Section = any
 
 // TODO any
 export interface SectionProps {
-    section: any,
+    section: Section,
     experience: Experience,
     groupsEntries: any,
     loadData: any,
