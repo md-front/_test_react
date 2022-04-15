@@ -13,6 +13,7 @@ export const formSubmit = ({ name, experience, formRegions }) => (dispatch, getS
   dispatch(changeSelectedRegions(regions));
 };
 export const changeNewInDays = (value) => (dispatch, getState) => {
+  console.log('changeNewInDays', value);
   const newInDays = [...getState().form.newInDays].map((option) => {
     // eslint-disable-next-line no-param-reassign
     option.checked = option.value === value;

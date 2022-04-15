@@ -8,8 +8,11 @@ import { ReactComponent as Info } from '../../assets/info.svg';
 import { ReactComponent as More } from '../../assets/search-more.svg';
 import { ReactComponent as Share } from '../../assets/share.svg';
 import { cloneObj } from '../../helpers';
-import { changeNewInDays, clearKeywords, formSubmit } from '../../redux/actions/form';
-import { changeSelectedRegions } from '../../redux/actions/regions';
+import {
+  changeNewInDays as ChangeNewInDays,
+  clearKeywords as ClearKeywords,
+  formSubmit as FormSubmit,
+} from '../../redux/actions/form';
 import '../../styles/vendor/select.scss';
 import { Region } from '../../types/initialParams.types';
 import { REQUIRED_FIELD_TOOLTIP, KEYWORD_FIELDS_DATA } from './Form.constants';
@@ -21,7 +24,14 @@ import { KeywordFields } from './KeywordFields';
 import { KeywordList } from './KeywordList';
 
 function Form(props: FormProps) {
-  const { necessary, unnecessary, newInDays } = props;
+  const {
+    necessary,
+    unnecessary,
+    newInDays,
+    changeNewInDays,
+    clearKeywords,
+    formSubmit,
+  } = props;
 
   const [name, setName] = useState(props.name);
   const [regions, setRegions] = useState(cloneObj(props.regions));
@@ -70,7 +80,7 @@ function Form(props: FormProps) {
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    props.formSubmit({
+    formSubmit({
       name,
       // @ts-ignore TODO
       experience,
@@ -304,10 +314,9 @@ const mapStateToProps = ({ form, regions }: FormGetState) => ({
 });
 
 const mapDispatchToProps = {
-  changeNewInDays,
-  clearKeywords,
-  formSubmit,
-  changeSelectedRegions,
+  changeNewInDays: ChangeNewInDays,
+  clearKeywords: ClearKeywords,
+  formSubmit: FormSubmit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);
