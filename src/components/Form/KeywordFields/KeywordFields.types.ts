@@ -22,3 +22,5 @@ export interface KeywordFieldProps {
 }
 
 export type KeywordFieldsData = Array<KeywordField>
+
+export type CheckKeywordInList = (keywordList: Array<string>, keyword: string) => boolean

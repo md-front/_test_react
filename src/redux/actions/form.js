@@ -30,7 +30,7 @@ export const addKeyword = (keywordType, value) => (dispatch, getState) => {
   dispatch(filterVacancies());
 };
 export const deleteKeyword = (keywordType, value) => (dispatch, getState) => {
-  const keywords = [...getState().form[keywordType]].filter((keyword) => keyword !== value);
+  const keywords = [...getState().form[keywordType]].filter((keyword) => keyword.toLowerCase() !== value.toLowerCase());
 
   dispatch({ type: types.CHANGE_KEYWORDS, keywordType, keywords });
   dispatch(filterVacancies());

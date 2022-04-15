@@ -23,6 +23,7 @@ module.exports = {
   ],
   rules: {
     /** 0 = off, 1 = warn, 2 = error */
+    'react/destructuring-assignment': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     // 'jsx-a11y/no-static-element-interactions': 'off',
     'no-return-assign': 0,
@@ -34,7 +35,6 @@ module.exports = {
     'no-unsafe-optional-chaining': 'off',
     'import/prefer-default-export': 'off',
     'no-use-before-define': 'warn',
-    'react/destructuring-assignment': 'warn',
     'react/jsx-filename-extension': [0, {
       extensions: ['.js', '.jsx', '.ts', '.tsx '],
     }],

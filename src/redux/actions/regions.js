@@ -9,7 +9,7 @@ import {
   updateGroupsVisibility,
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
-import { JUNIOR } from '../../constants/common.ts';
+import { JUNIOR } from '../../constants/common';
 
 export const changeActiveSection = (id) => (dispatch, getState) => {
   const { regions } = getState();
@@ -302,7 +302,7 @@ export const loadData = (section) => async (dispatch, getState) => {
     return result;
   }
   async function getVacanciesStep(pageNum, exp) {
-  // async function getVacanciesStep() {
+    // async function getVacanciesStep() {
     try {
       // eslint-disable-next-line max-len
       const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
