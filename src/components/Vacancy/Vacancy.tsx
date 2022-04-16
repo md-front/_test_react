@@ -7,6 +7,7 @@ import styles from './Vacancy.module.scss';
 import { addToBlacklist } from '../../redux/actions/app';
 import { AppState } from '../../types/initialParams.types';
 import { VacancyWrap } from './Vacancy.types';
+import { calcCurrency } from './Vacancy.helpers';
 
 function Vacancy({ vacancy, usdCurrency }: any) {
   const [isHover, setHover] = useState(false);
@@ -24,29 +25,15 @@ function Vacancy({ vacancy, usdCurrency }: any) {
   });
 
   const renderSalary = () => {
-    const usdValue = usdCurrency;
-    console.log('usdCurrency', usdCurrency);
-
-    function step(type: string) {
-      // TODO рефакторинг
-      const { from = 0, to = 0 } = (({ from: _from, to: _to, currency }) => {
-        if (type === currency) {
-          return { from: _from, to: _to };
-        }
-        if (type === 'USD') {
-          return { from: _from / usdValue, to: _to / usdValue };
-        }
-        return { from: _from * usdValue, to: _to * usdValue };
-      })(salary);
-
-      console.log('from / to', from, '/', to);
+    const step = (type: string) => {
+      const { from = 0, to = 0 } = calcCurrency({ type, salary, usdCurrency });
 
       const formatValue = (value: number) => Math.round(value).toLocaleString();
 
       return (
         <span
           key={type}
-          className={(usdValue && type === salary.currency) ? styles.presetCurrency : ''}
+          className={(usdCurrency && type === salary.currency) ? styles.presetCurrency : ''}
         >
           {from ? formatValue(from) : ''}
           {(from && to) ? ' - ' : ''}
@@ -55,12 +42,12 @@ function Vacancy({ vacancy, usdCurrency }: any) {
           {type === 'RUR' ? 'Р' : '$'}
         </span>
       );
-    }
+    };
 
     const salaryRur: React.ReactNode = step('RUR');
     let salaryUsd: React.ReactNode;
 
-    if (usdValue) {
+    if (usdCurrency) {
       salaryUsd = step('USD');
     }
 
