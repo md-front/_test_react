@@ -1,6 +1,3 @@
-// TODO
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { connect } from 'react-redux';
 import styles from './Company.module.scss';
@@ -8,8 +5,6 @@ import { Vacancy } from '../Vacancy';
 import { toggleFavorite } from '../../redux/actions/app';
 import { CompanyProps, CompanyWrap } from './Company.types';
 
-// TODO
-// eslint-disable-next-line no-shadow
 function Company({ company, toggleFavorite }: CompanyProps) {
   const logoUrl = company.vacancies[0]?.employer.logo_urls;
 

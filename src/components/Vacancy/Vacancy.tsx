@@ -25,11 +25,11 @@ function Vacancy({ vacancy, usdCurrency }: any) {
 
   const renderSalary = () => {
     const usdValue = usdCurrency;
-    const salaryRur: React.ReactNode = step('RUR');
-    let salaryUsd: React.ReactNode;
+    console.log('usdCurrency', usdCurrency);
 
     function step(type: string) {
-      const { from = 0, to = 0 } = (({ _from, _to, currency }) => {
+      // TODO рефакторинг
+      const { from = 0, to = 0 } = (({ from: _from, to: _to, currency }) => {
         if (type === currency) {
           return { from: _from, to: _to };
         }
@@ -38,6 +38,8 @@ function Vacancy({ vacancy, usdCurrency }: any) {
         }
         return { from: _from * usdValue, to: _to * usdValue };
       })(salary);
+
+      console.log('from / to', from, '/', to);
 
       const formatValue = (value: number) => Math.round(value).toLocaleString();
 
@@ -54,6 +56,9 @@ function Vacancy({ vacancy, usdCurrency }: any) {
         </span>
       );
     }
+
+    const salaryRur: React.ReactNode = step('RUR');
+    let salaryUsd: React.ReactNode;
 
     if (usdValue) {
       salaryUsd = step('USD');

@@ -5,13 +5,13 @@ import { hideAlert } from '../../redux/actions/app';
 import { AlertProps } from './Alert.types';
 
 function Alert(props: AlertProps) {
-  // TODO
-  const alertRef: any = React.createRef();
+  const alertRef = React.useRef(null);
 
   useEffect(() => {
     const alertClickOutside = (e: Event) => {
       const alert = alertRef?.current;
 
+      // @ts-ignore TODO
       if (alert && !alert.contains(e.target)) {
         props.hideAlert(e);
       }

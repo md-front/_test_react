@@ -25,7 +25,7 @@ module.exports = {
     /** 0 = off, 1 = warn, 2 = error */
     'react/destructuring-assignment': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
-    // 'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
     'no-return-assign': 0,
     'import/no-cycle': 'off',
     'no-param-reassign': 'off',
