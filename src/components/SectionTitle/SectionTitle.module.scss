@@ -10,7 +10,7 @@
   cursor: pointer;
   position: relative;
 
-  /** line */
+  /* line */
   &:after {
     content: '';
     position: absolute;
@@ -22,11 +22,11 @@
     transition: width .4s ease-in-out;
   }
 
-  /** text */
+  /* text */
   div {
     color: transparent;
 
-    /** visible text */
+    /* visible text */
     &:before {
       content: attr(data-text);
       position: absolute;
@@ -39,7 +39,7 @@
     }
   }
 
-  /** num */
+  /* num */
   span {
     display: inline-flex;
     min-width: 40px;
@@ -52,7 +52,7 @@
     opacity: .5;
     transition: color .2s, opacity .2s;
 
-    /** loader */
+    /* loader */
     svg {
       width: 20px;
       height: 20px;
@@ -64,15 +64,15 @@
   composes: title;
   cursor: default;
 
-  /** line */
+  /* line */
   &:after {
     width: 100%;
   }
 
-  /** text */
+  /* text */
   div {
 
-    /** visible text */
+    /* visible text */
     &:before {
       font-weight: 500;
     }
@@ -82,16 +82,16 @@
 .active,
 .title:hover {
 
-  /** text */
+  /* text */
   div {
 
-    /** visible text */
+    /* visible text */
     &:before {
       color: $textColor;
     }
   }
 
-  /** num */
+  /* num */
   span {
     color: $exp6Color;
     opacity: 1;

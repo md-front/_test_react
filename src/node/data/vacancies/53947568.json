@@ -1,0 +1,145 @@
+{
+  "id": "53947568",
+  "premium": false,
+  "billing_type": {
+    "id": "standard",
+    "name": "Стандарт"
+  },
+  "relations": [],
+  "name": "Frontend developer middle",
+  "insider_interview": null,
+  "response_letter_required": false,
+  "area": {
+    "id": "1",
+    "name": "Москва",
+    "url": "https://api.hh.ru/areas/1"
+  },
+  "salary": {
+    "from": 90000,
+    "to": 160000,
+    "currency": "RUR",
+    "gross": true
+  },
+  "type": {
+    "id": "open",
+    "name": "Открытая"
+  },
+  "address": null,
+  "allow_messages": true,
+  "site": {
+    "id": "hh",
+    "name": "hh.ru"
+  },
+  "experience": {
+    "id": "between1And3",
+    "name": "От 1 года до 3 лет"
+  },
+  "schedule": {
+    "id": "remote",
+    "name": "Удаленная работа"
+  },
+  "employment": {
+    "id": "full",
+    "name": "Полная занятость"
+  },
+  "department": null,
+  "contacts": null,
+  "description": "<p><strong>Что нужно делать:</strong></p> <ul> <li> <p>участвовать в разработке интересных и полезных проектов: Web, <strong>MedTech</strong>, EdTech</p> </li> <li> <p>разрабатывать интерфейсы по дизайн-макетам</p> </li> <li> <p>участвовать в создании API совместно с backend-отделом</p> </li> <li> <p>проектировать и декомпозировать задачи, работаем в JIRA</p> </li> <li> <p>участвовать в краткосрочном планировании</p> </li> <li> <p>автоматизировать процессы разработки</p> </li> <li> <p>контролировать выполнение задач и проводить код-ревью</p> </li> </ul> <p><strong>Tech-stack:</strong> - HTML5, CSS3<br />- адаптивная вёрстка по методологии БЭМ<br />- SASS/Stylus<br />- Webpack, Gulp<br />- Javascript<br />- Vue, React<br />- Git<br />- умение подключаться к серверу по SSH и работать в консоли Linux</p> <p><strong>Требования:</strong></p> <ul> <li> <p>Опыт разработки проектов на стеке React, React-Router от года</p> </li> <li> <p>Отличный уровень JavaScript</p> </li> <li> <p>Способность писать аккуратный и не перегруженный код, DRY</p> </li> <li> <p>Внимание к деталям интерфейса и забота о конечном пользователе, чтобы интерфейсом было удобно и приятно пользоваться</p> </li> <li> <p>Опыт работы от 1 года в команде</p> </li> </ul> <p><strong>Команда:</strong> Project manager, Head, Frontend, Backend</p> <p> </p> <p><strong>Будет плюсом:</strong></p> <ul> <li> <p>Есть опыт использования других JS-фреймворков</p> </li> <li> <p>Умение в анимацию JS/CSS, понимание разницы в подходах</p> </li> <li> <p>Хорошие скилы в UX\\UI</p> </li> <li> <p>Опыт разработки используя &quot;mobile first&quot; подход</p> </li> <li> <p>Опыт покрытия кода тестами</p> </li> <li> <p>Вы знаете принципы работы серверной части сайтов, какие бывают типы запросов и в чём их ограничения</p> </li> </ul> <p> </p> <p><strong>Немного о проекте:</strong></p> <ul> <li> <p>Основное направление - <strong>MedTech </strong></p> </li> <li> <p>Вы будете работать с дизайн-макетами очень высокого качества проработки</p> </li> <li> <p>На проекте используется дизайн-система обращенная в UI-библиотеку в коде</p> </li> <li> <p>Мы любим наш дизайн и это взаимно</p> </li> <li> <p>IT-сервисы компании модернизируются и есть возможность вносить идеи по оптимизации и реализовывать их</p> </li> <li> <p>Работаем под управлением собственника компании</p> </li> <li> <p>Ламповая атмосфера без лишней бюрократии и корпоративности</p> </li> </ul> <p><strong>Структура собеседования:</strong></p> <p>Пройти HR-менеджера - 15 минут, перед техсобеседованием. Никаких «кем вы видите себя через 5 лет»;</p> <p>Далее встреча с тех. спецом и руководителем . Можно понять, достаточно ли профессиональна наша команда и комфортно ли вам с ней будет. Мы, в свою очередь, проверим ваши профессиональные знания и навыки);</p> <p><strong>Условия:</strong></p> <ul> <li> <p>ЗП вилка от <strong>80 до 160 тр</strong></p> </li> <li> <p>Обязательный фидбек по результатам собеседования</p> </li> <li> <p>Комфортный онбординг, демократичный менеджмент, команда без токсиков</p> </li> <li> <p><strong>Гибридная / удаленная</strong> работа без привязки к конкретному городу. Уютные офисы также в наличии - базируемся во <strong>Владимире</strong> и в <strong>Москве</strong></p> </li> <li> <p>Основное рабочее время команды с 10 до 19 по МСК</p> </li> <li> <p>Возможность гибко распределить свое рабочее время по договоренности с руководителем и командой (переносить часы, определить индивидуальный график).</p> </li> <li> <p>Спортзал и ДМС</p> </li> <li> <p>Оплачиваемый отпуск и отсутствие по болезни.</p> </li> </ul> <p> </p> <p> </p>",
+  "branded_description": null,
+  "vacancy_constructor_template": null,
+  "key_skills": [
+    {
+      "name": "ООП"
+    },
+    {
+      "name": "MySQL"
+    },
+    {
+      "name": "JavaScript"
+    },
+    {
+      "name": "PHP"
+    },
+    {
+      "name": "SQL"
+    },
+    {
+      "name": "React"
+    },
+    {
+      "name": "Redux"
+    }
+  ],
+  "accept_handicapped": false,
+  "accept_kids": false,
+  "archived": true,
+  "response_url": null,
+  "specializations": [
+    {
+      "id": "1.221",
+      "name": "Программирование, Разработка",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.50",
+      "name": "Системы управления предприятием (ERP)",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.82",
+      "name": "Инженер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.9",
+      "name": "Web инженер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.10",
+      "name": "Web мастер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    }
+  ],
+  "professional_roles": [
+    {
+      "id": "96",
+      "name": "Программист, разработчик"
+    }
+  ],
+  "code": null,
+  "hidden": false,
+  "quick_responses_allowed": false,
+  "driver_license_types": [],
+  "accept_incomplete_resumes": false,
+  "employer": {
+    "id": "1302894",
+    "name": "Влад АйТи",
+    "url": "https://api.hh.ru/employers/1302894",
+    "alternate_url": "https://hh.ru/employer/1302894",
+    "logo_urls": {
+      "90": "https://hhcdn.ru/employer-logo/2850312.png",
+      "240": "https://hhcdn.ru/employer-logo/2850313.png",
+      "original": "https://hhcdn.ru/employer-logo-original/602289.png"
+    },
+    "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1302894",
+    "trusted": true
+  },
+  "published_at": "2022-03-16T17:30:51+0300",
+  "created_at": "2022-03-16T17:30:51+0300",
+  "negotiations_url": null,
+  "suitable_resumes_url": null,
+  "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=53947568",
+  "has_test": false,
+  "test": null,
+  "alternate_url": "https://hh.ru/vacancy/53947568",
+  "working_days": [],
+  "working_time_intervals": [],
+  "working_time_modes": [],
+  "accept_temporary": true
+}

@@ -1,8 +1,11 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable camelcase */
 import * as types from '../types/regions';
 // TODO
 // eslint-disable-next-line import/no-cycle
 import {
   clearUsdCurrency,
+  createimprintFav,
   hideLoader,
   loadUsdCurrency,
   showLoader,
@@ -10,6 +13,7 @@ import {
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
 import { JUNIOR } from '../../constants/common';
+import { IS_LOCAL_DATA } from '../../main';
 
 export const changeActiveSection = (id) => (dispatch, getState) => {
   const { regions } = getState();
@@ -32,7 +36,7 @@ export const changeSelectedRegions = (regions) => (dispatch) => {
   const isActiveRegionChanged = !activeSection.checked;
   let section = activeSection;
 
-  /** Регион новый */
+  /* Регион новый */
   if (isActiveRegionChanged) {
     let newActive;
 
@@ -69,6 +73,30 @@ export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState
   dispatch(visibleVacanciesUpdate(currentSection.id, regions, groupId));
 };
 
+const formatVacancy = ({
+  id,
+  name,
+  alternate_url,
+  created_at,
+  salary,
+  employer,
+  snippet,
+  archived,
+}) => ({
+  id,
+  name,
+  alternateUrl: alternate_url,
+  createdAt: created_at,
+  salary,
+  employer: {
+    id: employer.id,
+    name: employer.name,
+    logoUrl: employer.logo_urls?.['90'],
+  },
+  snippet: snippet.requirement,
+  archived,
+});
+
 export const filterVacancies = (
   presetVacancies,
   setAllVacancies = false,
@@ -83,7 +111,6 @@ export const filterVacancies = (
     currentSection.allVacancies = [];
   }
 
-  // const vacancies: Array<Vacancy> = presetVacancies || currentSection.allVacancies;
   const vacancies = presetVacancies || currentSection.allVacancies;
 
   const sortParams = {
@@ -109,9 +136,13 @@ export const filterVacancies = (
   let usdLoad = false;
 
   vacancies.forEach((vacancy) => {
+    vacancy = vacancy.createdAt ? vacancy : formatVacancy(vacancy);
     const employerId = vacancy.employer.id;
     const isFav = app.favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
+
+    // eslint-disable-next-line max-len
+    const someVacancyHaveParam = (param) => companies[employerId].vacancies.some((companyVacancy) => companyVacancy[param] === vacancy[param]);
 
     // TODO
     // eslint-disable-next-line no-prototype-builtins
@@ -121,10 +152,19 @@ export const filterVacancies = (
         name: vacancy.employer.name,
         sort: companySort,
         vacancies: [],
+        archived: [],
       };
-    } else if (companies[employerId].vacancies.some((companyVacancy) => companyVacancy.name === vacancy.name)) return;
+    } else if (someVacancyHaveParam('name')) {
+      return;
+    }
 
-    if (setAllVacancies) { currentSection.allVacancies.push(vacancy); }
+    if (vacancy.archived) {
+      companies[employerId].archived.push(vacancy.id);
+    }
+
+    if (setAllVacancies) {
+      currentSection.allVacancies.push(vacancy);
+    }
 
     if (keywordValidation) {
       const titles = `${vacancy.name} ${vacancy.employer.name}`;
@@ -136,30 +176,30 @@ export const filterVacancies = (
     // eslint-disable-next-line no-param-reassign
     vacancy.sort = sortParams.default;
 
-    /** Проверка на наличие в блеклисте */
+    /* Проверка на наличие в блеклисте */
     if (app.blacklist.includes(vacancy.id)) return;
 
-    /** Недавняя вакансия в пределах диапазона NEW_IN DAYS */
-    if (parseDateString(vacancy.created_at) > lastValidDate) {
+    /* Недавняя вакансия в пределах диапазона NEW_IN DAYS */
+    if (parseDateString(vacancy.createdAt) > lastValidDate) {
       setSortParams(5, 'isNew');
     }
 
-    /** Опыт > 6 лет */
+    /* Опыт > 6 лет */
     if (vacancy.exp6) {
       setSortParams(4, 'exp6');
     }
 
-    /** Опыт 3 - 6 лет */
+    /* Опыт 3 - 6 лет */
     if (vacancy.exp3) {
       setSortParams(3, 'exp3');
     }
 
-    /** Вакансия без опыта */
+    /* Вакансия без опыта */
     if (vacancy.isJun || vacancy.name.match(JUNIOR)) {
       setSortParams(2, 'isJun');
     }
 
-    /** В вакансии указана зп */
+    /* В вакансии указана зп */
     if (vacancy.salary) {
       setSortParams(1, 'isSalary');
 
@@ -210,17 +250,21 @@ export const filterVacancies = (
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (const groupName in groups) {
       const group = groups[groupName];
-
       group.isHidden = app.hiddenGroups[currentSection.id].includes(groupName);
 
       group.companies = [];
     }
 
     companies.forEach((company) => {
-      if (!company.vacancies.length) return;
+      if (!company.vacancies.length) { return; }
+
       const { companies } = groups[company.sort.name];
 
-      if (company.isNew) { companies.unshift(company); } else { companies.push(company); }
+      if (company.isNew) {
+        companies.unshift(company);
+      } else {
+        companies.push(company);
+      }
     });
 
     return groups;
@@ -261,7 +305,10 @@ export const loadData = (section) => async (dispatch, getState) => {
 
   const newVacancies = await getVacancies();
 
-  dispatch(filterVacancies(newVacancies, true));
+  const withNewOne = await testGetVacancy(section.id, newVacancies, app.imprintFav);
+
+  dispatch(filterVacancies(withNewOne, true));
+  // dispatch(filterVacancies(newVacancies, true));
 
   loadingData = false;
 
@@ -302,11 +349,11 @@ export const loadData = (section) => async (dispatch, getState) => {
     return result;
   }
   async function getVacanciesStep(pageNum, exp) {
-    // async function getVacanciesStep() {
     try {
-      // eslint-disable-next-line max-len
-      const response = await fetch(`https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`);
-      // const response = await fetch('http://localhost:5000/api/data');
+      const fetchUrl = IS_LOCAL_DATA
+        ? 'http://localhost:5000/api/data'
+        : `https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`;
+      const response = await fetch(fetchUrl);
 
       const json = await response.json();
 
@@ -322,8 +369,8 @@ export const loadData = (section) => async (dispatch, getState) => {
   }
 };
 
-const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null) => (dispatch) => {
-  const regions = [...newRegionsData];
+export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null) => (dispatch) => {
+  const regions = cloneObj(newRegionsData);
   const currentSection = regions.find((section) => section.id === changedSectionId);
 
   // TODO
@@ -352,5 +399,39 @@ const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null
   currentSection.visibleVacancies = result;
 
   dispatch({ type: types.UPDATE_DATA, regions });
+  dispatch(createimprintFav(regions));
   dispatch(hideLoader());
+};
+
+export const testGetVacancy = async (sectionId, vacancies, imprintFav) => {
+  const currentImprint = imprintFav.find((imprint) => imprint.id === sectionId);
+
+  if (!currentImprint) {
+    return vacancies;
+  }
+
+  // const promises = currentImprint.vacancies.filter(async (imprintedVacancy) => {
+  const promises = currentImprint.vacancies.map(async (imprintedVacancy) => {
+    if (!vacancies.some((vacancy) => vacancy.id === imprintedVacancy.id)) {
+      imprintedVacancy.archived = true;
+      // const fetchUrl = IS_LOCAL_DATA
+      //   ? `http://localhost:5000/api/vacancies/${imprintedVacancy.id}`
+      //   : `https://api.hh.ru/api/vacancies/${imprintedVacancy.id}`;
+      // const response = await fetch(fetchUrl);
+      // const json = await response.json();
+
+      // // TODO перебить на боевое
+
+      // if (json.archived) {
+      //   return imprintedVacancy;
+      // }
+      return imprintedVacancy;
+    }
+
+    return null;
+  });
+
+  const archived = await Promise.all(promises);
+
+  return [...vacancies, ...archived.filter(Boolean)];
 };

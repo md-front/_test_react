@@ -27,7 +27,7 @@
       color: cornflowerblue;
     }
 
-    .del  {
+    .del {
       opacity: 1;
     }
   }
@@ -69,6 +69,7 @@
 .new {
   font-weight: 700;
 }
+
 .new {
   font-size: 11px;
   color: variables.$newColor;
@@ -111,6 +112,12 @@
   }
 }
 
+// TODO
+:global(.text--archived) {
+  opacity: .4;
+  font-style: italic;
+}
+
 :global(.text) {
   display: block;
   max-width: 210px;
@@ -125,9 +132,11 @@
     &--isJun {
       color: variables.$junColor;
     }
+
     &--exp3 {
       color: variables.$exp3Color;
     }
+
     &--exp6 {
       color: variables.$exp6Color;
     }

@@ -1,7 +1,8 @@
 @import '../../styles/variables';
 @import '../../styles/media';
 
-.title { /** &[h3] */
+.title {
+  /* &[h3] */
   display: inline-block;
   margin: 0;
   padding: 4px 15px;
@@ -124,7 +125,7 @@
     box-shadow: $shadowParams $salaryColor;
   }
 
-  :global(.isSalary){
+  :global(.isSalary) {
     display: none;
   }
 }

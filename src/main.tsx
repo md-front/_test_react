@@ -10,6 +10,9 @@ import { setLS } from './helpers';
 import App from './App';
 import './styles/style.scss';
 
+export const IS_LOCAL_DATA = true;
+// export const IS_LOCAL_DATA = false;
+
 const composeEnhancers = composeWithDevTools({
   trace: true,
   traceLimit: 25,
@@ -31,11 +34,17 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  const { app } = store.getState();
+  const {
+    app: {
+      favorites, blacklist, hiddenGroups, imprintFav,
+    },
+  } = store.getState();
 
-  setLS('favorites', app.favorites);
-  setLS('blacklist', app.blacklist);
-  setLS('hiddenGroups', app.hiddenGroups);
+  setLS('favorites', favorites);
+  setLS('blacklist', blacklist);
+  setLS('hiddenGroups', hiddenGroups);
+  setLS('imprintFav', imprintFav);
+  setLS('lastTimeDaysAgo', new Date());
 });
 
 ReactDOM.render(

@@ -8,6 +8,8 @@ const data = JSON.parse(fs.readFileSync(path.join(path.resolve(), '/src/node/dat
 
 const app = express();
 
+const defaultCors = cors(null, { origin: true });
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -16,8 +18,23 @@ app.use((req, res, next) => {
 });
 
 // Таблица
-app.get('/api/data', cors(null, { origin: true }), (req, res) => {
+app.get('/api/data', defaultCors, (req, res) => {
   res.send(data);
+});
+
+// Инфа по 1 вакансии
+app.get('/api/vacancies/:vacancy', defaultCors, (req, res) => {
+  const Vacancy = JSON.parse(
+    fs.readFileSync(
+      path.join(
+        path.resolve(),
+        `/src/node/data/vacancies/${req.params.vacancy}.json`,
+      ),
+      'utf-8',
+    ),
+  );
+
+  res.send(Vacancy);
 });
 
 app.listen(5000, () => console.log('Сервер создан'));

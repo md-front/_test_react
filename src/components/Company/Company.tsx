@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import styles from './Company.module.scss';
 import { Vacancy } from '../Vacancy';
 import { toggleFavorite } from '../../redux/actions/app';
-import { CompanyProps, CompanyWrap } from './Company.types';
+import { AppProps, CompanyProps, CompanyWrap } from './Company.types';
 
-function Company({ company, toggleFavorite }: CompanyProps) {
-  const logoUrl = company.vacancies[0]?.employer.logo_urls;
+function Company({
+  showArchived, company, toggleFavorite,
+}: CompanyProps) {
+  const logoUrl = company.vacancies[0]?.employer.logoUrl;
 
   return (
-    <div className={styles.item}>
+    <div className={company.vacancies.length !== company.archived?.length ? styles.item : styles.itemArchived}>
       <div
         className={styles.title}
         onClick={() => toggleFavorite(company.id)}
@@ -17,10 +19,10 @@ function Company({ company, toggleFavorite }: CompanyProps) {
       >
         <h2>{company.name}</h2>
 
-        {logoUrl && <img src={logoUrl['90']} alt="logo" />}
+        {logoUrl && <img src={logoUrl} alt="logo" />}
       </div>
 
-      {company.vacancies.map((vacancy) => !vacancy.isDel
+      {company.vacancies.map((vacancy) => !vacancy.isDel && (!vacancy.archived || showArchived)
         && (
           <Vacancy
             vacancy={vacancy}
@@ -33,7 +35,11 @@ function Company({ company, toggleFavorite }: CompanyProps) {
 }
 
 // eslint-disable-next-line no-empty-pattern
-const mapStateToProps = ({ }: any, { company }: CompanyWrap) => ({
+const mapStateToProps = (
+  { app: { showArchived } }: AppProps,
+  { company }: CompanyWrap,
+) => ({
+  showArchived,
   company,
 });
 

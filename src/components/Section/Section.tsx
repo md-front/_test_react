@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './Section.module.scss';
 import { declOfNum } from '../../helpers';
-// import { loadData, toggleGroupVisibility } from '../../redux/actions/regions';
 import { loadData } from '../../redux/actions/regions';
 import { Groups } from '../Groups';
 import { GroupsVisibility } from '../GroupsVisibility';
@@ -13,7 +12,6 @@ function Section({
 }: SectionProps) {
   useEffect(() => {
     loadData(section);
-    // TODO
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -34,13 +32,13 @@ function Section({
   };
 
   const renderGroupsToggle = () => section.vacancies.length > 0
-            && (
-            <GroupsVisibility
-              sectionId={section.id}
-              groupsEntries={groupsEntries}
-              key={0}
-            />
-            );
+    && (
+      <GroupsVisibility
+        sectionId={section.id}
+        groupsEntries={groupsEntries}
+        key={0}
+      />
+    );
 
   const alertText = () => {
     const allVacancies = section.allVacancies.length;
@@ -52,8 +50,7 @@ function Section({
 
     return allVacancies
       ? `По вашему запросу ${declension[0]} ${allVacancies} ${declension[1]} 
-      но ${declension[2]} из-за "ключевых слов"${
-  section.vacancies.length > 0 ? ' или "отображения групп"' : ''}`
+      но ${declension[2]} из-за "ключевых слов"${section.vacancies.length > 0 ? ' или "отображения групп"' : ''}`
       : 'По вашему запросу вакансии не найдены, попробуйте изменить "название", "регион поиска" или добавить поля "опыта"';
   };
 

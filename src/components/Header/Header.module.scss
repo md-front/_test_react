@@ -1,4 +1,4 @@
-@import 'src/styles/variables.scss';
+@import '/src/styles/variables.scss';
 
 .actions {
   display: flex;
@@ -34,7 +34,80 @@
   }
 }
 
-.btn {/** &[button] */
+/* &[label] */
+.showArchived {
+  display: inline-flex;
+  margin-left: 15px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+
+  @media ($mobileL) {
+    margin: 0;
+  }
+
+  @media ($mobileP) {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  input {
+    display: none;
+
+    /* switch wrap */
+    &:checked+span {
+
+      /* switch inner icon */
+      &>span {
+        transform: translateX(16px);
+        background-color: $customPurpleH;
+      }
+
+      &+span {
+        opacity: 1;
+      }
+    }
+  }
+
+  input {
+
+    /* switch wrap */
+    &+span {
+      display: inline-flex;
+      width: 40px;
+      height: 23px;
+      margin-right: 10px;
+      padding: 2px;
+      align-items: center;
+      border: 2px solid $customPurpleL;
+      border-radius: $commonBorderRadius;
+      background-color: #fff;
+
+      /* switch inner icon */
+      span {
+        width: 16px;
+        height: 16px;
+        background-color: $customPurpleL;
+        border-radius: 50%;
+        transition: .2s;
+      }
+
+      /* text */
+      &+span {
+        opacity: .7;
+        transition: .2s;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+/* &[button] */
+.btn {
   display: inline-flex;
   margin-left: 15px;
   align-items: center;
@@ -50,21 +123,30 @@
   @media ($mobileL) {
     margin: 0;
   }
+
   @media ($mobileP) {
     padding: 5px 8px;
     font-size: 12px;
-  }
-
-  img {
-    width: 25px;
-    height: 25px;
-    margin-left: 10px;
   }
 }
 
 .disabled {
   opacity: .4;
   pointer-events: none;
+}
+
+.arch {
+  composes: btn;
+  border-color: red;
+
+  &:hover {
+    background-color: red;
+  }
+
+  &-disabled {
+    composes: arch;
+    composes: disabled;
+  }
 }
 
 .fav {

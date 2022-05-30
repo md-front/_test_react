@@ -1,0 +1,160 @@
+{
+  "id": "54267851",
+  "premium": false,
+  "billing_type": {
+    "id": "standard",
+    "name": "Стандарт"
+  },
+  "relations": [],
+  "name": "Программист / Full-stack разработчик",
+  "insider_interview": null,
+  "response_letter_required": false,
+  "area": {
+    "id": "102",
+    "name": "Хабаровск",
+    "url": "https://api.hh.ru/areas/102"
+  },
+  "salary": {
+    "from": 50000,
+    "to": 80000,
+    "currency": "RUR",
+    "gross": false
+  },
+  "type": {
+    "id": "open",
+    "name": "Открытая"
+  },
+  "address": {
+    "city": "Хабаровск",
+    "street": "Волочаевская улица",
+    "building": "8Е",
+    "description": null,
+    "lat": 48.4621,
+    "lng": 135.10069,
+    "raw": "Хабаровск, Волочаевская улица, 8Е",
+    "metro": null,
+    "metro_stations": []
+  },
+  "allow_messages": true,
+  "site": {
+    "id": "hh",
+    "name": "hh.ru"
+  },
+  "experience": {
+    "id": "between1And3",
+    "name": "От 1 года до 3 лет"
+  },
+  "schedule": {
+    "id": "remote",
+    "name": "Удаленная работа"
+  },
+  "employment": {
+    "id": "project",
+    "name": "Проектная работа"
+  },
+  "department": null,
+  "contacts": null,
+  "description": "<p><strong>В связи с расширением в ведущую веб-студию Дальнего Востока требуется Full-stack разработчик на проектную основу.</strong></p> <p><strong> </strong></p> <p><strong>МЫ ПРЕДЛАГАЕМ ПРОЕКТНОЕ СОТРУДНИЧЕСТВО СПЕЦИАЛИСТАМ, С ДАЛЬНЕЙШЕЙ ВОЗМОЖНОСТЬЮ РАБОТАТЬ В ШТАТЕ.</strong></p> <p><strong> </strong></p> <p>Если ты хочешь иметь возможность работать в перспективной компании, молодом и дружном коллективе, чтобы вместе развиваться и работать над интересными проектами - откликайся. Мы быстро рассмотрим твою кандидатуру.</p> <p> </p> <p><strong>Обязанности:</strong></p> <p>- Верстка графических макетов в HTML, CSS и JS.</p> <p>- Разработка функциональных модулей сайтов на PHP 8 / Laravel 9 (и более старых версиях);</p> <p>- Проектирование баз данных SQL (MySQL/MariaDB), связь разработанных БД с написанными модулями;</p> <p>- Внедрение фронтенда;</p> <p>- Доработка сайтов на CMS 1С-Bitrix, создание сайтов на CMS 1С-Bitrix с нуля;</p> <p>- Проведение базовых работ на серверах компании (развертка сайтов, подключение SSL-сертификата, направление доменов на сервер и тд.).</p> <p><strong> </strong></p> <p><strong>Требования:</strong></p> <p>- Хорошее знание HTML5 / CSS3, Typescript, JS / JQuery, Ajax, фреймворка Vue.js (знание React будет плюсом), адаптивной верстки;</p> <p>- Знакомство со сборкой фронтенда, npm, gulp, webpack;</p> <p>- Знание работы препроцессоров sass, less, scss;</p> <p>- Опыт и знание работы PHP 8 / Laravel 9 (и более старые версии), Bitrix, MySQL, Bash;</p> <p>- Опыт работы с Git необходим. Используем для работы Bitbucket;</p> <p>- Опыт разработки собственных сайтов;</p> <p>- Умение разбираться в чужом коде, искать в нем ошибки;</p> <p>- Умение придерживаться стандартов разработки, принятых в компании;</p> <p>- Опыт работы с адаптивной версткой;</p> <p>- Будет плюсом опыт работы с выгрузкой из 1С;</p> <p>- Умение постоянно развиваться, обучаться, осваивать новые технологии и инструменты, в том числе самостоятельно.</p> <p><strong> </strong></p> <p><strong>Условия:</strong></p> <p>- Сейчас ищем специалиста на проектную работу с дальнейшим трудоустройством в штат;</p> <p>- Всегда интересные задачи, постоянная поддержка и консультация опытных коллег;</p> <p>- Найм - на конкурсной основе.</p> <p><strong> </strong></p> <p><strong>К резюме, пожалуйста прикрепить ссылки на разработанные вами сайты, ваше портфолио, проекты на GitHub.</strong></p> <p><strong> </strong></p> <p><strong>Каждому кандидату, претендующему на эту вакансию, предлагается выполнить тестовые задания (одно на знание front-end части, другое на знание back-end части). Если вы оставили отклик, значит вы готовы выполнить тестовые задания.</strong></p> <p><strong> </strong></p> <p><strong>Задание вымышленное, следовательно, неоплачиваемое, т.к. никаких денег оно компании не принесет. Задание выполняется в течении 7 рабочих дней, проверяется в течение 5 рабочих дней.</strong></p> <p><strong> </strong></p> <p><strong>Мы должны убедиться, что в будущем сможем доверить Вам проект. Мы имеем репутацию, и не хотелось бы подводить клиентов, а также тратить лишние время и деньги. Надеюсь на Ваше понимание!</strong></p> <p> </p>",
+  "branded_description": null,
+  "vacancy_constructor_template": null,
+  "key_skills": [
+    {
+      "name": "PHP 7"
+    },
+    {
+      "name": "Bitrix"
+    },
+    {
+      "name": "1С-Битрикс"
+    },
+    {
+      "name": "Laravel 5"
+    },
+    {
+      "name": "CSS"
+    },
+    {
+      "name": "MySQL"
+    },
+    {
+      "name": "Ajax"
+    },
+    {
+      "name": "Bash"
+    }
+  ],
+  "accept_handicapped": false,
+  "accept_kids": false,
+  "archived": true,
+  "response_url": null,
+  "specializations": [
+    {
+      "id": "1.221",
+      "name": "Программирование, Разработка",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.50",
+      "name": "Системы управления предприятием (ERP)",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.82",
+      "name": "Инженер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.9",
+      "name": "Web инженер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    },
+    {
+      "id": "1.10",
+      "name": "Web мастер",
+      "profarea_id": "1",
+      "profarea_name": "Информационные технологии, интернет, телеком"
+    }
+  ],
+  "professional_roles": [
+    {
+      "id": "96",
+      "name": "Программист, разработчик"
+    }
+  ],
+  "code": null,
+  "hidden": false,
+  "quick_responses_allowed": false,
+  "driver_license_types": [],
+  "accept_incomplete_resumes": false,
+  "employer": {
+    "id": "1160232",
+    "name": "WEB ALTERNATIVE",
+    "url": "https://api.hh.ru/employers/1160232",
+    "alternate_url": "https://hh.ru/employer/1160232",
+    "logo_urls": {
+      "90": "https://hhcdn.ru/employer-logo/3916095.png",
+      "240": "https://hhcdn.ru/employer-logo/3916096.png",
+      "original": "https://hhcdn.ru/employer-logo-original/868805.png"
+    },
+    "vacancies_url": "https://api.hh.ru/vacancies?employer_id=1160232",
+    "trusted": true
+  },
+  "published_at": "2022-04-25T06:37:43+0300",
+  "created_at": "2022-04-25T06:37:43+0300",
+  "negotiations_url": null,
+  "suitable_resumes_url": null,
+  "apply_alternate_url": "https://hh.ru/applicant/vacancy_response?vacancyId=54267851",
+  "has_test": true,
+  "test": {
+    "required": false
+  },
+  "alternate_url": "https://hh.ru/vacancy/54267851",
+  "working_days": [],
+  "working_time_intervals": [],
+  "working_time_modes": [],
+  "accept_temporary": false
+}

@@ -48,7 +48,7 @@ function Form(props: FormProps) {
     // eslint-disable-next-line implicit-arrow-linebreak
     name.trim() && regions.some((region) => region.checked) && experience.some((region) => region.checked);
 
-  // TODO переделать на отдельные триггеры
+  // TODO рефакторинг
   const handleClickExp = (id: string) => {
     const params = experience.map((param) => {
       if (param.id === id) {

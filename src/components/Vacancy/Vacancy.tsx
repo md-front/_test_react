@@ -6,22 +6,23 @@ import { ReactComponent as Del } from '../../assets/del.svg';
 import styles from './Vacancy.module.scss';
 import { addToBlacklist } from '../../redux/actions/app';
 import { AppState } from '../../types/initialParams.types';
-import { VacancyWrap } from './Vacancy.types';
+import { VacancyProps, VacancyWrap } from './Vacancy.types';
 import { calcCurrency } from './Vacancy.helpers';
 
-function Vacancy({ vacancy, usdCurrency }: any) {
+function Vacancy({ vacancy, usdCurrency, addToBlacklist }: VacancyProps) {
   const [isHover, setHover] = useState(false);
 
   const handleMouseHover = () => setHover(!isHover);
 
   const { salary } = vacancy;
-  const validDescription = vacancy.snippet && vacancy.snippet.requirement && vacancy.snippet.requirement.length > 100;
+  const validDescription = vacancy.snippet?.length > 100;
 
   const highlightClass = classNames({
     text: true,
     'text--exp6': vacancy.exp6,
     'text--exp3': vacancy.exp3,
     'text--isJun': vacancy.isJun,
+    'text--archived': vacancy.archived,
   });
 
   const renderSalary = () => {
@@ -56,7 +57,7 @@ function Vacancy({ vacancy, usdCurrency }: any) {
 
   return (
     <a
-      href={vacancy.alternate_url}
+      href={vacancy.alternateUrl}
       className={styles.link}
       onMouseEnter={handleMouseHover}
       onMouseLeave={handleMouseHover}
@@ -76,7 +77,7 @@ function Vacancy({ vacancy, usdCurrency }: any) {
             {validDescription && (
               <span
                 className={styles.description}
-                dangerouslySetInnerHTML={{ __html: vacancy.snippet.requirement }}
+                dangerouslySetInnerHTML={{ __html: vacancy.snippet }}
               />
             )}
           </div>

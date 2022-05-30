@@ -2,6 +2,28 @@
 import { IGroups } from '../components/Groups/Groups.types';
 import { Vacancy } from '../components/Vacancy/Vacancy.types';
 
+export enum GroupNames {
+  isFav = 'Избранное',
+  isNew = 'Новые',
+  exp6 = 'Опыт > 6 лет',
+  exp3 = 'Опыт 3-6 лет',
+  isJun = 'Для начинающих',
+  isSalary = '1-3 c указанным окладом',
+  default = 'Опыт 1-3 года',
+}
+
+export enum BaseFormFields {
+  newInDays = 'newInDays',
+  regions = 'regions',
+  experience = 'experience',
+  favorites = 'favorites',
+  blacklist = 'blacklist',
+  hiddenGroups = 'hiddenGroups',
+  imprintFav = 'imprintFav',
+  necessary = 'necessary',
+  unnecessary = 'unnecessary',
+}
+
 type HiddenGroup = Array<any>;
 
 export type HiddenGroups = {
@@ -26,7 +48,7 @@ export interface Region {
 
 export type Regions = Array<Region>;
 
-interface NewInDays {
+interface NewInDaysItem {
   value: number,
   label: string,
   checked: boolean,
@@ -39,6 +61,8 @@ interface Experience {
   checked: boolean,
 }
 
+export type NewInDays = Array<NewInDaysItem>
+
 export type KeywordTypes = 'necessary' | 'unnecessary'
 
 export type Necessary = Array<string>
@@ -50,7 +74,7 @@ export interface Keywords {
 }
 export interface Form extends Keywords {
   name: string,
-  newInDays: Array<NewInDays>,
+  newInDays: NewInDays,
   experience: Array<Experience>,
 }
 
@@ -62,14 +86,24 @@ export interface DefaultSearchParams extends Form {
 export type Favorites = Array<string>;
 export type Blacklist = Array<string>;
 
+export interface imprintFav {
+  id: string,
+  vacancies: Array<Vacancy>
+}
+
+export type ShowArchived = boolean;
+
 export interface AppInitState {
   showAlert: boolean,
   // TODO
   favorites: Favorites | any,
   blacklist: Blacklist | any,
   hiddenGroups: HiddenGroups | any,
+  // TODO
+  imprintFav: Array<imprintFav> | any,
   showLoader: boolean,
   usdCurrency: boolean,
+  showArchived: ShowArchived,
 }
 
 export interface AppState {

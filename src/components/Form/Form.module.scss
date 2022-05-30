@@ -19,7 +19,7 @@
   align-items: center;
   font-weight: 500;
 
-  /** info icon */
+  /* info icon */
   svg {
     width: 18px;
     margin-left: 15px;
@@ -44,7 +44,7 @@
 }
 
 .warning {
-  /** &[svg] */
+  /* &[svg] */
   opacity: 1;
   transition: opacity .2s;
 
@@ -380,5 +380,5 @@
   }
 }
 
-/** in ../styles/vendor/select.scss */
+/* in ../styles/vendor/select.scss */
 .select {}

@@ -10,6 +10,8 @@ import {
   SET_USD_CURRENCY,
   CLEAR_USD_CURRENCY,
   UPDATE_GROUPS_VISIBILITY,
+  TOGGLE_ARCHIVED,
+  IMPRINT_FAVORITE,
 } from '../types/app';
 
 // eslint-disable-next-line default-param-last
@@ -64,6 +66,16 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         hiddenGroups: action.hiddenGroups,
+      };
+    case TOGGLE_ARCHIVED:
+      return {
+        ...state,
+        showArchived: action.showArchived,
+      };
+    case IMPRINT_FAVORITE:
+      return {
+        ...state,
+        imprintFav: [...action.imprintFav],
       };
     default:
       return state;
