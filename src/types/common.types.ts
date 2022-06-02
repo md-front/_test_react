@@ -7,7 +7,8 @@ export type GetLocalStorage = (key: string) => object | Array<any> | null;
 
 export type IsObjectsEqual = (arr1: Array<any>, arr2: Array<any>) => boolean;
 
-export type GetDataFromStorage = (type: string, regions?: Regions) => Array<any> | object;
+// export type GetDataFromStorage = (type: string, regions?: Regions) => Array<any> | object;
+export type GetDataFromStorage = (type: string, regions?: Regions) => any;
 
 export type FindClosestNewInDays = (value: number) => number;
 

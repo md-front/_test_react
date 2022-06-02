@@ -105,6 +105,9 @@ export const filterVacancies = (
   dispatch(showLoader());
 
   const { form, regions, app } = getState();
+  const {
+    favorites, blacklist, usdCurrency, minSalary, hiddenGroups,
+  } = app;
   const currentSection = regions.find((section) => section.isActive);
 
   if (setAllVacancies) {
@@ -138,7 +141,7 @@ export const filterVacancies = (
   vacancies.forEach((vacancy) => {
     vacancy = vacancy.createdAt ? vacancy : formatVacancy(vacancy);
     const employerId = vacancy.employer.id;
-    const isFav = app.favorites?.includes(employerId);
+    const isFav = favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
 
     // eslint-disable-next-line max-len
@@ -168,7 +171,13 @@ export const filterVacancies = (
 
     if (keywordValidation) {
       const titles = `${vacancy.name} ${vacancy.employer.name}`;
-      if (!(validNecessary(titles) && validUnnecessary(titles))) return;
+      if (!(validNecessary(titles) && validUnnecessary(titles))) { return; }
+    }
+
+    if (vacancy.salary?.currency === 'RUR' && minSalary) {
+      if (vacancy.salary.from < minSalary) {
+        return;
+      }
     }
 
     const company = companies[employerId];
@@ -177,7 +186,7 @@ export const filterVacancies = (
     vacancy.sort = sortParams.default;
 
     /* Проверка на наличие в блеклисте */
-    if (app.blacklist.includes(vacancy.id)) return;
+    if (blacklist.includes(vacancy.id)) return;
 
     /* Недавняя вакансия в пределах диапазона NEW_IN DAYS */
     if (parseDateString(vacancy.createdAt) > lastValidDate) {
@@ -203,7 +212,7 @@ export const filterVacancies = (
     if (vacancy.salary) {
       setSortParams(1, 'isSalary');
 
-      if (!usdLoad && !app.usdCurrency && vacancy.salary.currency === 'USD') {
+      if (!usdLoad && !usdCurrency && vacancy.salary.currency === 'USD') {
         usdLoad = true;
         dispatch(loadUsdCurrency());
       }
@@ -250,7 +259,7 @@ export const filterVacancies = (
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (const groupName in groups) {
       const group = groups[groupName];
-      group.isHidden = app.hiddenGroups[currentSection.id].includes(groupName);
+      group.isHidden = hiddenGroups[currentSection.id].includes(groupName);
 
       group.companies = [];
     }

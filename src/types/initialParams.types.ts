@@ -22,6 +22,7 @@ export enum BaseFormFields {
   imprintFav = 'imprintFav',
   necessary = 'necessary',
   unnecessary = 'unnecessary',
+  minSalary = 'minSalary',
 }
 
 type HiddenGroup = Array<any>;
@@ -103,6 +104,7 @@ export interface AppInitState {
   imprintFav: Array<imprintFav> | any,
   showLoader: boolean,
   usdCurrency: boolean,
+  minSalary: number | null,
   showArchived: ShowArchived,
 }
 

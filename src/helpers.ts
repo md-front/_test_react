@@ -4,6 +4,7 @@ import {
   FindClosestNewInDays,
   GetDataFromStorage, GetLocalStorage, IsObjectsEqual, ParseDateString, SetLocalStorage,
 } from './types/common.types';
+import { BaseFormFields } from './types/initialParams.types';
 
 /* Storage actions */
 export const setLS: SetLocalStorage = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
@@ -29,6 +30,10 @@ export const getDataFromStorage: GetDataFromStorage = (type: string, regions) =>
     });
 
     result = hiddenGroups;
+  }
+
+  if (!result && type === BaseFormFields.minSalary) {
+    return '';
   }
 
   if (!result/* || typeof(result[0]) !== 'string' */) {

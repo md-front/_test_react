@@ -12,6 +12,7 @@ import {
   UPDATE_GROUPS_VISIBILITY,
   TOGGLE_ARCHIVED,
   IMPRINT_FAVORITE,
+  CHANGE_MIN_SALARY,
 } from '../types/app';
 
 // eslint-disable-next-line default-param-last
@@ -76,6 +77,11 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         imprintFav: [...action.imprintFav],
+      };
+    case CHANGE_MIN_SALARY:
+      return {
+        ...state,
+        minSalary: action.minSalary,
       };
     default:
       return state;

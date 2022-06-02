@@ -247,5 +247,6 @@ export const appInitState: AppInitState = {
   showLoader: true,
   usdCurrency: false,
   imprintFav: getDataFromStorage(BaseFormFields.imprintFav),
+  minSalary: getDataFromStorage(BaseFormFields.minSalary),
   showArchived: false,
 };

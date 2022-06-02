@@ -22,6 +22,7 @@ import {
 } from './Form.types';
 import { KeywordFields } from './KeywordFields';
 import { KeywordList } from './KeywordList';
+import { Salary } from './Salary';
 
 function Form(props: FormProps) {
   const {
@@ -259,6 +260,8 @@ function Form(props: FormProps) {
         </label>
 
         <div className={styles.btns}>
+          <Salary />
+
           <button
             type="button"
             className={styles.btnCopy}
@@ -271,7 +274,6 @@ function Form(props: FormProps) {
             data-event="click"
           >
             <Share />
-            <span>Скопировать ссылку</span>
           </button>
           <ReactTooltip globalEventOff="click" />
         </div>

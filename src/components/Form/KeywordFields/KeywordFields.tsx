@@ -7,7 +7,7 @@ import styles from '../Form.module.scss';
 import { KeywordFieldProps } from './KeywordFields.types';
 import { KEYWORDS } from '../Form.constants';
 import { Keywords } from '../../../types/initialParams.types';
-import { checkKeywordInList } from './KeywordFields helpers';
+import { checkKeywordInList } from './KeywordFields.helpers';
 
 function KeywordFields(props: KeywordFieldProps) {
   const {
@@ -77,7 +77,6 @@ function KeywordFields(props: KeywordFieldProps) {
     <label className={styles.keyword} htmlFor={`${keyword.id}Input`}>
       <span className={styles.label}>
         {keyword.label}
-        {' '}
         <Info
           data-tip={keyword.baseTooltip}
           data-effect="solid"

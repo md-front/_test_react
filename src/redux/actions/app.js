@@ -123,3 +123,8 @@ export const updateGroupsVisibility = (sectionId, groupId, isHidden) => (dispatc
 
   dispatch({ type: types.UPDATE_GROUPS_VISIBILITY, hiddenGroups });
 };
+
+export const changeMinSalary = (minSalary) => (dispatch) => {
+  dispatch({ type: types.CHANGE_MIN_SALARY, minSalary });
+  dispatch(filterVacancies());
+};

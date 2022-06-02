@@ -9,6 +9,7 @@ import rootReducer from './redux/reducers';
 import { setLS } from './helpers';
 import App from './App';
 import './styles/style.scss';
+import { BaseFormFields } from './types/initialParams.types';
 
 export const IS_LOCAL_DATA = process.env.NODE_ENV === 'development';
 
@@ -35,14 +36,19 @@ const store = createStore(
 store.subscribe(() => {
   const {
     app: {
-      favorites, blacklist, hiddenGroups, imprintFav,
+      favorites,
+      blacklist,
+      hiddenGroups,
+      imprintFav,
+      minSalary,
     },
   } = store.getState();
 
-  setLS('favorites', favorites);
-  setLS('blacklist', blacklist);
-  setLS('hiddenGroups', hiddenGroups);
-  setLS('imprintFav', imprintFav);
+  setLS(BaseFormFields.favorites, favorites);
+  setLS(BaseFormFields.blacklist, blacklist);
+  setLS(BaseFormFields.hiddenGroups, hiddenGroups);
+  setLS(BaseFormFields.imprintFav, imprintFav);
+  setLS(BaseFormFields.minSalary, minSalary);
   setLS('lastTimeDaysAgo', new Date());
 });
 
