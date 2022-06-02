@@ -175,9 +175,7 @@ export const filterVacancies = (
     }
 
     if (vacancy.salary?.currency === 'RUR' && minSalary) {
-      if (vacancy.salary.from < minSalary) {
-        return;
-      }
+      if (vacancy.salary?.to < minSalary && vacancy.salary.from < minSalary) return;
     }
 
     const company = companies[employerId];

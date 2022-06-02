@@ -24,7 +24,7 @@ function Header(props: HeaderProps) {
           </a>
 
           <div className={styles.btns}>
-            {!!isImprintFavExist && (
+            {isImprintFavExist && (
               <label htmlFor="showArchived" className={styles.showArchived}>
                 <input
                   type="checkbox"
