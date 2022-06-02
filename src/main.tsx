@@ -10,8 +10,7 @@ import { setLS } from './helpers';
 import App from './App';
 import './styles/style.scss';
 
-export const IS_LOCAL_DATA = true;
-// export const IS_LOCAL_DATA = false;
+export const IS_LOCAL_DATA = process.env.NODE_ENV === 'development';
 
 const composeEnhancers = composeWithDevTools({
   trace: true,
