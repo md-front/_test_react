@@ -34,7 +34,7 @@ module.exports = {
     'import/extensions': 'off',
     'no-unsafe-optional-chaining': 'off',
     'import/prefer-default-export': 'off',
-    'no-use-before-define': 'warn',
+    'no-use-before-define': 'off',
     'react/jsx-filename-extension': [0, {
       extensions: ['.js', '.jsx', '.ts', '.tsx '],
     }],
