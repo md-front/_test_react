@@ -17,8 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log(6);
-
 // Таблица
 app.get('/api/data', defaultCors, (req, res) => {
   res.send(data);
