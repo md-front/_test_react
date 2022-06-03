@@ -37,4 +37,5 @@ app.get('/api/vacancies/:vacancy', defaultCors, (req, res) => {
   res.send(Vacancy);
 });
 
+// eslint-disable-next-line no-console
 app.listen(5000, () => console.log('Сервер создан'));

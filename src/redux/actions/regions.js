@@ -377,6 +377,7 @@ export const loadData = (section) => async (dispatch, getState) => {
         pagesLeft: json.pages,
       };
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
     }
 
