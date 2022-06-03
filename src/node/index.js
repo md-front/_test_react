@@ -4,7 +4,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
-const data = JSON.parse(fs.readFileSync(path.join(path.resolve(), '/src/node/data/data.json'), 'utf-8'));
+const data = JSON.parse(fs.readFileSync(path.join(path.resolve(), '/src/node/data/data1.json'), 'utf-8'));
 
 const app = express();
 

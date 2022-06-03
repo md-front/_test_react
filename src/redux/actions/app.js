@@ -9,8 +9,8 @@ export const showAlert = (e) => (dispatch) => {
 
 export const hideAlert = () => ({ type: types.HIDE_ALERT });
 
-export const toggleArchived = (showArchived) => (dispatch) => {
-  dispatch(({ type: types.TOGGLE_ARCHIVED, showArchived }));
+export const toggleVisibilityArchived = (showArchived) => (dispatch) => {
+  dispatch(({ type: types.TOGGLE_VISIBILITY_ARCHIVED, showArchived }));
 };
 
 export const loadUsdCurrency = () => async (dispatch) => {
@@ -39,10 +39,21 @@ export const createimprintFav = (regions) => (dispatch) => {
   dispatch({ type: types.IMPRINT_FAVORITE, imprintFav });
 };
 
-export const removedArchivedFav = (currentSection) => (dispatch, getState) => {
+const findCurrentSection = (regions) => regions.find((section) => section.isActive);
+
+export const changeHaveArchived = (newArchivedState) => (dispatch, getState) => {
+  const haveArchived = newArchivedState || !getState().app.haveArchived;
+
+  dispatch({ type: types.TOGGLE_HAVE_ARCHIVED, haveArchived });
+};
+
+export const removeArchived = () => (dispatch, getState) => {
   const { regions } = getState();
+  const currentSection = findCurrentSection(regions);
 
   const filteredFavRegions = cloneObj(regions).map((region) => {
+    region.archived = [];
+
     if (!region.groups?.isFav?.companies?.length) {
       return region;
     }
@@ -64,28 +75,25 @@ export const removedArchivedFav = (currentSection) => (dispatch, getState) => {
     return region;
   });
 
+  dispatch(changeHaveArchived(false));
+  dispatch(toggleVisibilityArchived(false));
   dispatch(createimprintFav(filteredFavRegions));
   dispatch(visibleVacanciesUpdate(currentSection.id, filteredFavRegions));
-  dispatch(toggleArchived(false));
 };
 
 export const clearList = (listType) => (dispatch, getState) => {
   const { regions } = getState();
-  const currentSection = regions.find((section) => section.isActive);
+  const currentSection = findCurrentSection(regions);
 
   dispatch({ type: types.CLEAR_LIST, listType });
   dispatch(filterVacancies(currentSection.allVacancies));
-
-  if (listType === 'imprintFav') {
-    dispatch(removedArchivedFav(currentSection));
-  }
 };
 
 export const addToBlacklist = (e, vacancy) => (dispatch, getState) => {
   e.preventDefault();
   e.stopPropagation();
   const { regions } = getState();
-  const currentSection = regions.find((section) => section.isActive);
+  const currentSection = findCurrentSection(regions);
 
   // vacancy.is_del = true;
 
@@ -126,5 +134,10 @@ export const updateGroupsVisibility = (sectionId, groupId, isHidden) => (dispatc
 
 export const changeMinSalary = (minSalary) => (dispatch) => {
   dispatch({ type: types.CHANGE_MIN_SALARY, minSalary });
+  dispatch(filterVacancies());
+};
+
+export const toggleSalaryOnly = () => (dispatch) => {
+  dispatch({ type: types.TOGGLE_SALARY_ONLY });
   dispatch(filterVacancies());
 };

@@ -10,6 +10,7 @@ import {
   loadUsdCurrency,
   showLoader,
   updateGroupsVisibility,
+  changeHaveArchived,
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
 import { JUNIOR } from '../../constants/common';
@@ -106,7 +107,7 @@ export const filterVacancies = (
 
   const { form, regions, app } = getState();
   const {
-    favorites, blacklist, usdCurrency, minSalary, hiddenGroups,
+    favorites, blacklist, usdCurrency, minSalary, hiddenGroups, isSalaryOnly,
   } = app;
   const currentSection = regions.find((section) => section.isActive);
 
@@ -115,6 +116,8 @@ export const filterVacancies = (
   }
 
   const vacancies = presetVacancies || currentSection.allVacancies;
+
+  if (!vacancies) return;
 
   const sortParams = {
     default: {
@@ -163,6 +166,7 @@ export const filterVacancies = (
 
     if (vacancy.archived) {
       companies[employerId].archived.push(vacancy.id);
+      dispatch(changeHaveArchived(true));
     }
 
     if (setAllVacancies) {
@@ -172,6 +176,10 @@ export const filterVacancies = (
     if (keywordValidation) {
       const titles = `${vacancy.name} ${vacancy.employer.name}`;
       if (!(validNecessary(titles) && validUnnecessary(titles))) { return; }
+    }
+
+    if (isSalaryOnly && !vacancy.salary?.from) {
+      return;
     }
 
     if (vacancy.salary?.currency === 'RUR' && minSalary) {

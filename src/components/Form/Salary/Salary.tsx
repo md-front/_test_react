@@ -8,10 +8,14 @@ import styles from '../Form.module.scss';
 
 function Salary() {
   // @ts-ignore
+  const isSalaryOnly = useSelector(({ app }) => app.isSalaryOnly);
+  // @ts-ignore
   const minSalary = useSelector(({ app }) => app.minSalary);
   const [searchTerm, setSearchTerm] = useState(minSalary);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const dispatch = useDispatch();
+
+  const tip = `Вакансии с${!isSalaryOnly ? ' указаной' : ''} ЗП (в рублях) ниже значения будут скрыты`;
 
   const onChange = (e: any) => {
     setSearchTerm(e.target.value.replace(/\D/g, ''));
@@ -34,7 +38,7 @@ function Salary() {
       <span className={styles.label}>
         Зарплата от
         <Info
-          data-tip="Вакансии с указаной ЗП (в рублях) ниже значения будут скрыты"
+          data-tip={tip}
           data-effect="solid"
         />
         <ReactTooltip />

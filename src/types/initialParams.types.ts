@@ -92,7 +92,9 @@ export interface imprintFav {
   vacancies: Array<Vacancy>
 }
 
+export type HaveArchived = boolean;
 export type ShowArchived = boolean;
+export type IsSalaryOnly = boolean;
 
 export interface AppInitState {
   showAlert: boolean,
@@ -105,7 +107,9 @@ export interface AppInitState {
   showLoader: boolean,
   usdCurrency: boolean,
   minSalary: number | null,
+  haveArchived: HaveArchived,
   showArchived: ShowArchived,
+  isSalaryOnly: IsSalaryOnly,
 }
 
 export interface AppState {

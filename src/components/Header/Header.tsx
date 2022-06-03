@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { Form } from '../Form';
 import styles from './Header.module.scss';
-import { clearList, toggleArchived } from '../../redux/actions/app';
+import {
+  clearList, toggleVisibilityArchived, removeArchived, toggleSalaryOnly,
+} from '../../redux/actions/app';
 import { AppProps, HeaderProps } from './Header.types';
 import { BUTTONS_DATA } from './Header.constants';
 
 function Header(props: HeaderProps) {
-  const isImprintFavExist = props.imprintFav.some((region) => region.vacancies.length);
-
   return (
     <header>
       <div className="container">
@@ -24,23 +24,34 @@ function Header(props: HeaderProps) {
           </a>
 
           <div className={styles.btns}>
-            {isImprintFavExist && (
+            <label htmlFor="isSalaryOnly" className={styles.showArchived}>
+              <input
+                type="checkbox"
+                id="isSalaryOnly"
+                checked={props.isSalaryOnly}
+                onChange={() => props.toggleSalaryOnly()}
+              />
+              <span><span /></span>
+              <span>Только с ЗП</span>
+            </label>
+
+            {props.haveArchived && (
               <label htmlFor="showArchived" className={styles.showArchived}>
                 <input
                   type="checkbox"
                   id="showArchived"
                   checked={props.showArchived}
-                  onChange={() => props.toggleArchived(!props.showArchived)}
+                  onChange={() => props.toggleVisibilityArchived(!props.showArchived)}
                 />
                 <span><span /></span>
-                <span>Показывать архивные вакансии</span>
+                <span>Архивные вакансии</span>
               </label>
             )}
             <button
               type="button"
-              className={isImprintFavExist
+              className={props.haveArchived
                 ? styles.arch : styles['arch-disabled']}
-              onClick={() => props.clearList('imprintFav')}
+              onClick={() => props.removeArchived()}
               data-tip="Старые данные удалены"
               data-effect="solid"
               data-delay-hide="2000"
@@ -74,21 +85,25 @@ function Header(props: HeaderProps) {
 
 const mapStateToProps = ({
   app: {
-    imprintFav,
     blacklist,
     favorites,
     showArchived,
+    isSalaryOnly,
+    haveArchived,
   },
 }: AppProps) => ({
-  imprintFav,
+  haveArchived,
   blacklist,
   favorites,
   showArchived,
+  isSalaryOnly,
 });
 
 const mapDispatchToProps = {
   clearList,
-  toggleArchived,
+  removeArchived,
+  toggleVisibilityArchived,
+  toggleSalaryOnly,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

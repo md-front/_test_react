@@ -31,7 +31,7 @@ function Section({
     );
   };
 
-  const renderGroupsToggle = () => section.vacancies.length > 0
+  const renderGroupsToggle = () => section.vacancies?.length > 0
     && (
       <GroupsVisibility
         sectionId={section.id}
@@ -50,7 +50,7 @@ function Section({
 
     return allVacancies
       ? `По вашему запросу ${declension[0]} ${allVacancies} ${declension[1]} 
-      но ${declension[2]} из-за "ключевых слов"${section.vacancies.length > 0 ? ' или "отображения групп"' : ''}`
+      но ${declension[2]} из-за "ключевых слов"${section.vacancies?.length > 0 ? ' или "отображения групп"' : ''}`
       : 'По вашему запросу вакансии не найдены, попробуйте изменить "название", "регион поиска" или добавить поля "опыта"';
   };
 

@@ -10,8 +10,10 @@ import {
   SET_USD_CURRENCY,
   CLEAR_USD_CURRENCY,
   UPDATE_GROUPS_VISIBILITY,
-  TOGGLE_ARCHIVED,
+  TOGGLE_VISIBILITY_ARCHIVED,
+  TOGGLE_HAVE_ARCHIVED,
   IMPRINT_FAVORITE,
+  TOGGLE_SALARY_ONLY,
   CHANGE_MIN_SALARY,
 } from '../types/app';
 
@@ -68,7 +70,12 @@ const app = (state = appInitState, action) => {
         ...state,
         hiddenGroups: action.hiddenGroups,
       };
-    case TOGGLE_ARCHIVED:
+    case TOGGLE_HAVE_ARCHIVED:
+      return {
+        ...state,
+        haveArchived: action.haveArchived,
+      };
+    case TOGGLE_VISIBILITY_ARCHIVED:
       return {
         ...state,
         showArchived: action.showArchived,
@@ -82,6 +89,11 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         minSalary: action.minSalary,
+      };
+    case TOGGLE_SALARY_ONLY:
+      return {
+        ...state,
+        isSalaryOnly: !state.isSalaryOnly,
       };
     default:
       return state;

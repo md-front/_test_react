@@ -1,12 +1,15 @@
-import { imprintFav } from '../../types/initialParams.types';
+import { IsSalaryOnly, ShowArchived } from '../../types/initialParams.types';
 
 export interface HeaderProps {
-    imprintFav: Array<imprintFav>,
     blacklist: Array<number>,
     favorites: Array<number>,
-    showArchived: boolean,
+    showArchived: ShowArchived,
+    isSalaryOnly: IsSalaryOnly,
+    haveArchived: boolean,
     clearList: (type: keyof HeaderProps) => void
-    toggleArchived: (showArchived: boolean) => void
+    removeArchived: () => void
+    toggleVisibilityArchived: (showArchived: boolean) => void
+    toggleSalaryOnly: () => void
 }
 
 export interface Btn {

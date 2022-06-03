@@ -137,10 +137,10 @@
 
 .arch {
   composes: btn;
-  border-color: red;
+  border-color: $customRed;
 
   &:hover {
-    background-color: red;
+    background-color: $customRed;
   }
 
   &-disabled {
