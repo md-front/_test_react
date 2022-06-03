@@ -41,7 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src --colors",
+    "lint": "eslint src --color",
     "deploy": "react-scripts build && gh-pages -d build",
     "prepare": "husky install"
   },
