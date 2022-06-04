@@ -26,7 +26,7 @@ module.exports = {
     'react/destructuring-assignment': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
-    'no-return-assign': 0,
+    'no-return-assign': 'off',
     'import/no-cycle': 'off',
     'no-param-reassign': 'off',
     'no-underscore-dangle': ['off'],
@@ -35,7 +35,7 @@ module.exports = {
     'no-unsafe-optional-chaining': 'off',
     'import/prefer-default-export': 'off',
     'no-use-before-define': 'off',
-    'react/jsx-filename-extension': [0, {
+    'react/jsx-filename-extension': ['off', {
       extensions: ['.js', '.jsx', '.ts', '.tsx '],
     }],
     'max-len': ['error', {
@@ -43,7 +43,7 @@ module.exports = {
     }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
-    'linebreak-style': 0,
+    'linebreak-style': 'off',
   },
   settings: {
     'import/resolver': {
