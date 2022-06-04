@@ -4,7 +4,6 @@ import * as types from '../types/regions';
 // TODO
 // eslint-disable-next-line import/no-cycle
 import {
-  clearUsdCurrency,
   createimprintFav,
   hideLoader,
   loadUsdCurrency,
@@ -74,6 +73,53 @@ export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState
   dispatch(visibleVacanciesUpdate(currentSection.id, regions, groupId));
 };
 
+const createSalaryText = (salary, usdCurrency) => {
+  if (!salary) return null;
+
+  const { currency } = salary;
+  const formatValue = (value) => Math.round(value).toLocaleString();
+
+  const calcCurrency = ({ salary, type, usdCurrency }) => (({ from, to, currency }) => {
+    switch (type) {
+      case currency:
+        return { from, to };
+      case 'USD':
+        return { from: from / usdCurrency, to: to / usdCurrency };
+      default:
+        return { from: from * usdCurrency, to: to * usdCurrency };
+    }
+  })(salary);
+
+  const step = (type) => {
+    const { from = 0, to = 0 } = calcCurrency({ type, salary, usdCurrency });
+
+    const symbol = (() => {
+      switch (type) {
+        case 'RUR':
+          return 'Р';
+        case 'USD':
+          return '$';
+        default:
+          return currency;
+      }
+    })();
+
+    return (
+      // eslint-disable-next-line max-len
+      `${!to && from ? 'от ' : ''}${from ? formatValue(from) : 'до '}${(from && to) ? ' - ' : ''}${to ? formatValue(to) : ''} ${symbol}`
+    );
+  };
+
+  const salaryRur = step(currency);
+  let salaryUsd;
+
+  if (usdCurrency && currency === 'RUR') {
+    salaryUsd = step('USD');
+  }
+
+  return [salaryRur, salaryUsd || ''];
+};
+
 const formatVacancy = ({
   id,
   name,
@@ -83,12 +129,15 @@ const formatVacancy = ({
   employer,
   snippet,
   archived,
-}) => ({
+}, usdCurrency) => ({
   id,
   name,
   alternateUrl: alternate_url,
   createdAt: created_at,
-  salary,
+  salary: {
+    component: createSalaryText(salary, usdCurrency),
+    ...salary,
+  },
   employer: {
     id: employer.id,
     name: employer.name,
@@ -139,10 +188,9 @@ export const filterVacancies = (
 
   const companies = {};
   const filteredVacancies = [];
-  let usdLoad = false;
 
   vacancies.forEach((vacancy) => {
-    vacancy = vacancy.createdAt ? vacancy : formatVacancy(vacancy);
+    vacancy = vacancy.createdAt ? vacancy : formatVacancy(vacancy, usdCurrency);
     const employerId = vacancy.employer.id;
     const isFav = favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
@@ -217,11 +265,6 @@ export const filterVacancies = (
     /* В вакансии указана зп */
     if (vacancy.salary) {
       setSortParams(1, 'isSalary');
-
-      if (!usdLoad && !usdCurrency && vacancy.salary.currency === 'USD') {
-        usdLoad = true;
-        dispatch(loadUsdCurrency());
-      }
     }
 
     function setSortParams(sortValue, paramName) {
@@ -308,15 +351,13 @@ export const loadData = (section) => async (dispatch, getState) => {
     return;
   }
 
+  await dispatch(loadUsdCurrency());
+
   loadingData = true;
 
   // TODO
   // eslint-disable-next-line no-param-reassign
   section.prevRequest = request;
-
-  if (app.usdCurrency) {
-    dispatch(clearUsdCurrency());
-  }
 
   const newVacancies = await getVacancies();
 

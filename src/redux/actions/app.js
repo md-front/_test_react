@@ -20,7 +20,6 @@ export const loadUsdCurrency = () => async (dispatch) => {
 
   dispatch({ type: types.SET_USD_CURRENCY, value });
 };
-export const clearUsdCurrency = () => ({ type: types.CLEAR_USD_CURRENCY });
 
 export const showLoader = () => ({ type: types.SHOW_LOADER });
 export const hideLoader = () => ({ type: types.HIDE_LOADER });

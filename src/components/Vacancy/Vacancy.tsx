@@ -5,12 +5,10 @@ import { connect } from 'react-redux';
 import { ReactComponent as Del } from '../../assets/del.svg';
 import styles from './Vacancy.module.scss';
 import { addToBlacklist } from '../../redux/actions/app';
-import { AppState } from '../../types/initialParams.types';
 import { VacancyProps, VacancyWrap } from './Vacancy.types';
-import { calcCurrency } from './Vacancy.helpers';
 
 function Vacancy({
-  vacancy, usdCurrency, addToBlacklist,
+  vacancy, addToBlacklist,
 }: VacancyProps) {
   const [isHover, setHover] = useState(false);
   const { salary } = vacancy;
@@ -27,48 +25,25 @@ function Vacancy({
     'text--archived': vacancy.archived,
   });
 
-  const renderSalary = () => {
-    const { currency } = salary;
-    const formatValue = (value: number) => Math.round(value).toLocaleString();
+  const isNewBadge = vacancy.isNew && <sup className={styles.new}>&nbsp;NEW</sup>;
 
-    const step = (type: string) => {
-      const { from = 0, to = 0 } = calcCurrency({ type, salary, usdCurrency });
+  const salaryBadge = salary && <span className="isSalary">$&nbsp;</span>;
 
-      const symbol = (() => {
-        switch (type) {
-          case 'RUR':
-            return 'Р';
-          case 'USD':
-            return '$';
-          default:
-            return currency;
-        }
-      })();
+  const salaryValue = salary?.component
+    && (
+      <span className={styles.salary}>
+        {salary.component.map((salaryValue, i) => (
+          <span className={i === 0 ? styles.presetCurrency : ''} key={salaryValue}>{salaryValue}</span>
+        ))}
+      </span>
+    );
 
-      return (
-        <span
-          key={type}
-          className={(usdCurrency && type === currency) ? styles.presetCurrency : ''}
-        >
-          {!to && from && 'от '}
-          {from ? formatValue(from) : 'до'}
-          {(from && to) ? ' - ' : ' '}
-          {!!to && formatValue(to)}
-          &nbsp;
-          {symbol}
-        </span>
-      );
-    };
-
-    const salaryRur: React.ReactNode = step(currency);
-    let salaryUsd: React.ReactNode;
-
-    if (usdCurrency && currency === 'RUR') {
-      salaryUsd = step('USD');
-    }
-
-    return [salaryRur, salaryUsd || ''];
-  };
+  const description = validDescription && (
+    <span
+      className={styles.description}
+      dangerouslySetInnerHTML={{ __html: vacancy.snippet }}
+    />
+  );
 
   return (
     <a
@@ -80,24 +55,16 @@ function Vacancy({
       rel="noopener noreferrer"
     >
       <span className={highlightClass}>
-        {salary
-          && <span className="isSalary">$&nbsp;</span>}
+        {salaryBadge}
         {vacancy.name}
       </span>
-      {vacancy.isNew && <sup className={styles.new}>&nbsp;NEW</sup>}
+      {isNewBadge}
 
-      {isHover
-        && (salary || validDescription)
+      {isHover && (salary || validDescription)
         && (
           <div className="popup">
-            {salary
-              && <span className={styles.salary}>{renderSalary()}</span>}
-            {validDescription && (
-              <span
-                className={styles.description}
-                dangerouslySetInnerHTML={{ __html: vacancy.snippet }}
-              />
-            )}
+            {salaryValue}
+            {description}
           </div>
         )}
 
@@ -113,9 +80,9 @@ function Vacancy({
   );
 }
 
-const mapStateToProps = ({ app }: AppState, { vacancy }: VacancyWrap) => ({
+// eslint-disable-next-line no-empty-pattern
+const mapStateToProps = ({ }, { vacancy }: VacancyWrap) => ({
   vacancy,
-  usdCurrency: app.usdCurrency,
 });
 
 const mapDispatchToProps = {

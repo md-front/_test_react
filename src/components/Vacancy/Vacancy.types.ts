@@ -4,6 +4,7 @@ export interface Salary {
   currency: string,
   from: number,
   gross: boolean,
+  component: Array<string>,
   to: number
 }
 export interface CalcCurrencyProps {
@@ -36,8 +37,6 @@ export interface Vacancy {
 
 export interface VacancyProps {
   vacancy: Vacancy,
-  // TODO
-  usdCurrency: any,
   addToBlacklist: (e: any, vacancy: Vacancy) => void
 }
 

@@ -8,7 +8,6 @@ import {
   HIDE_LOADER,
   CLEAR_LIST,
   SET_USD_CURRENCY,
-  CLEAR_USD_CURRENCY,
   UPDATE_GROUPS_VISIBILITY,
   TOGGLE_VISIBILITY_ARCHIVED,
   TOGGLE_HAVE_ARCHIVED,
@@ -59,11 +58,6 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         usdCurrency: action.value,
-      };
-    case CLEAR_USD_CURRENCY:
-      return {
-        ...state,
-        usdCurrency: null,
       };
     case UPDATE_GROUPS_VISIBILITY:
       return {
