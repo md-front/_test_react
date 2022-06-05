@@ -79,7 +79,7 @@ const createSalaryText = (salary, usdCurrency) => {
   const { currency } = salary;
   const formatValue = (value) => Math.round(value).toLocaleString();
 
-  const calcCurrency = ({ salary, type, usdCurrency }) => (({ from, to, currency }) => {
+  const calcCurrency = ({ salary, type }) => (({ from, to, currency }) => {
     switch (type) {
       case currency:
         return { from, to };
@@ -91,7 +91,7 @@ const createSalaryText = (salary, usdCurrency) => {
   })(salary);
 
   const step = (type) => {
-    const { from = 0, to = 0 } = calcCurrency({ type, salary, usdCurrency });
+    const { from = 0, to = 0 } = calcCurrency({ type, salary });
 
     const symbol = (() => {
       switch (type) {
@@ -110,14 +110,19 @@ const createSalaryText = (salary, usdCurrency) => {
     );
   };
 
-  const salaryRur = step(currency);
-  let salaryUsd;
+  const salaryMain = step(currency);
+  const salaryAdditional = usdCurrency && (() => {
+    switch (currency) {
+      case 'RUR':
+        return step('USD');
+      case 'USD':
+        return step('RUR');
+      default:
+        return null;
+    }
+  })();
 
-  if (usdCurrency && currency === 'RUR') {
-    salaryUsd = step('USD');
-  }
-
-  return [salaryRur, salaryUsd || ''];
+  return [salaryMain, salaryAdditional || ''];
 };
 
 const formatVacancy = ({
