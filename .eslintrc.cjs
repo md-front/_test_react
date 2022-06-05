@@ -39,7 +39,7 @@ module.exports = {
       extensions: ['.js', '.jsx', '.ts', '.tsx '],
     }],
     'max-len': ['error', {
-      code: 125,
+      code: 140,
     }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',

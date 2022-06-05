@@ -1,9 +1,8 @@
-import { findClosestNewInDays, getDataFromStorage, getLS } from '../helpers';
+import { calcLastVisit, getDataFromStorage } from '../helpers';
 import {
   AppInitState, BaseFormFields, DefaultSearchParams, GroupNames, Regions,
 } from '../types/initialParams.types';
 import { IGroups } from '../components/Groups/Groups.types';
-import { NEW_IN_DAYS } from '../constants/common';
 /*
  * {
  * sortValue: приоритет вывода группы (больше - выше),
@@ -63,7 +62,7 @@ const DEFAULT_SEARCH_PARAMS: DefaultSearchParams = {
   // unnecessary: ['backend', 'SQL'],
   necessary: [],
   unnecessary: [],
-  newInDays: NEW_IN_DAYS,
+  newInDays: calcLastVisit(),
   experience: [
     {
       id: 'noExperience',
@@ -149,7 +148,6 @@ const initialState: Partial<DefaultSearchParams> = (() => {
   // eslint-disable-next-line no-restricted-syntax,guard-for-in
   for (const param in DEFAULT_SEARCH_PARAMS) {
     let dataFromUrl = urlParams.get(param);
-    const lastVisit = Number(getLS('lastTimeDaysAgo'));
     let tempData;
     const isKeyword = param === BaseFormFields.necessary || param === BaseFormFields.unnecessary;
     const needDefaultValue = param === BaseFormFields.newInDays
@@ -168,16 +166,6 @@ const initialState: Partial<DefaultSearchParams> = (() => {
 
       return '';
     })();
-
-    if (param === BaseFormFields.newInDays) {
-      tempData = DEFAULT_SEARCH_PARAMS.newInDays.map((option) => {
-        // @ts-ignore
-        // eslint-disable-next-line no-param-reassign
-        option.checked = option.value === findClosestNewInDays(lastVisit);
-
-        return option;
-      });
-    }
 
     if (dataFromUrl) {
       if (param === BaseFormFields.newInDays) {

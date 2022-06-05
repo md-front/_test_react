@@ -4,7 +4,7 @@ import {
   FindClosestNewInDays,
   GetDataFromStorage, GetLocalStorage, IsObjectsEqual, ParseDateString, SetLocalStorage,
 } from './types/common.types';
-import { BaseFormFields } from './types/initialParams.types';
+import { BaseFormFields, NewInDays } from './types/initialParams.types';
 
 /* Storage actions */
 export const setLS: SetLocalStorage = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
@@ -32,7 +32,7 @@ export const getDataFromStorage: GetDataFromStorage = (type: string, regions) =>
     result = hiddenGroups;
   }
 
-  if (!result && type === BaseFormFields.minSalary) {
+  if (!result && (type === BaseFormFields.minSalary || type === 'lastTimeDaysAgo')) {
     return '';
   }
 
@@ -41,25 +41,6 @@ export const getDataFromStorage: GetDataFromStorage = (type: string, regions) =>
   }
 
   return result;
-};
-
-export const findClosestNewInDays: FindClosestNewInDays = (value) => {
-  const result = NEW_IN_DAYS.reduce((closest, item) => {
-    const currentDiff = Math.abs(value - item.value);
-    if (currentDiff <= closest.diff) {
-      return {
-        value: item.value,
-        diff: currentDiff,
-      };
-    }
-
-    return closest;
-  }, {
-    value: NEW_IN_DAYS[0].value,
-    diff: value - NEW_IN_DAYS[0].value,
-  });
-
-  return result.value;
 };
 
 /*  Objects actions */
@@ -76,4 +57,42 @@ export const parseDateString: ParseDateString = (dateString) => {
   const arr = dateString.split(/\D/);
   // @ts-ignore TODO
   return new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+};
+
+export const calcLastVisit = (): NewInDays => {
+  const lastVisit = new Date(getLS('lastTimeDaysAgo'));
+
+  if (!lastVisit) {
+    return NEW_IN_DAYS;
+  }
+
+  const closest = findClosestNewInDays(lastVisit);
+
+  return NEW_IN_DAYS.map((option) => {
+    option.checked = option.value === closest;
+
+    return option;
+  });
+};
+
+const findClosestNewInDays: FindClosestNewInDays = (lastVisit) => {
+  // @ts-ignore
+  const diffInDays = Math.abs(new Date() - lastVisit) / 86400000;
+
+  const result = NEW_IN_DAYS.reduce((closest, item) => {
+    const currentDiff = Math.abs(diffInDays - item.value);
+    if (currentDiff <= closest.diff) {
+      return {
+        value: item.value,
+        diff: currentDiff,
+      };
+    }
+
+    return closest;
+  }, {
+    value: NEW_IN_DAYS[0].value,
+    diff: diffInDays - NEW_IN_DAYS[0].value,
+  });
+
+  return result.value;
 };

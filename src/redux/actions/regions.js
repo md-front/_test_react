@@ -105,7 +105,6 @@ const createSalaryText = (salary, usdCurrency) => {
     })();
 
     return (
-      // eslint-disable-next-line max-len
       `${!to && from ? 'от ' : ''}${from ? formatValue(from) : 'до '}${(from && to) ? ' - ' : ''}${to ? formatValue(to) : ''} ${symbol}`
     );
   };
