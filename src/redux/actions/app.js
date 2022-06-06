@@ -9,8 +9,12 @@ export const showAlert = (e) => (dispatch) => {
 
 export const hideAlert = () => ({ type: types.HIDE_ALERT });
 
-export const toggleVisibilityArchived = (showArchived) => (dispatch) => {
+export const toggleVisibilityArchived = (showArchived) => (dispatch, getState) => {
+  const { regions } = getState();
+  const currentSection = findCurrentSection(regions);
+
   dispatch(({ type: types.TOGGLE_VISIBILITY_ARCHIVED, showArchived }));
+  dispatch(visibleVacanciesUpdate(currentSection.id, regions));
 };
 
 export const loadUsdCurrency = () => async (dispatch) => {

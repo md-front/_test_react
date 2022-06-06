@@ -1,8 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable camelcase */
 import * as types from '../types/regions';
-// TODO
-// eslint-disable-next-line import/no-cycle
 import {
   createimprintFav,
   hideLoader,
@@ -199,8 +197,9 @@ export const filterVacancies = (
     const isFav = favorites?.includes(employerId);
     const companySort = sortParams[isFav ? 'isFav' : 'default'];
 
-    // eslint-disable-next-line max-len
-    const someVacancyHaveParam = (param) => companies[employerId].vacancies.some((companyVacancy) => companyVacancy[param] === vacancy[param]);
+    const someVacancyHaveParam = (param) => companies[employerId].vacancies.some((companyVacancy) => {
+      return companyVacancy[param] === vacancy[param];
+    });
 
     // TODO
     // eslint-disable-next-line no-prototype-builtins
@@ -365,10 +364,9 @@ export const loadData = (section) => async (dispatch, getState) => {
 
   const newVacancies = await getVacancies();
 
-  const withNewOne = await testGetVacancy(section.id, newVacancies, app.imprintFav);
+  const withNewOne = await checkArchivedVacancies(section.id, newVacancies, app.imprintFav);
 
   dispatch(filterVacancies(withNewOne, true));
-  // dispatch(filterVacancies(newVacancies, true));
 
   loadingData = false;
 
@@ -430,13 +428,16 @@ export const loadData = (section) => async (dispatch, getState) => {
   }
 };
 
-export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null) => (dispatch) => {
+export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId = null) => (dispatch, getState) => {
+  const { showArchived } = getState().app;
   const regions = cloneObj(newRegionsData);
   const currentSection = regions.find((section) => section.id === changedSectionId);
 
-  // TODO
-  // eslint-disable-next-line max-len
-  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => visibleInCompanies + company.vacancies.filter((vacancy) => !vacancy.isDel).length, 0);
+  const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => {
+    return visibleInCompanies + company.vacancies.filter((vacancy) => {
+      return !vacancy.isDel || !(vacancy.archived && showArchived);
+    }).length;
+  }, 0);
 
   let result;
 
@@ -448,8 +449,6 @@ export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId
   } else {
     result = Object.values(currentSection.groups).reduce((visibleInGroup, group) => {
       if (!group.isHidden) {
-        // TODO
-        // eslint-disable-next-line no-param-reassign
         visibleInGroup += reduceVacancy(group.companies);
       }
 
@@ -464,7 +463,7 @@ export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId
   dispatch(hideLoader());
 };
 
-export const testGetVacancy = async (sectionId, vacancies, imprintFav) => {
+export const checkArchivedVacancies = async (sectionId, vacancies, imprintFav) => {
   const currentImprint = imprintFav.find((imprint) => imprint.id === sectionId);
 
   if (!currentImprint) {

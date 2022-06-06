@@ -27,7 +27,7 @@ function Vacancy({
 
   const isNewBadge = vacancy.isNew && <sup className={styles.new}>&nbsp;NEW</sup>;
 
-  const salaryBadge = salary && <span className="isSalary">$&nbsp;</span>;
+  const salaryBadge = salary.currency && <span className="isSalary">$&nbsp;</span>;
 
   const salaryValue = salary?.component
     && (
@@ -60,7 +60,7 @@ function Vacancy({
       </span>
       {isNewBadge}
 
-      {isHover && (salary || validDescription)
+      {isHover && (salary.currency || validDescription)
         && (
           <div className="popup">
             {salaryValue}

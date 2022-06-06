@@ -96,9 +96,7 @@ function Form(props: FormProps) {
 
     const _necessary = necessary.length ? necessary.join(',') : null;
     const _unnecessary = unnecessary.length ? unnecessary.join(',') : null;
-    // TODO
-    // @ts-ignore
-    const _newInDays = newInDays.find((option) => option.checked).value;
+    const _newInDays = newInDays.find((option) => option.checked)!.value;
 
     // eslint-disable-next-line max-len
     const _url = `${window.location.origin}${window.location.pathname}?name=${_name}&regions=${_regions}&experience=${_experience}&newInDays=${_newInDays}${_necessary ? `&necessary=${_necessary}` : ''}${_unnecessary ? `&unnecessary=${_unnecessary}` : ''}`;
@@ -107,9 +105,6 @@ function Form(props: FormProps) {
 
     // TODO Regions | Experience
     function transformToUrlFormat(arr: Array<any>) {
-      // TODO
-      // eslint-disable-next-line no-return-assign
-      // eslint-disable-next-line
       return arr.reduce((sum, item) => (item.checked ? sum += `${item.id},` : sum), '').slice(0, -1);
     }
   };

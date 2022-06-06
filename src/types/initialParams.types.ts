@@ -47,6 +47,8 @@ export interface Region {
   allVacancies?: Array<Vacancy>
 }
 
+export type OptionFromUrl = Region | Experience
+
 export type Regions = Array<Region>;
 
 interface NewInDaysItem {

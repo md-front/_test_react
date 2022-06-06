@@ -1,6 +1,6 @@
 import { calcLastVisit, getDataFromStorage } from '../helpers';
 import {
-  AppInitState, BaseFormFields, DefaultSearchParams, GroupNames, Regions,
+  AppInitState, BaseFormFields, DefaultSearchParams, GroupNames, OptionFromUrl, Region, Regions,
 } from '../types/initialParams.types';
 import { IGroups } from '../components/Groups/Groups.types';
 /*
@@ -129,26 +129,20 @@ const DEFAULT_SEARCH_PARAMS: DefaultSearchParams = {
   ],
 };
 
-// TODO
-type Test = {
-  location: Location
-}
-
 /* todo react router */
 const initialState: Partial<DefaultSearchParams> = (() => {
-  const result = {};
-  const { location }: Test = document;
-  // @ts-ignore
-  const urlParams = (new URL(location)).searchParams;
+  const urlParams = (new URL(document.location.href)).searchParams;
 
   if (!urlParams.toString()) {
     return DEFAULT_SEARCH_PARAMS;
   }
 
+  const result: Partial<DefaultSearchParams> = {};
+
   // eslint-disable-next-line no-restricted-syntax,guard-for-in
   for (const param in DEFAULT_SEARCH_PARAMS) {
-    let dataFromUrl = urlParams.get(param);
-    let tempData;
+    const dataFromUrl = urlParams.get(param);
+    let tempData: any;
     const isKeyword = param === BaseFormFields.necessary || param === BaseFormFields.unnecessary;
     const needDefaultValue = param === BaseFormFields.newInDays
       || param === BaseFormFields.regions
@@ -156,8 +150,7 @@ const initialState: Partial<DefaultSearchParams> = (() => {
 
     const emptyValue = (() => {
       if (needDefaultValue) {
-        // @ts-ignore
-        return DEFAULT_SEARCH_PARAMS[param];
+        return DEFAULT_SEARCH_PARAMS[param as keyof DefaultSearchParams];
       }
 
       if (isKeyword) {
@@ -170,8 +163,6 @@ const initialState: Partial<DefaultSearchParams> = (() => {
     if (dataFromUrl) {
       if (param === BaseFormFields.newInDays) {
         tempData = DEFAULT_SEARCH_PARAMS.newInDays.map((option) => {
-          // @ts-ignore
-          // eslint-disable-next-line no-param-reassign
           option.checked = option.value === +dataFromUrl;
 
           return option;
@@ -180,30 +171,22 @@ const initialState: Partial<DefaultSearchParams> = (() => {
         tempData = dataFromUrl.split(',');
       } else if (param === BaseFormFields.regions || param === BaseFormFields.experience) {
         tempData = [...DEFAULT_SEARCH_PARAMS[param]];
-        // @ts-ignore
-        dataFromUrl = dataFromUrl.split(',');
 
-        tempData.forEach((option) => {
-          // @ts-ignore
-          // eslint-disable-next-line no-param-reassign
-          option.checked = dataFromUrl.includes(option.id);
-        });
+        const arrDataFromUrl = dataFromUrl.split(',');
+
+        tempData.forEach((option: OptionFromUrl) => option.checked = arrDataFromUrl.includes(option.id));
       } else {
         tempData = dataFromUrl;
       }
     }
 
     if (param === BaseFormFields.regions) {
-      // @ts-ignore
-      let activeRegion;
-      // @ts-ignore
-      tempData.forEach((region) => {
-        // @ts-ignore
+      let activeRegion: Region;
+      tempData!.forEach((region: Region) => {
         if (!activeRegion && region.checked) {
           activeRegion = region;
           activeRegion.isActive = true;
         } else {
-          // eslint-disable-next-line no-param-reassign
           region.isActive = false;
         }
       });
