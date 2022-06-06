@@ -19,28 +19,35 @@ export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(k
 window.getLS = getLS;
 
 export const getDataFromStorage: GetDataFromStorage = (type: string, regions) => {
-  let result = getLS(type);
+  try {
+    const result = getLS(type);
 
-  if (!result && regions) {
-    const hiddenGroups = {};
+    if (result) {
+      return result;
+    }
 
-    regions.forEach((section) => {
-      // @ts-ignore TODO
-      hiddenGroups[section.id] = [];
-    });
+    if (regions) {
+      const hiddenGroups = {};
 
-    result = hiddenGroups;
-  }
+      regions.forEach((section) => {
+        // @ts-ignore TODO
+        hiddenGroups[section.id] = [];
+      });
 
-  if (!result && (type === BaseFormFields.minSalary || type === 'lastTimeDaysAgo')) {
-    return '';
-  }
+      return hiddenGroups;
+    }
 
-  if (!result/* || typeof(result[0]) !== 'string' */) {
+    // if (type === BaseFormFields.minSalary || type === 'lastTimeDaysAgo') {
+    if (type === BaseFormFields.minSalary) {
+      return '';
+    }
+
     return [];
-  }
+  } catch (e) {
+    console.error(e);
 
-  return result;
+    return null;
+  }
 };
 
 /*  Objects actions */
