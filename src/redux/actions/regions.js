@@ -3,9 +3,9 @@
 import * as types from '../types/regions';
 import {
   createimprintFav,
-  hideLoader,
+  // hideLoader,
   loadUsdCurrency,
-  showLoader,
+  loading,
   updateGroupsVisibility,
   changeHaveArchived,
 } from './app';
@@ -17,12 +17,10 @@ export const changeActiveSection = (id) => (dispatch, getState) => {
   const { regions } = getState();
 
   regions.forEach((section) => {
-    // TODO
-    // eslint-disable-next-line no-param-reassign
     section.isActive = section.id === id;
 
     if (section.isActive && !section.allVacancies) {
-      dispatch(showLoader());
+      dispatch(loading());
     }
   });
 
@@ -54,13 +52,13 @@ export const changeSelectedRegions = (regions) => (dispatch) => {
     dispatch({ type: types.UPDATE_DATA, regions });
   }
 
-  dispatch(showLoader());
+  dispatch(loading());
   dispatch(loadData(section));
 };
 
 export const toggleGroupVisibility = (sectionId, groupId) => (dispatch, getState) => {
   const { regions } = getState();
-  dispatch(showLoader());
+  dispatch(loading());
 
   const currentSection = regions.find((section) => section.id === sectionId);
 
@@ -154,7 +152,7 @@ export const filterVacancies = (
   setAllVacancies = false,
   keywordValidation = true,
 ) => async (dispatch, getState) => {
-  dispatch(showLoader());
+  dispatch(loading());
 
   const { form, regions, app } = getState();
   const {
@@ -350,7 +348,7 @@ export const loadData = (section) => async (dispatch, getState) => {
   if (loadingData) return;
 
   if (!section.prevRequest && section.prevRequest === request) {
-    dispatch(hideLoader());
+    // dispatch(hideLoader());
     return;
   }
 
@@ -373,19 +371,32 @@ export const loadData = (section) => async (dispatch, getState) => {
   async function getVacancies() {
     const experience = form.experience.filter((exp) => exp.checked);
     const result = [];
+    let progress = 0;
+    let step = 100 / experience.length;
+
+    const calcProgress = (pageVeight) => {
+      progress += pageVeight;
+      dispatch(loading(progress));
+    };
 
     // TODO
     // eslint-disable-next-line no-restricted-syntax
     for (const exp of experience) {
       let expResult = [];
+      step = 100 / experience.length;
       // eslint-disable-next-line prefer-const,no-await-in-loop
       let { vacancies, pagesLeft } = await getVacanciesStep(0, exp.id);
+      const pageVeight = step / pagesLeft;
+
+      calcProgress(pageVeight);
 
       expResult.push(...vacancies);
 
       // TODO
       // eslint-disable-next-line no-plusplus
       while (--pagesLeft > 0) {
+        calcProgress(pageVeight);
+        // console.log(pagesLeft);
         // eslint-disable-next-line no-await-in-loop
         const { vacancies } = await getVacanciesStep(pagesLeft, exp.id);
 
@@ -435,7 +446,7 @@ export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId
 
   const reduceVacancy = (companies) => companies.reduce((visibleInCompanies, company) => {
     return visibleInCompanies + company.vacancies.filter((vacancy) => {
-      return !vacancy.isDel || !(vacancy.archived && showArchived);
+      return !vacancy.isDel && (!vacancy.archived || showArchived);
     }).length;
   }, 0);
 
@@ -460,7 +471,7 @@ export const visibleVacanciesUpdate = (changedSectionId, newRegionsData, groupId
 
   dispatch({ type: types.UPDATE_DATA, regions });
   dispatch(createimprintFav(regions));
-  dispatch(hideLoader());
+  // dispatch(hideLoader());
 };
 
 export const checkArchivedVacancies = async (sectionId, vacancies, imprintFav) => {

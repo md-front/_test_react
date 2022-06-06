@@ -47,7 +47,7 @@ export interface Region {
   allVacancies?: Array<Vacancy>
 }
 
-export type OptionFromUrl = Region | Experience
+export type UrlOption = Region | Experience
 
 export type Regions = Array<Region>;
 
@@ -106,7 +106,7 @@ export interface AppInitState {
   hiddenGroups: HiddenGroups | any,
   // TODO
   imprintFav: Array<imprintFav> | any,
-  showLoader: boolean,
+  loading: number,
   usdCurrency: boolean,
   minSalary: number | null,
   haveArchived: HaveArchived,

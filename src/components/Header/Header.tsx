@@ -16,7 +16,7 @@ function Header(props: HeaderProps) {
 
         <div className={styles.actions}>
           <a
-            href={window.location.origin + window.location.pathname}
+            href="/"
             className={styles.rootLink}
             title="Применить стандартный поиск"
           >

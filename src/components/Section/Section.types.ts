@@ -9,5 +9,6 @@ export interface SectionProps {
     experience: Experience,
     groupsEntries: any,
     loadData: any,
+    loading: number,
     // toggleGroupVisibility: any,
 }

@@ -8,7 +8,7 @@ export interface SectionTitleState {
 export interface SectionTitleProps {
   section: Section,
   isActiveSection: boolean,
-  showLoader: boolean,
+  loading: number,
   // TODO sectionId
   changeActiveSection: (sectionId: any) => void,
 }

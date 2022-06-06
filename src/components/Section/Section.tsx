@@ -8,26 +8,28 @@ import { GroupsVisibility } from '../GroupsVisibility';
 import { SectionProps } from './Section.types';
 
 function Section({
-  section, experience, loadData, groupsEntries,
+  section, experience, loadData, groupsEntries, loading,
 }: SectionProps) {
   useEffect(() => {
-    loadData(section);
+    if (!section.allVacancies?.length) {
+      loadData(section);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderLoading = () => {
     const isFewExp = experience.filter((exp) => exp.checked).length > 1;
-    const fewExp = (
-      <span className={styles.fewExpAlert}>
-        (На группировку двух и более секций опыта потребуется больше времени)
-      </span>
-    );
 
     return (
-      <h3 className={styles.alert}>
-        Загрузка...
-        {isFewExp && fewExp}
-      </h3>
+      <>
+        <div className={styles.loader}><span style={{ width: `${loading}%` }} /></div>
+        <h3 className={styles.loadingTitle}>
+          Загрузка...
+        </h3>
+        {isFewExp && (
+          <span className={styles.fewExpAlert}>(На группировку двух и более секций опыта потребуется больше времени)</span>
+        )}
+      </>
     );
   };
 
@@ -66,7 +68,7 @@ function Section({
   return (
     <section className={styles.section}>
       <div className="container">
-        {!section.allVacancies
+        {!section.allVacancies || loading
           ? renderLoading()
           : [
             renderGroupsToggle(),
@@ -78,8 +80,9 @@ function Section({
 }
 
 // TODO form section
-const mapStateToProps = ({ form }: any, { section }: any) => ({
+const mapStateToProps = ({ form, app }: any, { section }: any) => ({
   section,
+  loading: app.loading,
   groupsEntries: Object.entries(section.groups),
   experience: form.experience,
 });

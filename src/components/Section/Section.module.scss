@@ -1,5 +1,9 @@
 @import "../../styles/variables";
 
+.loadingTitle {
+  margin: 10px 0;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -9,7 +13,20 @@
 }
 
 .fewExpAlert {
-  margin-left: 10px;
   font-weight: 500;
   font-size: 14px;
+}
+
+.loader {
+  height: 14px;
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    background-color: $customPurpleH;
+    transition: .2s ease-in;
+  }
 }

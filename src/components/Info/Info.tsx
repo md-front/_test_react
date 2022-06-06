@@ -13,7 +13,10 @@ export default function Info() {
   const activeSection = (() => sections.find((section: SectionType) => section.isActive))();
   const [activeTitleId, setActiveTitle] = useState(activeSection!.id);
 
-  useEffect(() => setActiveTitle(activeSection!.id), [activeSection]);
+  useEffect(
+    () => setActiveTitle(activeSection!.id),
+    [activeSection],
+  );
 
   return (
     <main>

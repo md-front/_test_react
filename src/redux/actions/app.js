@@ -25,7 +25,7 @@ export const loadUsdCurrency = () => async (dispatch) => {
   dispatch({ type: types.SET_USD_CURRENCY, value });
 };
 
-export const showLoader = () => ({ type: types.SHOW_LOADER });
+export const loading = (progress) => ({ type: types.LOADING, progress });
 export const hideLoader = () => ({ type: types.HIDE_LOADER });
 
 export const createimprintFav = (regions) => (dispatch) => {

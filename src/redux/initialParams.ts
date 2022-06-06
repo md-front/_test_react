@@ -1,6 +1,6 @@
 import { calcLastVisit, getDataFromStorage } from '../helpers';
 import {
-  AppInitState, BaseFormFields, DefaultSearchParams, GroupNames, OptionFromUrl, Region, Regions,
+  AppInitState, BaseFormFields, DefaultSearchParams, GroupNames, UrlOption, Region, Regions,
 } from '../types/initialParams.types';
 import { IGroups } from '../components/Groups/Groups.types';
 /*
@@ -174,7 +174,7 @@ const initialState: Partial<DefaultSearchParams> = (() => {
 
         const arrDataFromUrl = dataFromUrl.split(',');
 
-        tempData.forEach((option: OptionFromUrl) => option.checked = arrDataFromUrl.includes(option.id));
+        tempData.forEach((option: UrlOption) => option.checked = arrDataFromUrl.includes(option.id));
       } else {
         tempData = dataFromUrl;
       }
@@ -215,7 +215,7 @@ export const appInitState: AppInitState = {
   favorites: getDataFromStorage(BaseFormFields.favorites),
   blacklist: getDataFromStorage(BaseFormFields.blacklist),
   hiddenGroups: getDataFromStorage(BaseFormFields.hiddenGroups, initialState.regions),
-  showLoader: true,
+  loading: 0,
   usdCurrency: false,
   imprintFav: getDataFromStorage(BaseFormFields.imprintFav),
   minSalary: getDataFromStorage(BaseFormFields.minSalary),

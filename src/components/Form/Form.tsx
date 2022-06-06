@@ -14,7 +14,7 @@ import {
   formSubmit as FormSubmit,
 } from '../../redux/actions/form';
 import '../../styles/vendor/select.scss';
-import { Region } from '../../types/initialParams.types';
+import { Region, UrlOption } from '../../types/initialParams.types';
 import { REQUIRED_FIELD_TOOLTIP, KEYWORD_FIELDS_DATA } from './Form.constants';
 import styles from './Form.module.scss';
 import {
@@ -90,23 +90,21 @@ function Form(props: FormProps) {
   };
 
   const share = () => {
+    const transformToUrlFormat = (arr: Array<UrlOption>) => {
+      return arr.reduce((sum, item) => (item.checked ? sum += `${item.id},` : sum), '').slice(0, -1);
+    };
+
     const _name = name.trim().split(' ').join('+');
     const _regions = transformToUrlFormat(regions);
     const _experience = transformToUrlFormat(experience);
 
     const _necessary = necessary.length ? necessary.join(',') : null;
     const _unnecessary = unnecessary.length ? unnecessary.join(',') : null;
-    const _newInDays = newInDays.find((option) => option.checked)!.value;
 
     // eslint-disable-next-line max-len
-    const _url = `${window.location.origin}${window.location.pathname}?name=${_name}&regions=${_regions}&experience=${_experience}&newInDays=${_newInDays}${_necessary ? `&necessary=${_necessary}` : ''}${_unnecessary ? `&unnecessary=${_unnecessary}` : ''}`;
+    const _url = `${window.location.origin}${window.location.pathname}?name=${_name}&regions=${_regions}&experience=${_experience}${_necessary ? `&necessary=${_necessary}` : ''}${_unnecessary ? `&unnecessary=${_unnecessary}` : ''}`;
 
     window.navigator.clipboard.writeText(_url);
-
-    // TODO Regions | Experience
-    function transformToUrlFormat(arr: Array<any>) {
-      return arr.reduce((sum, item) => (item.checked ? sum += `${item.id},` : sum), '').slice(0, -1);
-    }
   };
 
   return (

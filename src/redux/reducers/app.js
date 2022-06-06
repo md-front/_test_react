@@ -4,7 +4,7 @@ import {
   HIDE_ALERT,
   ADD_TO_BLACKLIST,
   TOGGLE_FAVORITE,
-  SHOW_LOADER,
+  LOADING,
   HIDE_LOADER,
   CLEAR_LIST,
   SET_USD_CURRENCY,
@@ -39,15 +39,15 @@ const app = (state = appInitState, action) => {
         ...state,
         favorites: [...action.favorites],
       };
-    case SHOW_LOADER:
+    case LOADING:
       return {
         ...state,
-        showLoader: true,
+        loading: action.progress,
       };
     case HIDE_LOADER:
       return {
         ...state,
-        showLoader: false,
+        loading: 100,
       };
     case CLEAR_LIST:
       return {
