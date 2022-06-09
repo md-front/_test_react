@@ -1,7 +1,6 @@
 import { Company } from '../Company/Company.types';
 import { Vacancy } from '../Vacancy/Vacancy.types';
 
-// TODO
 export type Companies = Array<Company>;
 
 export type FindSome = (company: Company, param: keyof Vacancy) => boolean

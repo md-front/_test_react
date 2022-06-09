@@ -8,15 +8,7 @@ import { BaseFormFields, NewInDays } from './types/initialParams.types';
 
 /* Storage actions */
 export const setLS: SetLocalStorage = (key, payload) => localStorage.setItem(key, JSON.stringify(payload));
-// TODO
-// @ts-ignore
-window.setLS = setLS;
-// export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key) || '{}');
-// @ts-ignore
-export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key));
-// TODO
-// @ts-ignore
-window.getLS = getLS;
+export const getLS: GetLocalStorage = (key) => JSON.parse(localStorage.getItem(key) as string);
 
 export const getDataFromStorage: GetDataFromStorage = (type: string, regions) => {
   try {
@@ -30,7 +22,7 @@ export const getDataFromStorage: GetDataFromStorage = (type: string, regions) =>
       const hiddenGroups = {};
 
       regions.forEach((section) => {
-        // @ts-ignore TODO
+        // @ts-ignore
         hiddenGroups[section.id] = [];
       });
 
@@ -61,8 +53,7 @@ export const declOfNum: DeclOfNum = (number, words) => {
 };
 
 export const parseDateString: ParseDateString = (dateString) => {
-  const arr = dateString.split(/\D/);
-  // @ts-ignore TODO
+  const arr: Array<any> = dateString.split(/\D/);
   return new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
 };
 

@@ -1,20 +1,17 @@
-import { Experience } from '../../types/common.types';
-import { Form, Regions } from '../../types/initialParams.types';
+import { Experience, Form, Regions } from '../../types/initialParams.types';
 
 interface FormSubmit {
     name: string,
-    experience: Experience,
+    experience: Array<Experience>,
     formRegions: Regions
 }
 export interface FormProps extends Form {
     regions: Regions,
     changeNewInDays: () => void,
     clearKeywords: () => void,
-    formSubmit: (payload: FormSubmit) => void,
-    changeSelectedRegion: () => void,
+    formSubmit: (payload: FormSubmit) => void
 }
 
-// TODO
 export interface FormGetState {
     form: Form,
     regions: Regions

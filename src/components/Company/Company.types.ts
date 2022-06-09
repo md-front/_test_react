@@ -9,11 +9,10 @@ export interface Company {
         sortValue: number
     },
     vacancies: Array<Vacancy>,
-    // TODO
-    archived: Array<any>,
+    archived: Array<Vacancy>,
     isNew: boolean
 }
-// TODO дублирование
+
 export interface CompanyWrap {
     company: Company,
 }
@@ -24,7 +23,6 @@ export interface CompanyProps {
     toggleFavorite: any,
 }
 
-// TODO
 export interface AppProps {
     app: {
         showArchived: ShowArchived

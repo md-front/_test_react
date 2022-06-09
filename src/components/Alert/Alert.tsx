@@ -5,13 +5,12 @@ import { hideAlert } from '../../redux/actions/app';
 import { AlertProps } from './Alert.types';
 
 function Alert(props: AlertProps) {
-  const alertRef = React.useRef(null);
+  const alertRef = React.useRef<any>(null);
 
   useEffect(() => {
     const alertClickOutside = (e: Event) => {
       const alert = alertRef?.current;
 
-      // @ts-ignore TODO
       if (alert && !alert.contains(e.target)) {
         props.hideAlert(e);
       }
@@ -25,7 +24,6 @@ function Alert(props: AlertProps) {
     document.addEventListener('click', alertClickOutside);
 
     return () => {
-      // componentWillUnmount
       document.removeEventListener('keydown', closeByEsc);
       document.removeEventListener('click', alertClickOutside);
     };

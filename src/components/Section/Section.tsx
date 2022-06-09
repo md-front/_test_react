@@ -79,7 +79,6 @@ function Section({
   );
 }
 
-// TODO form section
 const mapStateToProps = ({ form, app }: any, { section }: any) => ({
   section,
   loading: app.loading,

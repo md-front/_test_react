@@ -20,7 +20,6 @@ export interface Btn {
     tip: string,
 }
 
-// TODO
 export interface AppProps {
     app: HeaderProps
 }

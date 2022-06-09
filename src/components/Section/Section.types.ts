@@ -1,12 +1,10 @@
-import { Experience } from '../../types/common.types';
+import { Experience } from '../../types/initialParams.types';
 
-// TODO any
 export type Section = any
 
-// TODO any
 export interface SectionProps {
     section: Section,
-    experience: Experience,
+    experience: Array<Experience>,
     groupsEntries: any,
     loadData: any,
     loading: number,

@@ -1,3 +1,3 @@
 export interface FooterProps {
-    showAlert: (e: MouseEvent) => void;
+    showAlert: (e: any) => void;
 }

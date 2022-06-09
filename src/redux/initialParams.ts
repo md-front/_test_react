@@ -129,7 +129,6 @@ const DEFAULT_SEARCH_PARAMS: DefaultSearchParams = {
   ],
 };
 
-/* todo react router */
 const initialState: Partial<DefaultSearchParams> = (() => {
   const urlParams = (new URL(document.location.href)).searchParams;
 

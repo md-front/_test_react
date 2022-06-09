@@ -40,8 +40,6 @@ export const changeSelectedRegions = (regions) => (dispatch) => {
       if (!newActive && region.checked) {
         newActive = region;
       } else {
-        // TODO
-        // eslint-disable-next-line no-param-reassign
         region.isActive = false;
       }
     });
@@ -199,7 +197,6 @@ export const filterVacancies = (
       return companyVacancy[param] === vacancy[param];
     });
 
-    // TODO
     // eslint-disable-next-line no-prototype-builtins
     if (!companies.hasOwnProperty(employerId)) {
       companies[employerId] = {
@@ -236,8 +233,6 @@ export const filterVacancies = (
     }
 
     const company = companies[employerId];
-    // TODO
-    // eslint-disable-next-line no-param-reassign
     vacancy.sort = sortParams.default;
 
     /* Проверка на наличие в блеклисте */
@@ -279,8 +274,6 @@ export const filterVacancies = (
       }
 
       if (vacancy.sort.sortValue < sortValue) {
-        // TODO
-        // eslint-disable-next-line no-param-reassign
         vacancy.sort = sort;
       }
 
@@ -288,8 +281,6 @@ export const filterVacancies = (
         company[paramName] = true;
       }
 
-      // TODO
-      // eslint-disable-next-line no-param-reassign
       vacancy[paramName] = true;
     }
 
@@ -305,7 +296,6 @@ export const filterVacancies = (
   function groupCompanies(companies) {
     const groups = cloneObj(currentSection.groups);
 
-    // TODO
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (const groupName in groups) {
       const group = groups[groupName];
@@ -356,8 +346,6 @@ export const loadData = (section) => async (dispatch, getState) => {
 
   loadingData = true;
 
-  // TODO
-  // eslint-disable-next-line no-param-reassign
   section.prevRequest = request;
 
   const newVacancies = await getVacancies();
@@ -379,7 +367,6 @@ export const loadData = (section) => async (dispatch, getState) => {
       dispatch(loading(progress));
     };
 
-    // TODO
     // eslint-disable-next-line no-restricted-syntax
     for (const exp of experience) {
       let expResult = [];
@@ -392,11 +379,9 @@ export const loadData = (section) => async (dispatch, getState) => {
 
       expResult.push(...vacancies);
 
-      // TODO
       // eslint-disable-next-line no-plusplus
       while (--pagesLeft > 0) {
         calcProgress(pageVeight);
-        // console.log(pagesLeft);
         // eslint-disable-next-line no-await-in-loop
         const { vacancies } = await getVacanciesStep(pagesLeft, exp.id);
 
@@ -406,8 +391,6 @@ export const loadData = (section) => async (dispatch, getState) => {
       }
 
       expResult = expResult.map((vacancy) => {
-        // TODO
-        // eslint-disable-next-line no-param-reassign
         vacancy[exp.modifier] = true;
         return vacancy;
       });
@@ -490,8 +473,6 @@ export const checkArchivedVacancies = async (sectionId, vacancies, imprintFav) =
       //   : `https://api.hh.ru/api/vacancies/${imprintedVacancy.id}`;
       // const response = await fetch(fetchUrl);
       // const json = await response.json();
-
-      // // TODO перебить на боевое
 
       // if (json.archived) {
       //   return imprintedVacancy;

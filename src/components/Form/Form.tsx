@@ -1,9 +1,7 @@
-/* eslint-disable react/destructuring-assignment */ // TODO
 import Select from 'rc-select';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-// @ts-ignore
-import ReactTooltip from 'react-tooltip/dist/index';
+import ReactTooltip from 'react-tooltip';
 import { ReactComponent as Info } from '../../assets/info.svg';
 import { ReactComponent as More } from '../../assets/search-more.svg';
 import { ReactComponent as Share } from '../../assets/share.svg';
@@ -38,18 +36,14 @@ function Form(props: FormProps) {
   const [regions, setRegions] = useState(cloneObj(props.regions));
   const [experience, setExperience] = useState(props.experience);
   const [showMore, setShowMore] = useState(true);
-  // const [url, setUrl] = useState('');
 
   const toggle = () => {
     setShowMore(!showMore);
   };
 
-  const defaultValidation = () =>
-    // @ts-ignore TODO
-    // eslint-disable-next-line implicit-arrow-linebreak
-    name.trim() && regions.some((region) => region.checked) && experience.some((region) => region.checked);
+  const defaultValidation = () => name.trim() && regions.some((region: Region) => region.checked)
+  && experience.some((region) => region.checked);
 
-  // TODO рефакторинг
   const handleClickExp = (id: string) => {
     const params = experience.map((param) => {
       if (param.id === id) {
@@ -83,7 +77,6 @@ function Form(props: FormProps) {
 
     formSubmit({
       name,
-      // @ts-ignore TODO
       experience,
       formRegions: regions,
     });
@@ -243,7 +236,7 @@ function Form(props: FormProps) {
           <Select
             id="newInDays"
             prefixCls="select"
-            // @ts-ignore TODO
+            // @ts-ignore
             defaultValue={newInDays.find((option) => option.checked).value}
             options={newInDays}
             onChange={changeNewInDays}

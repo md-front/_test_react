@@ -20,12 +20,4 @@ export type DeclOfNum = (number: number, words: Array<Array<string>>) => Array<s
 
 export type ParseDateString = (dateString: string) => Date;
 
-export interface Exp {
-  id: string,
-  modifier: keyof IGroups,
-  name: string,
-  checked: boolean
-}
-export type Experience = Array<Exp>
-
 export type CreateimprintFav = (regions: Regions) => Array<imprintFav>;

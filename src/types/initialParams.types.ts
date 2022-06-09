@@ -34,6 +34,8 @@ export type HiddenGroups = {
   remote: HiddenGroup
 };
 
+export type SectionId = keyof HiddenGroups;
+
 export interface Region {
   id: keyof HiddenGroups,
   name: string,
@@ -57,7 +59,7 @@ interface NewInDaysItem {
   checked: boolean,
 }
 
-interface Experience {
+export interface Experience {
   id: string,
   modifier: string,
   name: string,
@@ -82,7 +84,6 @@ export interface Form extends Keywords {
 }
 
 export interface DefaultSearchParams extends Form {
-  // TODO
   regions: Regions | any
 }
 
@@ -100,22 +101,22 @@ export type IsSalaryOnly = boolean;
 
 export interface AppInitState {
   showAlert: boolean,
-  // TODO
-  favorites: Favorites | any,
-  blacklist: Blacklist | any,
-  hiddenGroups: HiddenGroups | any,
-  // TODO
-  imprintFav: Array<imprintFav> | any,
+  favorites: Favorites,
+  blacklist: Blacklist,
+  hiddenGroups: HiddenGroups,
+  imprintFav: Array<imprintFav>,
   loading: number,
   usdCurrency: boolean,
-  minSalary: number | null,
+  minSalary: number,
   haveArchived: HaveArchived,
   showArchived: ShowArchived,
   isSalaryOnly: IsSalaryOnly,
 }
 
-export interface AppState {
-  app: Partial<AppInitState>
+export type AppState = {
+  app: Partial<AppInitState>,
+  form: Partial<Form>,
+  regions: Partial<Regions>,
 }
 
 export type FormInitState = Partial<DefaultSearchParams>

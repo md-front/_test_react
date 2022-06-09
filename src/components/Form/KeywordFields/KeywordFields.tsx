@@ -50,8 +50,7 @@ function KeywordFields(props: KeywordFieldProps) {
     const removeFromDifferentKeywords = () => {
       if (!checkKeywordInList(props[diffType!], inputValue)) return;
 
-      // @ts-ignore TODO
-      DeleteKeyword(diffType, inputValue);
+      DeleteKeyword(diffType!, inputValue);
 
       setTooltip({
         type: 'dark',

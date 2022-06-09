@@ -65,7 +65,7 @@ function Header(props: HeaderProps) {
               <button
                 type="button"
                 key={btn.type}
-                // @ts-ignore TODO
+                // @ts-ignore
                 className={props[btn.type].length ? styles[btn.className] : styles[btn.disableClassName]}
                 onClick={() => props.clearList(btn.type)}
               >
@@ -75,7 +75,6 @@ function Header(props: HeaderProps) {
           </div>
         </div>
 
-        {/* @ts-ignore TODO */}
         <Form />
 
       </div>

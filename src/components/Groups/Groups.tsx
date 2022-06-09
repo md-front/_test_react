@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import styles from './Groups.module.scss';
 import { Group } from '../Group';
 import { GroupsProps } from './Groups.types';
-import { GroupNames } from '../../types/initialParams.types';
+import { AppState, GroupNames } from '../../types/initialParams.types';
 import { IGroup } from '../Group/Group.types';
 
 function Groups({ groupsEntries }: GroupsProps) {
-  // @ts-ignore TODO
-  const showArchived: any = useSelector((state) => state.app.showArchived);
+  const showArchived: any = useSelector(({ app }: AppState) => app.showArchived);
 
   const displayGroup = (group: IGroup) => {
     if (group.name === GroupNames.isFav) {
@@ -22,10 +21,8 @@ function Groups({ groupsEntries }: GroupsProps) {
   };
 
   return (
-
-    // TODO 0
     <>
-      {groupsEntries.map(([groupName, group]) => (!!(!group.isHidden && group.companies?.length)
+      {groupsEntries.map(([groupName, group]) => (Boolean((!group.isHidden && group.companies?.length))
         && (
           <div
             className={styles[groupName]}

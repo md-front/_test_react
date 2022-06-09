@@ -1,4 +1,5 @@
 import { Section } from '../Section/Section.types';
+import { AppInitState, SectionId } from '../../types/initialParams.types';
 
 export interface SectionTitleState {
   activeTitleId: string,
@@ -9,6 +10,9 @@ export interface SectionTitleProps {
   section: Section,
   isActiveSection: boolean,
   loading: number,
-  // TODO sectionId
-  changeActiveSection: (sectionId: any) => void,
+  changeActiveSection: (sectionId: SectionId) => void,
+}
+
+export interface AppState {
+  app: AppInitState
 }

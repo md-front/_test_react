@@ -4,13 +4,12 @@ import ReactTooltip from 'react-tooltip';
 import { ReactComponent as Info } from '../../../assets/info.svg';
 import useDebounce from '../../../hooks/useDebounce';
 import { changeMinSalary } from '../../../redux/actions/app';
+import { AppState } from '../../../types/initialParams.types';
 import styles from '../Form.module.scss';
 
 function Salary() {
-  // @ts-ignore
-  const isSalaryOnly = useSelector(({ app }) => app.isSalaryOnly);
-  // @ts-ignore
-  const minSalary = useSelector(({ app }) => app.minSalary);
+  const isSalaryOnly = useSelector(({ app }: AppState) => app.isSalaryOnly);
+  const minSalary = useSelector(({ app }: AppState) => app.minSalary);
   const [searchTerm, setSearchTerm] = useState(minSalary);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const dispatch = useDispatch();
@@ -29,8 +28,7 @@ function Salary() {
         dispatch(changeMinSalary(''));
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [debouncedSearchTerm],
+    [dispatch, debouncedSearchTerm],
   );
 
   return (

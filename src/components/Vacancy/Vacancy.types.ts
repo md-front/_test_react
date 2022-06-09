@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-// TODO
 export interface Salary {
   currency: string,
   from: number,
@@ -40,7 +38,6 @@ export interface VacancyProps {
   addToBlacklist: (e: any, vacancy: Vacancy) => void
 }
 
-// TODO
 export interface VacancyWrap {
   vacancy: Vacancy
 }

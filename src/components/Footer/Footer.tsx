@@ -24,7 +24,6 @@ function Footer(props: FooterProps) {
           <button
             type="button"
             className={styles.link}
-            // @ts-ignore TODO
             onClick={props.showAlert}
           >
             Что тут вообще происходит?
