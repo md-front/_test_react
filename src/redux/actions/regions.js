@@ -126,6 +126,9 @@ const formatVacancy = ({
   salary,
   employer,
   snippet,
+  exp3,
+  exp6,
+  isJun,
   archived,
 }, usdCurrency) => ({
   id,
@@ -141,8 +144,11 @@ const formatVacancy = ({
     name: employer.name,
     logoUrl: employer.logo_urls?.['90'],
   },
-  snippet: snippet.requirement,
+  exp3,
+  exp6,
+  isJun,
   archived,
+  snippet: snippet.requirement,
 });
 
 export const filterVacancies = (

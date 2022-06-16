@@ -1,8 +1,23 @@
 `WIP` 
 
+* "новые" высчитывается неверно, всё что выше оседает в ней
+* раскраска вакансий слетела (при попадании на уровень сортировки группы выше)
+
 * React
+
+* React.lazy "<Suspense >" на загрузку https://ru.reactjs.org/docs/code-splitting.html#reactlazy
+** Предохранитель на clearStorage https://ru.reactjs.org/docs/error-boundaries.html
+
+
+
+
+
 ** Мемоизация
 ** Обращение к стору через useSelector
+
+* Formik?
+
+
 
 * TS
 ** readonly / static etc. TS
@@ -28,9 +43,9 @@ Backlog
 * Настраиваемый приоритет сортировки групп
 * Анимации
 * Формирование листа отображаемых вакансий
-* Lazy load
 * Авторизация приложения
 * React 18
+* SSR
 
 `TODO:`
 
