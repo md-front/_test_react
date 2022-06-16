@@ -265,7 +265,7 @@ export const filterVacancies = (
     }
 
     /* В вакансии указана зп */
-    if (vacancy.salary) {
+    if (vacancy?.salary?.component) {
       setSortParams(1, 'isSalary');
     }
 

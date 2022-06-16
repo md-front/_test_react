@@ -1,8 +1,5 @@
 `WIP` 
 
-* "новые" высчитывается неверно, всё что выше оседает в ней
-* раскраска вакансий слетела (при попадании на уровень сортировки группы выше)
-
 * React
 
 * React.lazy "<Suspense >" на загрузку https://ru.reactjs.org/docs/code-splitting.html#reactlazy
