@@ -112,11 +112,6 @@
   }
 }
 
-:global(.text--archived) {
-  opacity: .4;
-  font-style: italic;
-}
-
 :global(.text) {
   display: block;
   max-width: 210px;
@@ -125,19 +120,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: variables.$linkColor;
+}
 
-  &.text {
+:global(.text--archived) {
+  opacity: .4;
+  font-style: italic;
+}
 
-    &--isJun {
-      color: variables.$junColor;
-    }
+:global(.text--isJun) {
+  color: variables.$junColor;
+}
 
-    &--exp3 {
-      color: variables.$exp3Color;
-    }
+:global(.text--exp3) {
+  color: variables.$exp3Color;
+}
 
-    &--exp6 {
-      color: variables.$exp6Color;
-    }
-  }
+:global(.text--exp6) {
+  color: variables.$exp6Color;
 }
