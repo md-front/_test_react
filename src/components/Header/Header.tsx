@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import { ReactComponent as Info } from '../../assets/info.svg';
 import { Form } from '../Form';
 import styles from './Header.module.scss';
 import {
@@ -34,6 +35,24 @@ function Header(props: HeaderProps) {
               <span><span /></span>
               <span>Только с ЗП</span>
             </label>
+
+            {props.salaryStat.length > 0
+              && (
+                <div className={styles.salaryStat}>
+                  <Info
+                    data-effect="solid"
+                    data-tip
+                    data-for="salaryStat"
+                  />
+                  <ReactTooltip id="salaryStat">
+                    {props.salaryStat.map(([currency, times]) => (
+                      <div key={currency}>
+                        {`до ${currency}k Р: (${times})`}
+                      </div>
+                    ))}
+                  </ReactTooltip>
+                </div>
+              )}
 
             {props.haveArchived && (
               <label htmlFor="showArchived" className={styles.showArchived}>
@@ -89,6 +108,7 @@ const mapStateToProps = ({
     showArchived,
     isSalaryOnly,
     haveArchived,
+    salaryStat,
   },
 }: AppProps) => ({
   haveArchived,
@@ -96,6 +116,7 @@ const mapStateToProps = ({
   favorites,
   showArchived,
   isSalaryOnly,
+  salaryStat,
 });
 
 const mapDispatchToProps = {

@@ -11,7 +11,8 @@ import App from './App';
 import './styles/style.scss';
 import { BaseFormFields } from './types/initialParams.types';
 
-export const IS_LOCAL_DATA = process.env.NODE_ENV === 'development';
+// export const IS_LOCAL_DATA = process.env.NODE_ENV === 'development';
+export const IS_LOCAL_DATA = false;
 
 const composeEnhancers = composeWithDevTools({
   trace: true,

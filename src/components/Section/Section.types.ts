@@ -8,5 +8,6 @@ export interface SectionProps {
     groupsEntries: any,
     loadData: any,
     loading: number,
+    minSalary: number,
     // toggleGroupVisibility: any,
 }

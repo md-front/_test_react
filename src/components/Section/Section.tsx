@@ -8,7 +8,7 @@ import { GroupsVisibility } from '../GroupsVisibility';
 import { SectionProps } from './Section.types';
 
 function Section({
-  section, experience, loadData, groupsEntries, loading,
+  section, experience, loadData, groupsEntries, loading, minSalary,
 }: SectionProps) {
   useEffect(() => {
     if (!section.allVacancies?.length) {
@@ -52,7 +52,9 @@ function Section({
 
     return allVacancies
       ? `По вашему запросу ${declension[0]} ${allVacancies} ${declension[1]} 
-      но ${declension[2]} из-за "ключевых слов"${section.vacancies?.length > 0 ? ' или "отображения групп"' : ''}`
+      но ${declension[2]} из-за "ключевых слов"
+      ${section.vacancies?.length > 0 ? ' / "отображения групп"' : ''}
+      ${minSalary ? ' / "фильтрации по ЗП"' : ''}`
       : 'По вашему запросу вакансии не найдены, попробуйте изменить "название", "регион поиска" или добавить поля "опыта"';
   };
 
@@ -82,6 +84,7 @@ function Section({
 const mapStateToProps = ({ form, app }: any, { section }: any) => ({
   section,
   loading: app.loading,
+  minSalary: app.minSalary,
   groupsEntries: Object.entries(section.groups),
   experience: form.experience,
 });

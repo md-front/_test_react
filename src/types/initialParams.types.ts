@@ -98,6 +98,8 @@ export interface imprintFav {
 export type HaveArchived = boolean;
 export type ShowArchived = boolean;
 export type IsSalaryOnly = boolean;
+type SalaryStatItem = [string, number];
+export type SalaryStat = Array<SalaryStatItem>;
 
 export interface AppInitState {
   showAlert: boolean,
@@ -111,6 +113,7 @@ export interface AppInitState {
   haveArchived: HaveArchived,
   showArchived: ShowArchived,
   isSalaryOnly: IsSalaryOnly,
+  salaryStat: SalaryStat
 }
 
 export type AppState = {

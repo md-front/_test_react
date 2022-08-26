@@ -34,6 +34,29 @@
   }
 }
 
+.salaryStat {
+  display: flex;
+
+  &:hover {
+
+    svg *:not(g) {
+      fill: $customPurple;
+    }
+  }
+  
+  /* info icon */
+  svg {
+    width: 18px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    *:not(g) {
+      fill: $defaultColor;
+      transition: fill .4s;
+    }
+  }
+}
+
 /* &[label] */
 .showArchived {
   display: inline-flex;

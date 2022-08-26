@@ -28,6 +28,42 @@ export const loadUsdCurrency = () => async (dispatch) => {
 export const loading = (progress) => ({ type: types.LOADING, progress });
 export const hideLoader = () => ({ type: types.HIDE_LOADER });
 
+export const setSalaryStat = (salaryArr) => (dispatch) => {
+  const step = 50000;
+  const salaryStat = {};
+
+  const findClosest = (value) => Math.ceil(value / step) * step;
+
+  const setToClosest = (value) => {
+    let closest = findClosest(value);
+    closest = String(closest).slice(0, -3);
+
+    if (salaryStat[closest]) {
+      salaryStat[closest] += 1;
+    } else {
+      salaryStat[closest] = 1;
+    }
+  };
+
+  salaryArr.forEach((salary) => {
+    const { from, to } = salary;
+
+    if (from && to) {
+      for (let count = from; count < to; count += step) {
+        setToClosest(count);
+      }
+    } else {
+      setToClosest(from || to);
+    }
+  });
+
+  const sortedSalaryStat = Object.entries(salaryStat).sort(
+    ([keyA], [keyB]) => keyA - keyB,
+  );
+
+  dispatch({ type: types.SET_SALARY_STAT, salaryStat: sortedSalaryStat });
+};
+
 export const createimprintFav = (regions) => (dispatch) => {
   const extractVacancies = (companies) => companies.reduce(
     (cumulative, company) => [...cumulative, ...company.vacancies],

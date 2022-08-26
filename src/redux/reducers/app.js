@@ -14,6 +14,7 @@ import {
   IMPRINT_FAVORITE,
   TOGGLE_SALARY_ONLY,
   CHANGE_MIN_SALARY,
+  SET_SALARY_STAT,
 } from '../types/app';
 
 // eslint-disable-next-line default-param-last
@@ -88,6 +89,11 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         isSalaryOnly: !state.isSalaryOnly,
+      };
+    case SET_SALARY_STAT:
+      return {
+        ...state,
+        salaryStat: action.salaryStat,
       };
     default:
       return state;

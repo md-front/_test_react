@@ -8,6 +8,7 @@ import {
   loading,
   updateGroupsVisibility,
   changeHaveArchived,
+  setSalaryStat,
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
 import { JUNIOR } from '../../constants/common';
@@ -191,6 +192,7 @@ export const filterVacancies = (
   const lastValidDate = new Date(new Date() - (+newInDays.value * 24 * 60 * 60 * 1000));
 
   const companies = {};
+  const salaryArr = [];
   const filteredVacancies = [];
 
   vacancies.forEach((vacancy) => {
@@ -266,6 +268,10 @@ export const filterVacancies = (
 
     /* В вакансии указана зп */
     if (vacancy?.salary?.component) {
+      if (vacancy.salary.currency === 'RUR') {
+        salaryArr.push(vacancy.salary);
+      }
+
       setSortParams(1, 'isSalary');
     }
 
@@ -297,6 +303,9 @@ export const filterVacancies = (
   currentSection.groups = groupCompanies(Object.values(companies));
   currentSection.vacancies = filteredVacancies;
 
+  if (salaryArr.length) {
+    dispatch(setSalaryStat(salaryArr));
+  }
   dispatch(visibleVacanciesUpdate(currentSection.id, regions));
 
   function groupCompanies(companies) {

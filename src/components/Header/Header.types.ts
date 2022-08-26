@@ -1,4 +1,4 @@
-import { IsSalaryOnly, ShowArchived } from '../../types/initialParams.types';
+import { IsSalaryOnly, SalaryStat, ShowArchived } from '../../types/initialParams.types';
 
 export interface HeaderProps {
     blacklist: Array<number>,
@@ -6,6 +6,7 @@ export interface HeaderProps {
     showArchived: ShowArchived,
     isSalaryOnly: IsSalaryOnly,
     haveArchived: boolean,
+    salaryStat: SalaryStat,
     clearList: (type: keyof HeaderProps) => void
     removeArchived: () => void
     toggleVisibilityArchived: (showArchived: boolean) => void

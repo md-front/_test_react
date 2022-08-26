@@ -129,6 +129,7 @@ const DEFAULT_SEARCH_PARAMS: DefaultSearchParams = {
   ],
 };
 
+// TODO вынести
 const initialState: Partial<DefaultSearchParams> = (() => {
   const urlParams = (new URL(document.location.href)).searchParams;
 
@@ -221,4 +222,5 @@ export const appInitState: AppInitState = {
   haveArchived: false,
   isSalaryOnly: false,
   showArchived: false,
+  salaryStat: [],
 };
