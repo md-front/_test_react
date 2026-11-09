@@ -103,6 +103,8 @@ export type SalaryStat = Array<SalaryStatItem>;
 
 export interface AppInitState {
   showAlert: boolean,
+  isAuthOpen: boolean,
+  authError: string,
   favorites: Favorites,
   blacklist: Blacklist,
   hiddenGroups: HiddenGroups,

@@ -5,10 +5,11 @@ import { ReactComponent as Info } from '../../assets/info.svg';
 import { Form } from '../Form';
 import styles from './Header.module.scss';
 import {
-  clearList, toggleVisibilityArchived, removeArchived, toggleSalaryOnly,
+  clearList, toggleVisibilityArchived, removeArchived, toggleSalaryOnly, openAuth,
 } from '../../redux/actions/app';
 import { AppProps, HeaderProps } from './Header.types';
 import { BUTTONS_DATA } from './Header.constants';
+import { hasHhToken } from '../../api/hh';
 
 function Header(props: HeaderProps) {
   return (
@@ -25,6 +26,14 @@ function Header(props: HeaderProps) {
           </a>
 
           <div className={styles.btns}>
+            <button
+              type="button"
+              className={props.hasToken ? styles.authActive : styles.auth}
+              onClick={() => props.openAuth()}
+            >
+              {props.hasToken ? 'Токен hh.ru указан' : 'Указать токен hh.ru'}
+            </button>
+
             <label htmlFor="isSalaryOnly" className={styles.showArchived}>
               <input
                 type="checkbox"
@@ -117,6 +126,7 @@ const mapStateToProps = ({
   showArchived,
   isSalaryOnly,
   salaryStat,
+  hasToken: hasHhToken(),
 });
 
 const mapDispatchToProps = {
@@ -124,6 +134,7 @@ const mapDispatchToProps = {
   removeArchived,
   toggleVisibilityArchived,
   toggleSalaryOnly,
+  openAuth,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

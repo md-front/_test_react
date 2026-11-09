@@ -1,0 +1,164 @@
+@import '../../styles/variables';
+
+.overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, .45);
+}
+
+.modal {
+  width: 620px;
+  max-width: 100%;
+  max-height: 90vh;
+  padding: 25px 30px;
+  border-radius: $commonBorderRadius;
+  background-color: $backgroundColorL;
+  box-shadow: $shadowParams rgba(0, 0, 0, .35);
+  overflow: auto;
+
+  @media ($mobileL) {
+    padding: 20px;
+  }
+}
+
+.title {
+  margin: 0 0 15px;
+  font-size: 24px;
+}
+
+.text {
+  margin: 0 0 18px;
+  font-size: 15px;
+  line-height: 1.45;
+
+  a {
+    color: $customPurple;
+  }
+
+  code {
+    padding: 2px 4px;
+    border-radius: 4px;
+    background-color: $borderColor;
+  }
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+
+  span {
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid $customPurpleL;
+  border-radius: $commonBorderRadius;
+  font-size: 15px;
+  transition: border-color .2s;
+
+  &:focus {
+    border-color: $customPurple;
+  }
+
+  &:disabled {
+    opacity: .7;
+  }
+}
+
+.showToken {
+  display: inline-flex;
+  margin-top: 10px;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+
+  input {
+    margin: 0 7px 0 0;
+  }
+}
+
+.hint {
+  margin: 14px 0 0;
+  color: $linkColor;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.error {
+  margin: 12px 0 0;
+  color: $customRed;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  button {
+    margin: 0 10px 10px 0;
+  }
+}
+
+.primary,
+.secondary,
+.danger {
+  padding: 9px 14px;
+  border-radius: $commonBorderRadius;
+  font-size: 14px;
+  font-weight: 500;
+  transition: .2s;
+}
+
+.primary {
+  border: 2px solid $customPurple;
+  background-color: $customPurple;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    border-color: $customPurpleH;
+    background-color: $customPurpleH;
+  }
+
+  &:disabled {
+    opacity: .6;
+    cursor: default;
+  }
+}
+
+.secondary {
+  border: 2px solid $defaultColor;
+  background-color: transparent;
+
+  &:hover {
+    background-color: $borderColor;
+  }
+}
+
+.danger {
+  border: 2px solid $customRed;
+  background-color: transparent;
+  color: $customRed;
+
+  &:hover {
+    background-color: $customRed;
+    color: #fff;
+  }
+}

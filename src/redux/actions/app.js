@@ -9,6 +9,9 @@ export const showAlert = (e) => (dispatch) => {
 
 export const hideAlert = () => ({ type: types.HIDE_ALERT });
 
+export const openAuth = (error) => ({ type: types.OPEN_AUTH, error });
+export const closeAuth = () => ({ type: types.CLOSE_AUTH });
+
 export const toggleVisibilityArchived = (showArchived) => (dispatch, getState) => {
   const { regions } = getState();
   const currentSection = findCurrentSection(regions);

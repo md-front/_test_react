@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import styles from './Section.module.scss';
 import { declOfNum } from '../../helpers';
 import { loadData } from '../../redux/actions/regions';
+import { openAuth } from '../../redux/actions/app';
 import { Groups } from '../Groups';
 import { GroupsVisibility } from '../GroupsVisibility';
 import { SectionProps } from './Section.types';
+import { hasHhToken } from '../../api/hh';
 
 function Section({
-  section, experience, loadData, groupsEntries, loading, minSalary,
+  section, experience, loadData, groupsEntries, loading, minSalary, authError, openAuth,
 }: SectionProps) {
   useEffect(() => {
-    if (!section.allVacancies?.length) {
+    if (hasHhToken() && !section.allVacancies?.length) {
       loadData(section);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,6 +44,42 @@ function Section({
       />
     );
 
+  const renderAuthRequired = () => (
+    <div className={styles.authRequired}>
+      <h3>{authError || 'Для загрузки вакансий нужен токен hh.ru'}</h3>
+      <p>
+        API hh.ru требует авторизацию. Укажите токен приложения из личного кабинета
+        {' '}
+        <a href="https://dev.hh.ru/admin" target="_blank" rel="noopener noreferrer">
+          dev.hh.ru
+        </a>
+        .
+      </p>
+      <button
+        type="button"
+        className={styles.authButton}
+        onClick={() => openAuth()}
+      >
+        Указать токен
+      </button>
+    </div>
+  );
+
+  const renderContent = () => {
+    if (!hasHhToken() || authError) {
+      return renderAuthRequired();
+    }
+
+    if (!section.allVacancies || loading) {
+      return renderLoading();
+    }
+
+    return [
+      renderGroupsToggle(),
+      renderGroups(),
+    ];
+  };
+
   const alertText = () => {
     const allVacancies = section.allVacancies.length;
     const declension = declOfNum(allVacancies, [
@@ -70,12 +108,7 @@ function Section({
   return (
     <section className={styles.section}>
       <div className="container">
-        {!section.allVacancies || loading
-          ? renderLoading()
-          : [
-            renderGroupsToggle(),
-            renderGroups(),
-          ]}
+        {renderContent()}
       </div>
     </section>
   );
@@ -85,12 +118,14 @@ const mapStateToProps = ({ form, app }: any, { section }: any) => ({
   section,
   loading: app.loading,
   minSalary: app.minSalary,
+  authError: app.authError,
   groupsEntries: Object.entries(section.groups),
   experience: form.experience,
 });
 
 const mapDispatchToProps = {
   loadData,
+  openAuth,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Section);

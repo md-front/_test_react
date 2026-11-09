@@ -9,5 +9,7 @@ export interface SectionProps {
     loadData: any,
     loading: number,
     minSalary: number,
+    authError: string,
+    openAuth: () => void,
     // toggleGroupVisibility: any,
 }

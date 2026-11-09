@@ -7,10 +7,12 @@ export interface HeaderProps {
     isSalaryOnly: IsSalaryOnly,
     haveArchived: boolean,
     salaryStat: SalaryStat,
+    hasToken: boolean,
     clearList: (type: keyof HeaderProps) => void
     removeArchived: () => void
     toggleVisibilityArchived: (showArchived: boolean) => void
     toggleSalaryOnly: () => void
+    openAuth: (error?: string) => void
 }
 
 export interface Btn {

@@ -9,9 +9,13 @@ import {
   updateGroupsVisibility,
   changeHaveArchived,
   setSalaryStat,
+  openAuth,
 } from './app';
 import { cloneObj, parseDateString } from '../../helpers';
 import { JUNIOR } from '../../constants/common';
+import {
+  getHhErrorMessage, getHhToken, hhFetch, isAuthHhError, parseHhError,
+} from '../../api/hh';
 import { IS_LOCAL_DATA } from '../../main';
 
 export const changeActiveSection = (id) => (dispatch, getState) => {
@@ -340,6 +344,11 @@ let loadingData = false;
 export const loadData = (section) => async (dispatch, getState) => {
   const { form, app } = getState();
 
+  if (!IS_LOCAL_DATA && !getHhToken()) {
+    dispatch(openAuth());
+    return;
+  }
+
   const request = JSON.stringify([form.name, section.location, form.experience]);
 
   // if(section.prevRequest && section.prevRequest === request) {
@@ -357,19 +366,35 @@ export const loadData = (section) => async (dispatch, getState) => {
     return;
   }
 
-  await dispatch(loadUsdCurrency());
-
   loadingData = true;
 
-  section.prevRequest = request;
+  try {
+    try {
+      await dispatch(loadUsdCurrency());
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+    }
 
-  const newVacancies = await getVacancies();
+    section.prevRequest = request;
 
-  const withNewOne = await checkArchivedVacancies(section.id, newVacancies, app.imprintFav);
+    const newVacancies = await getVacancies();
 
-  dispatch(filterVacancies(withNewOne, true));
+    const withNewOne = await checkArchivedVacancies(section.id, newVacancies, app.imprintFav);
 
-  loadingData = false;
+    dispatch(filterVacancies(withNewOne, true));
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e);
+
+    if (isAuthHhError(e)) {
+      dispatch(openAuth(getHhErrorMessage(e)));
+    }
+
+    dispatch(loading(0));
+  } finally {
+    loadingData = false;
+  }
 
   async function getVacancies() {
     const experience = form.experience.filter((exp) => exp.checked);
@@ -398,11 +423,11 @@ export const loadData = (section) => async (dispatch, getState) => {
       while (--pagesLeft > 0) {
         calcProgress(pageVeight);
         // eslint-disable-next-line no-await-in-loop
-        const { vacancies } = await getVacanciesStep(pagesLeft, exp.id);
+        const { vacancies: nextPageVacancies } = await getVacanciesStep(pagesLeft, exp.id);
 
-        if (!vacancies) break;
+        if (!nextPageVacancies) break;
 
-        expResult.push(...vacancies);
+        expResult.push(...nextPageVacancies);
       }
 
       expResult = expResult.map((vacancy) => {
@@ -416,24 +441,27 @@ export const loadData = (section) => async (dispatch, getState) => {
     return result;
   }
   async function getVacanciesStep(pageNum, exp) {
-    try {
-      const fetchUrl = IS_LOCAL_DATA
-        ? 'http://localhost:5000/api/data'
-        : `https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`;
-      const response = await fetch(fetchUrl);
+    const fetchUrl = IS_LOCAL_DATA
+      ? 'http://localhost:5000/api/data'
+      : `https://api.hh.ru/vacancies?text=${form.name}&${section.location}&per_page=100&page=${pageNum}&experience=${exp}`;
+    const response = IS_LOCAL_DATA
+      ? await fetch(fetchUrl)
+      : await hhFetch(fetchUrl);
 
-      const json = await response.json();
-
-      return {
-        vacancies: json.items,
-        pagesLeft: json.pages,
-      };
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e);
+    if (!response.ok) {
+      throw await parseHhError(response);
     }
 
-    return null;
+    const json = await response.json();
+
+    if (!Array.isArray(json.items)) {
+      throw new Error('hh.ru вернул неожиданный ответ');
+    }
+
+    return {
+      vacancies: json.items,
+      pagesLeft: Math.max(json.pages || 1, 1),
+    };
   }
 };
 

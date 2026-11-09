@@ -2,6 +2,8 @@ import { appInitState } from '../initialParams';
 import {
   SHOW_ALERT,
   HIDE_ALERT,
+  OPEN_AUTH,
+  CLOSE_AUTH,
   ADD_TO_BLACKLIST,
   TOGGLE_FAVORITE,
   LOADING,
@@ -29,6 +31,17 @@ const app = (state = appInitState, action) => {
       return {
         ...state,
         showAlert: true,
+      };
+    case OPEN_AUTH:
+      return {
+        ...state,
+        isAuthOpen: true,
+        authError: action.error || state.authError,
+      };
+    case CLOSE_AUTH:
+      return {
+        ...state,
+        isAuthOpen: false,
       };
     case ADD_TO_BLACKLIST:
       return {

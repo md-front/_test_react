@@ -5,21 +5,26 @@ import { MainProps, AppProps } from './Main.types';
 import { Footer } from '../../components/Footer';
 import { Info } from '../../components/Info';
 import { Alert } from '../../components/Alert';
+import { Auth } from '../../components/Auth';
 
-function Main({ showAlert }: MainProps) {
-  return showAlert
-    ? <Alert />
-    : (
-      <div className="main">
-        <Header />
-        <Info />
-        <Footer />
-      </div>
-    );
+function Main({ showAlert, isAuthOpen }: MainProps) {
+  if (showAlert) {
+    return <Alert />;
+  }
+
+  return (
+    <div className="main">
+      <Header />
+      <Info />
+      <Footer />
+      {isAuthOpen && <Auth />}
+    </div>
+  );
 }
 
 const mapStateToProps = ({ app }: AppProps) => ({
   showAlert: app.showAlert,
+  isAuthOpen: app.isAuthOpen,
 });
 
 export default connect(mapStateToProps)(Main);

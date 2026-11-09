@@ -212,6 +212,8 @@ export const regionsInitState: Regions = [
 
 export const appInitState: AppInitState = {
   showAlert: false,
+  isAuthOpen: false,
+  authError: '',
   favorites: getDataFromStorage(BaseFormFields.favorites),
   blacklist: getDataFromStorage(BaseFormFields.blacklist),
   hiddenGroups: getDataFromStorage(BaseFormFields.hiddenGroups, initialState.regions),

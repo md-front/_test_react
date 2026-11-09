@@ -1,5 +1,7 @@
 export const SHOW_ALERT = 'SHOW_ALERT';
 export const HIDE_ALERT = 'HIDE_ALERT';
+export const OPEN_AUTH = 'OPEN_AUTH';
+export const CLOSE_AUTH = 'CLOSE_AUTH';
 export const ADD_TO_BLACKLIST = 'ADD_TO_BLACKLIST';
 export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
 export const IMPRINT_FAVORITE = 'IMPRINT_FAVORITE';

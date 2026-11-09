@@ -1,5 +1,6 @@
 export interface MainProps {
-    showAlert: boolean
+    showAlert: boolean,
+    isAuthOpen: boolean,
 }
 
 export interface AppProps {

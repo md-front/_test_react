@@ -186,6 +186,22 @@
   }
 }
 
+.auth {
+  composes: btn;
+  border-color: $customPurple;
+
+  &:hover {
+    background-color: $customPurple;
+    color: #fff;
+  }
+}
+
+.authActive {
+  composes: auth;
+  background-color: $customPurple;
+  color: #fff;
+}
+
 .del {
   composes: btn;
   border-color: $defaultColor;
