@@ -181,8 +181,10 @@ const initialState: Partial<DefaultSearchParams> = (() => {
     }
 
     if (param === BaseFormFields.regions) {
-      let activeRegion: Region;
-      tempData!.forEach((region: Region) => {
+      const regionsForActive = (tempData || emptyValue) as Regions;
+      let activeRegion: Region | undefined;
+
+      regionsForActive.forEach((region: Region) => {
         if (!activeRegion && region.checked) {
           activeRegion = region;
           activeRegion.isActive = true;
